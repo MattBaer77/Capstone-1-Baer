@@ -39,9 +39,10 @@ _The goal of this site is to help users:_
 **Outline of approach:**
 - Database schema:
     - _See diagram:_
-![Database Diagram](./diagrams/capstone_1_baer_database_schema.png)
+<img src ="./diagrams/capstone_1_baer_database_schema.png">
 <br>
 <br>
+
 - API issues:
     - API downtime
     - API becoming no longer available
