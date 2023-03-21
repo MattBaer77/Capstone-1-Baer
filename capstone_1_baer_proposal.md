@@ -52,7 +52,7 @@ _The goal of this site is to help users:_
 <br>
 
 - Sensitive information:
-    - Sensitive information will be username and encrypted password for user authentication - and authorization.
+    - Sensitive information will be username and encrypted password for user authentication and authorization.
 <br>
 <br>
 
