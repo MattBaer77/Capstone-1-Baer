@@ -50,10 +50,12 @@ _The goal of this site is to help users:_
     - API data is sparse / lacking appropriate detail
 <br>
 <br>
+
 - Sensitive information:
     - Sensitive information will be username and encrypted password for user authentication - and authorization.
 <br>
 <br>
+
 - Functionality:
     - Represent basic workout information from API in legible format
     - Have a “guided” editor mode for use during a workout so that users can add data without being burdened by excessive navigation.
@@ -62,15 +64,18 @@ _The goal of this site is to help users:_
     - Have a “progress overview” for each workout that visually compares previous - performance to most current performance.
 <br>
 <br>
+
 - User Flow:
     - _See diagram B._ (forthcoming)
     - User:
         - Creates workout day plans > participates in workout sessions following plan > records performance metrics for each workout in plan per session > views comparisions of past sessions for that workout.
 <br>
 <br>
+
 - Features beyond CRUD:
     - Represent the user’s progress with a visual chart or graph likely using “chartjs” - tools or similar.
 <br>
 <br>
+
 - Stretch Goals:
     - Integrate one api call that allows users to share their progress on a social media platform.
