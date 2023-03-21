@@ -61,7 +61,7 @@ _The goal of this site is to help users:_
     - Have a “guided” editor mode for use during a workout so that users can add data without being burdened by excessive navigation.
         - Example: “How many reps in this set?”
         - Form Text Input: “15”
-    - Have a “progress overview” for each workout that visually compares previous - performance to most current performance.
+    - Have a “progress overview” for each workout that visually compares previous performance to most current performance.
 <br>
 <br>
 
