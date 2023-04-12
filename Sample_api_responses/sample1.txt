@@ -1,0 +1,290 @@
+List workouts
+
+https://wger.de/api/v2/exercise/?language=2
+
+Response:
+
+HTTP 200 OK
+                    
+                        Allow:
+                        GET, HEAD, OPTIONS
+                    
+                        Content-Type:
+                        application/json
+                    
+                        Vary:
+                        Accept
+                    
+                
+{
+        "count": 348,
+        "next": "https://wger.de/api/v2/exercise/?language=2&limit=20&offset=20",
+        "previous": null,
+        "results": [
+            {
+                "id": 345,
+                "uuid": "c788d643-150a-4ac7-97ef-84643c6419bf",
+                "name": "2 Handed Kettlebell Swing",
+                "exercise_base": 9,
+                "description": "
+    Two Handed Russian Style Kettlebell swing",
+                "creation_date": "2015-08-03",
+                "category": 10,
+                "muscles": [],
+                "muscles_secondary": [],
+                "equipment": [
+                    10
+                ],
+                "language": 2,
+                "license": 2,
+                "license_author": "deusinvictus",
+                "variations": [
+                    345,
+                    249
+                ],
+                "author_history": [
+                    "deusinvictus"
+                ]
+            },
+            {
+                "id": 1731,
+                "uuid": "66fe654d-3379-46e8-95dc-23e3ce56f25c",
+                "name": "4-count burpees",
+                "exercise_base": 997,
+                "description": "
+    Starting position:
+    Stand straight, feet hip-width apart.
+    Steps:
+    Squat low and support yourself on the floor with your hands between the knees and in front of your feet, your back straight.
+    Keeping your hands on the floor, jump your legs backward into high plank position.
+    Jump your feet forward to return to the squat position.
+    Repeat.
+    ",
+                "creation_date": "2023-02-05",
+                "category": 11,
+                "muscles": [],
+                "muscles_secondary": [],
+                "equipment": [
+                    7
+                ],
+                "language": 2,
+                "license": 2,
+                "license_author": "Miroslav Mazel (imported from Feeel)",
+                "variations": [],
+                "author_history": [
+                    "mondstern (imported from Feeel)",
+                    "Miroslav Mazel (imported from Feeel)"
+                ]
+            },
+            {
+                "id": 1061,
+                "uuid": "60d8018d-296f-4c62-a80b-f609a25d34ea",
+                "name": "Abdominal Stabilization",
+                "exercise_base": 56,
+                "description": "",
+                "creation_date": "2022-10-11",
+                "category": 10,
+                "muscles": [
+                    6
+                ],
+                "muscles_secondary": [
+                    14
+                ],
+                "equipment": [
+                    4
+                ],
+                "language": 2,
+                "license": 2,
+                "license_author": "wger.de",
+                "variations": [],
+                "author_history": [
+                    "wger.de"
+                ]
+            },
+            {
+                "id": 2056,
+                "uuid": "8d125c27-f531-4caa-89da-7dc20bebfa49",
+                "name": "Abduktion im Stand",
+                "exercise_base": 1097,
+                "description": "Das Training des stabilen Standes dominat auf einem Bein ist beiseitig entscheidend. Einerseits um Beschwerden vorzubeugen und andererseits um eine stabile Basis zu legen.Die übende Person stellt sich in die gewohnte Standposition und versucht bei stabilem Oberkörper das unbelastete Bein wiederholt zu heben und und in Hüfte und Knie zu beugen und wieder zu senken. Die Bewegung wird jedenfalls auch mit der anderen Seite wiederholt.\nDie Übung trainiert die Stabilität der hüftumgebenden Muskulatur",
+                "creation_date": "2023-03-13",
+                "category": 9,
+                "muscles": [],
+                "muscles_secondary": [],
+                "equipment": [
+                    7
+                ],
+                "language": 2,
+                "license": 2,
+                "license_author": "tregga",
+                "variations": [],
+                "author_history": [
+                    "tregga"
+                ]
+            },
+            {
+                "id": 2055,
+                "uuid": "5eda0a41-3a58-4424-acdb-5a02a4e5c113",
+                "name": "Abduktion im Stand",
+                "exercise_base": 1096,
+                "description": "Das Training des stabilen Standes dominat auf einem Bein ist beiseitig entscheidend. Einerseits um Beschwerden vorzubeugen und andererseits um eine stabile Basis zu legen.Die übende Person stellt sich in die gewohnte Standposition und versucht bei stabilem Oberkörper das unbelastete Bein wiederholt zu heben und und in Hüfte und Knie zu beugen und wieder zu senken. Die Bewegung wird jedenfalls auch mit der anderen Seite wiederholt.\nDie Übung trainiert die Stabilität der hüftumgebenden Muskulatur",
+                "creation_date": "2023-03-13",
+                "category": 9,
+                "muscles": [],
+                "muscles_secondary": [],
+                "equipment": [
+                    7
+                ],
+                "language": 2,
+                "license": 2,
+                "license_author": "tregga",
+                "variations": [],
+                "author_history": [
+                    "tregga"
+                ]
+            },
+            {
+                "id": 2063,
+                "uuid": "b6771fbc-f99a-477a-be36-52b97dc9a952",
+                "name": "Alternate back lunges",
+                "exercise_base": 1102,
+                "description": "The posterior muscles of the buttocks, hamstrings, soleus and gastrocnemius are trained more",
+                "creation_date": "2023-03-19",
+                "category": 9,
+                "muscles": [
+                    8,
+                    10
+                ],
+                "muscles_secondary": [],
+                "equipment": [
+                    7
+                ],
+                "language": 2,
+                "license": 2,
+                "license_author": "clafal",
+                "variations": [],
+                "author_history": [
+                    "clafal"
+                ]
+            },
+            {
+                "id": 1907,
+                "uuid": "ad8b39c2-fcf1-47fd-b096-e40defd13f3a",
+                "name": "Alternating bicep curls",
+                "exercise_base": 1012,
+                "description": "
+    Starting position:
+    Start standing up with dumbbells in each hand, your back straight and feet hip-width apart. Your arms should be relaxed, pointing down. Your knees should be slightly bent, your abs contracted, and your shoulders down.
+    Steps:
+    Bend one arm at the elbow, bringing the dumbbell up to your shoulder. Your upper arm should remain motionless during this movement.
+    Bring the dumbbell back down until your arm is in its original relaxed position.
+    Repeat, switching arms.
+    ",
+                "creation_date": "2023-02-05",
+                "category": 8,
+                "muscles": [],
+                "muscles_secondary": [],
+                "equipment": [
+                    3
+                ],
+                "language": 2,
+                "license": 2,
+                "license_author": "Miroslav Mazel (imported from Feeel)",
+                "variations": [],
+                "author_history": [
+                    "Miroslav Mazel (imported from Feeel)"
+                ]
+            },
+            {
+                "id": 227,
+                "uuid": "53ca25b3-61d9-4f72-bfdb-492b83484ff5",
+                "name": "Arnold Shoulder Press",
+                "exercise_base": 20,
+                "description": "
+    Very common shoulder exercise.\n
+    \n
+    As shown here: https://www.youtube.com/watch?v=vj2w851ZHRM
+
+    ",
+                "creation_date": "2014-03-09",
+                "category": 13,
+                "muscles": [],
+                "muscles_secondary": [],
+                "equipment": [
+                    3
+                ],
+                "language": 2,
+                "license": 1,
+                "license_author": "trzr23",
+                "variations": [
+                    227,
+                    329,
+                    256,
+                    190,
+                    152,
+                    155,
+                    123,
+                    119
+                ],
+                "author_history": [
+                    "trzr23"
+                ]
+            },
+            {
+                "id": 289,
+                "uuid": "6add5973-86d0-4543-928a-6bb8b3f34efc",
+                "name": "Axe Hold",
+                "exercise_base": 31,
+                "description": "
+    Grab dumbbells and extend arms to side and hold as long as you can",
+                "creation_date": "2014-11-02",
+                "category": 8,
+                "muscles": [],
+                "muscles_secondary": [],
+                "equipment": [
+                    3
+                ],
+                "language": 2,
+                "license": 1,
+                "license_author": "GrosseHund",
+                "variations": [],
+                "author_history": [
+                    "GrosseHund"
+                ]
+            },
+            {
+                "id": 1884,
+                "uuid": "e5a2e93a-e0b1-44e8-965d-c806bc2d2280",
+                "name": "Back neck stretch",
+                "exercise_base": 1010,
+                "description": "
+    Starting position:
+    Sit upright on a chair or a firm pillow.
+    Steps:
+    Breathe out and tilt your head forward, chin to chest, putting hands behind your head.
+    Use your hands to pull your head down lightly and press against your hands with your head to balance out the force.
+    Hold for a bit.
+    Relax your arms and head, opening up a bit with your shoulders.
+    Keep repeating this from step 2 onward.
+    ",
+                "creation_date": "2023-02-05",
+                "category": 12,
+                "muscles": [],
+                "muscles_secondary": [],
+                "equipment": [
+                    7
+                ],
+                "language": 2,
+                "license": 2,
+                "license_author": "Miroslav Mazel (imported from Feeel)",
+                "variations": [],
+                "author_history": [
+                    "Miroslav Mazel (imported from Feeel)"
+                ]
+            },
+
+
+
+
+    ]
+}
