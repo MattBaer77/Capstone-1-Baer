@@ -114,6 +114,9 @@ class User(db.Model):
         nullable=False,
     )
 
+    workouts = db.relationship('Workout', backref='owner' cascade='all, delete-orphan')
+    # workouts_authored = db.relationship('Workout', backref='author')
+
 class Workout(db.Model):
     """A Workout - a group of exercises"""
 
@@ -135,11 +138,13 @@ class Workout(db.Model):
         nullable=False
     )
 
-    author_user_id = db.Column(
-        db.Integer,
-        db.ForeignKey('users.id', ondelete="CASCADE")
-        nullable=False
-    )
+    # author_user_id = db.Column(
+    #     db.Integer,
+    #     db.ForeignKey('users.id', ondelete="SET NULL") # Can I instead set to a default value?
+    #     nullable=False
+    # )
+
+    exercises = db.relationship('Exercise', secondary='workout_exercises', backref='on_workout')
 
 class WorkoutExercise(db.Model):
     """JOIN TABLE workout_exercise"""
