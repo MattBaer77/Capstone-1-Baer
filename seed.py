@@ -8,3 +8,5 @@ from models import User, Message, Follows
 db.drop_all()
 db.create_all()
 
+# Make api call to populate exercises
+

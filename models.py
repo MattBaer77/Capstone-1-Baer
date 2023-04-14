@@ -12,12 +12,12 @@ db = SQLAlchemy()
 
 ###
 
-# Level 1 - General Workout Info
+# Level 1 - General Exercise Info
 
-class Workout(db.Model):
-    """Workouts from API"""
+class Exercise(db.Model):
+    """Exercises from API"""
 
-    __tablename__ = 'workouts'
+    __tablename__ = 'exercises'
 
     id = db.Column(
         db.Integer,
@@ -26,7 +26,7 @@ class Workout(db.Model):
 
     
 class Metric(db.Model):
-    """Metrics to measure workout performance"""
+    """Metrics to measure exercise performance"""
 
     __tablename__ = 'metrics'
 
@@ -35,10 +35,10 @@ class Metric(db.Model):
         primary_key=True,
     )
 
-class WorkoutMetric(db.Model):
-    """JOIN TABLE workout_metrics"""
+class ExerciseMetric(db.Model):
+    """JOIN TABLE exercise_metrics"""
 
-    __tablename__ = 'workout_metrics'
+    __tablename__ = 'exercise_metrics'
 
     id = db.Column(
         db.Integer,
@@ -47,7 +47,7 @@ class WorkoutMetric(db.Model):
 
 ###
 
-# Level 2 - User & Workout Planning
+# Level 2 - User & Exercise Planning
 
 class User(db.Model):
     """User in the system."""
@@ -80,20 +80,20 @@ class User(db.Model):
         nullable=False,
     )
 
-class Day(db.Model):
-    """A Day - a group of workouts"""
+class Workout(db.Model):
+    """A Workout - a group of exercises"""
 
-    __tablename__ = 'days'
+    __tablename__ = 'workouts'
 
     id = db.Column(
         db.Integer,
         primary_key=True,
     )
 
-class DayWorkout(db.Model):
-    """JOIN TABLE day_workout"""
+class WorkoutExercise(db.Model):
+    """JOIN TABLE workout_exercise"""
 
-    __tablename__ = 'day_workouts'
+    __tablename__ = 'workout_exercises'
 
     id = db.Column(
         db.Integer,
@@ -101,7 +101,7 @@ class DayWorkout(db.Model):
     )
 
 class Goal(db.Model):
-    """JOIN workout_metric and day_workout then add a goal_value"""
+    """JOIN exercise_metric and workout_exercise then add a goal_value"""
 
     __tablename__ = 'goal'
 
@@ -113,7 +113,7 @@ class Goal(db.Model):
 ###
 
 class Performance(db.model):
-    """JOIN record a day's actual performance to the day's goals"""
+    """JOIN record a workout's actual performance to the workout's goals"""
 
     __tablename__ = 'performance'
 
