@@ -156,15 +156,15 @@ class WorkoutExercise(db.Model):
         primary_key=True,
     )
 
-    exercise_id = db.Column(
-        db.Integer,
-        db.ForeignKey('exercises.id', ondelete="CASCADE")
-        nullable=False
-    )
-
     workout_id = db.Column(
         db.Integer,
         db.ForeignKey('workouts.id', ondelete="CASCADE")
+        nullable=False
+    )
+
+    exercise_id = db.Column(
+        db.Integer,
+        db.ForeignKey('exercises.id', ondelete="CASCADE")
         nullable=False
     )
 
