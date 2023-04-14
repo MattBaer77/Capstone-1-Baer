@@ -24,6 +24,18 @@ class Exercise(db.Model):
         primary_key=True,
     )
 
+    name = db.Column(
+        db.Text,
+        default="No Name"
+        # nullable=False # Add this in later if neccessary.
+    )
+
+    description = db.Column(
+        db.Text,
+        default="No Description"
+        # nullable=False # Add this in later if neccessary.
+    )
+
     
 class Metric(db.Model):
     """Metrics to measure exercise performance"""
@@ -32,7 +44,17 @@ class Metric(db.Model):
 
     id = db.Column(
         db.Integer,
-        primary_key=True,
+        primary_key=True
+    )
+
+    kind = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    units = db.Column(
+        db.Text,
+        nullable=False
     )
 
 class ExerciseMetric(db.Model):
@@ -43,6 +65,18 @@ class ExerciseMetric(db.Model):
     id = db.Column(
         db.Integer,
         primary_key=True,
+    )
+
+    exercise_id = db.Column(
+        db.Integer,
+        db.ForeignKey('exercises.id', ondelete='CASCADE'),
+        nullable=False
+    )
+
+    metric_id = db.Column(
+        db.Integer,
+        db.ForeignKey('metrics.id', ondelete='CASCADE'),
+        nullable=False
     )
 
 ###
@@ -90,6 +124,23 @@ class Workout(db.Model):
         primary_key=True,
     )
 
+    description = db.Column(
+        db.Text,
+        default="No Description"
+    )
+
+    owner_user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete="CASCADE")
+        nullable=False
+    )
+
+    author_user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete="CASCADE")
+        nullable=False
+    )
+
 class WorkoutExercise(db.Model):
     """JOIN TABLE workout_exercise"""
 
@@ -100,6 +151,18 @@ class WorkoutExercise(db.Model):
         primary_key=True,
     )
 
+    exercise_id = db.Column(
+        db.Integer,
+        db.ForeignKey('exercises.id', ondelete="CASCADE")
+        nullable=False
+    )
+
+    workout_id = db.Column(
+        db.Integer,
+        db.ForeignKey('workouts.id', ondelete="CASCADE")
+        nullable=False
+    )
+
 class Goal(db.Model):
     """JOIN exercise_metric and workout_exercise then add a goal_value"""
 
@@ -108,6 +171,21 @@ class Goal(db.Model):
     id = db.Column(
         db.Integer,
         primary_key=True,
+    )
+
+    exercise_metric_id = db.Column(
+        db.Integer,
+        db.ForeignKey('exercise_metrics.id', ondelete="CASCADE")
+    )
+
+    workout_exercise_id = db.Column(
+        db.Integer,
+        db.ForeignKey('workout_exercises.id', ondelete="CASCADE")
+    )
+
+    goal_value = db.Column(
+        db.Integer,
+        nullable=False
     )
 
 ###
@@ -122,6 +200,27 @@ class Performance(db.model):
         primary_key=True,
     )
 
+    date = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=datetime.utcnow()
+    )
+
+    last_edited_date = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=datetime.utcnow()
+    )
+
+    goal_id = db.Column(
+        db.Integer,
+        db.ForeignKey('goals.id', ondelete="CASCADE")
+    )
+
+    performance = db.Column(
+        db.Integer,
+        nullable=False
+    )
 
 ##############################################################################
 def connect_db(app):
