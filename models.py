@@ -114,7 +114,7 @@ class User(db.Model):
         nullable=False,
     )
 
-    workouts = db.relationship('Workout', backref='owner' cascade='all, delete-orphan')
+    workouts = db.relationship('Workout', backref='owner', cascade='all, delete-orphan')
     # workouts_authored = db.relationship('Workout', backref='author')
 
 class Workout(db.Model):
@@ -134,13 +134,13 @@ class Workout(db.Model):
 
     owner_user_id = db.Column(
         db.Integer,
-        db.ForeignKey('users.id', ondelete="CASCADE")
+        db.ForeignKey('users.id', ondelete="CASCADE"),
         nullable=False
     )
 
     # author_user_id = db.Column(
     #     db.Integer,
-    #     db.ForeignKey('users.id', ondelete="SET NULL") # Can I instead set to a default value?
+    #     db.ForeignKey('users.id', ondelete="SET NULL"), # Can I instead set to a default value?
     #     nullable=False
     # )
 
@@ -158,20 +158,20 @@ class WorkoutExercise(db.Model):
 
     workout_id = db.Column(
         db.Integer,
-        db.ForeignKey('workouts.id', ondelete="CASCADE")
+        db.ForeignKey('workouts.id', ondelete="CASCADE"),
         nullable=False
     )
 
     exercise_id = db.Column(
         db.Integer,
-        db.ForeignKey('exercises.id', ondelete="CASCADE")
+        db.ForeignKey('exercises.id', ondelete="CASCADE"),
         nullable=False
     )
 
 class Goal(db.Model):
     """JOIN exercise_metric and workout_exercise then add a goal_value"""
 
-    __tablename__ = 'goal'
+    __tablename__ = 'goals'
 
     id = db.Column(
         db.Integer,
@@ -195,7 +195,7 @@ class Goal(db.Model):
 
 ###
 
-class Performance(db.model):
+class Performance(db.Model):
     """JOIN record a workout's actual performance to the workout's goals"""
 
     __tablename__ = 'performance'
