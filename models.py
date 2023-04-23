@@ -1,5 +1,7 @@
 """SQLAlchemy models for Routine."""
 
+import copy
+
 from datetime import datetime
 
 from flask_bcrypt import Bcrypt
@@ -212,6 +214,7 @@ class Workout(db.Model):
         """
             Creates a copied workout.
             Sets author_user_id to original author.
+            Copies the workout's exercises and goals.
         """
 
         workout = Workout(
@@ -220,8 +223,15 @@ class Workout(db.Model):
             author_user_id=workout_to_copy.author_user_id
         )
 
+        workout.exercises = workout_to_copy.exercises
         # copy exercises
+
+        # REPAIR THIS
+        # MAY NEED TO MAKE A DEEP COPY HERE
+        # workout.goals = workout_to_copy.goals
         # copy goals
+        # MAY NEED TO MAKE A DEEP COPY HERE
+        # REPAIR THIS
 
         db.session.add(workout)
         return workout

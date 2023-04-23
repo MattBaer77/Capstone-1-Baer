@@ -2,6 +2,7 @@
 
 import os
 import pdb
+import copy
 
 from secrets import sneakybeaky
 
@@ -28,3 +29,11 @@ toolbar = DebugToolbarExtension(app)
 connect_db(app)
 
 ##############################################################################
+
+@app.route('/')
+def home():
+    """
+    Show a page with
+    user info
+    user workouts
+    """
