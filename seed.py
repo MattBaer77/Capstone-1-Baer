@@ -65,13 +65,26 @@ db.session.add_all([
 db.session.commit()
 
 # Add users
-bob_bobson = User(email='bob@unoriginallastname.com', username='Bobbo', bio='I am here to do some workouts! I hope you are too!!!', password='bobson')
-mike_mikeson = User(email='mike@gmail.com', username='Mikey', bio='I am here to do some workouts! I hope you are too!!!', password='mikeson')
-bob_alfredson = User(email='bob@gmail.com', username='BobbyA', bio='I am here to do some workouts! I hope you are too!!!', password='alfredson')
-jim_mikeson = User(email='jim@gmail.com', username='JimmyMike', bio='I am here to do some workouts! I hope you are too!!!', password='mikeson')
-bob_bo = User(email='otherbob@otherbob.com', username='Bobbo2electricboo', bio='I am here to do some workouts! I hope you are too!!!', password='bobson')
 
-db.session.add_all([bob_bobson, mike_mikeson, bob_alfredson, jim_mikeson, bob_bo])
+# BEFORE SIGNUP METHOD
+
+# bob_bobson = User(email='bob@unoriginallastname.com', username='Bobbo', bio='I am here to do some workouts! I hope you are too!!!', password='bobson')
+# mike_mikeson = User(email='mike@gmail.com', username='Mikey', bio='I am here to do some workouts! I hope you are too!!!', password='mikeson')
+# bob_alfredson = User(email='bob@gmail.com', username='BobbyA', bio='I am here to do some workouts! I hope you are too!!!', password='alfredson')
+# jim_mikeson = User(email='jim@gmail.com', username='JimmyMike', bio='I am here to do some workouts! I hope you are too!!!', password='mikeson')
+# bob_bo = User(email='otherbob@otherbob.com', username='Bobbo2electricboo', bio='I am here to do some workouts! I hope you are too!!!', password='bobson')
+
+# db.session.add_all([bob_bobson, mike_mikeson, bob_alfredson, jim_mikeson, bob_bo])
+# db.session.commit()
+
+# BEFORE SIGNUP METHOD
+
+bob_bobson = User.signup(email='bob@unoriginallastname.com', username='Bobbo', bio='I am here to do some workouts! I hope you are too!!!', password='bobson')
+mike_mikeson = User.signup(email='mike@gmail.com', username='Mikey', bio='I am here to do some workouts! I hope you are too!!!', password='mikeson')
+bob_alfredson = User.signup(email='bob@gmail.com', username='BobbyA', bio='I am here to do some workouts! I hope you are too!!!', password='alfredson')
+jim_mikeson = User.signup(email='jim@gmail.com', username='JimmyMike', bio='I am here to do some workouts! I hope you are too!!!', password='mikeson')
+bob_bo = User.signup(email='otherbob@otherbob.com', username='Bobbo2electricboo', bio='I am here to do some workouts! I hope you are too!!!', password='bobson')
+
 db.session.commit()
 
 # Add workouts

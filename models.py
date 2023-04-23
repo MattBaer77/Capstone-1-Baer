@@ -94,13 +94,13 @@ class User(db.Model):
         primary_key=True,
     )
 
-    email = db.Column(
+    username = db.Column(
         db.Text,
         nullable=False,
         unique=True,
     )
 
-    username = db.Column(
+    email = db.Column(
         db.Text,
         nullable=False,
         unique=True,
@@ -117,6 +117,43 @@ class User(db.Model):
 
     workouts = db.relationship('Workout', backref='owner', cascade='all, delete-orphan')
     # workouts_authored = db.relationship('Workout', backref='author')
+
+    @classmethod
+    def signup(cls, username, email, bio, password):
+        """Sign up user.
+        Hashes password and adds user to db session.
+        """
+
+        hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
+
+        user = User(
+            username=username,
+            email=email,
+            bio=bio,
+            password=hashed_pwd,
+        )
+
+        db.session.add(user)
+        return user
+
+    @classmethod
+    def authenticate(cls, username, password):
+        """Find user with `username` and `password`.
+
+        Search for a user whose password hash matches this password
+        and, if it finds such a user, returns that user object.
+
+        If can't find matching user (or if password is wrong), returns False.
+        """
+
+        user = cls.query.filter_by(username=username).first()
+
+        if user:
+            is_auth = bcrypt.check_password_hash(user.password, password)
+            if is_auth:
+                return user
+
+        return False
 
 
 
@@ -148,10 +185,11 @@ class Workout(db.Model):
 
     exercises = db.relationship('Exercise', secondary='workout_exercises', backref='on_workouts')
     goals = db.relationship('Goal', secondary='workout_exercises', backref='from_workouts')
-    
-    # # REVIEW THIS
-    # author = db.relationship('User', backref='workouts_authored')
-    # # REVIEW THIS
+
+    def get_author(self):
+        """Returns the author based on the author_user_id"""
+        author = User.query.get(self.author_user_id)
+        return author
 
     @classmethod
     def create(cls, description, owner_user_id):
