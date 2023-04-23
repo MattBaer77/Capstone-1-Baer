@@ -139,14 +139,51 @@ class Workout(db.Model):
         nullable=False
     )
 
-    # author_user_id = db.Column(
-    #     db.Integer,
-    #     db.ForeignKey('users.id', ondelete="SET NULL"), # Can I instead set to a default value?
-    #     nullable=False
-    # )
+    author_user_id = db.Column(
+        db.Integer,
+        nullable=True
+    )
 
     exercises = db.relationship('Exercise', secondary='workout_exercises', backref='on_workouts')
     goals = db.relationship('Goal', secondary='workout_exercises', backref='from_workouts')
+    # REVIEW THIS
+    author = db.relationship('User')
+    # REVIEW THIS
+
+    @classmethod
+    def create(cls, description, owner_user_id):
+        """
+            Creates a new workout.
+            Sets author_user_id to creator.
+        """
+
+        workout = Workout(
+            description=description,
+            owner_user_id=owner_user_id,
+            author_user_id=owner_user_id
+        )
+
+        db.session.add(workout)
+        return workout
+
+    @classmethod
+    def copy(cls, workout_to_copy, owner_user_id):
+        """
+            Creates a copied workout.
+            Sets author_user_id to original author.
+        """
+
+        workout = Workout(
+            description=workout_to_copy.description,
+            owner_user_id=owner_user_id,
+            author_user_id=workout_to_copy.author_user_id
+        )
+
+        # copy exercises
+        # copy goals
+
+        db.session.add(workout)
+        return workout
 
 class WorkoutExercise(db.Model):
     """JOIN TABLE workout_exercise"""

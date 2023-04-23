@@ -75,11 +75,19 @@ db.session.add_all([bob_bobson, mike_mikeson, bob_alfredson, jim_mikeson, bob_bo
 db.session.commit()
 
 # Add workouts
-the_bobson_workout = Workout(description='Curls and Burpees Forever', owner_user_id='1')
-the_mikeson_workout = Workout(description='Kettles and Abs All Day', owner_user_id='2')
-the_bo_workout = Workout(description='I do very little', owner_user_id='5')
 
-db.session.add_all([the_bobson_workout, the_mikeson_workout, the_bo_workout])
+# BEFORE CREATE METHOD
+# the_bobson_workout = Workout(description='Curls and Burpees Forever', owner_user_id='1')
+# the_mikeson_workout = Workout(description='Kettles and Abs All Day', owner_user_id='2')
+# the_bo_workout = Workout(description='I do very little', owner_user_id='5')
+
+# db.session.add_all([the_bobson_workout, the_mikeson_workout, the_bo_workout])
+# BEFORE CREATE METHOD
+
+the_bobson_workout = Workout.create(description='Curls and Burpees Forever', owner_user_id='1')
+the_mikeson_workout = Workout.create(description='Kettles and Abs All Day', owner_user_id='2')
+the_bo_workout = Workout.create(description='I do very little', owner_user_id='5')
+
 db.session.commit()
 
 # Add exercises to the workouts
