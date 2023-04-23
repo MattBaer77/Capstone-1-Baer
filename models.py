@@ -118,6 +118,8 @@ class User(db.Model):
     workouts = db.relationship('Workout', backref='owner', cascade='all, delete-orphan')
     # workouts_authored = db.relationship('Workout', backref='author')
 
+
+
 class Workout(db.Model):
     """A Workout - a group of exercises"""
 
@@ -146,9 +148,10 @@ class Workout(db.Model):
 
     exercises = db.relationship('Exercise', secondary='workout_exercises', backref='on_workouts')
     goals = db.relationship('Goal', secondary='workout_exercises', backref='from_workouts')
-    # REVIEW THIS
-    author = db.relationship('User')
-    # REVIEW THIS
+    
+    # # REVIEW THIS
+    # author = db.relationship('User', backref='workouts_authored')
+    # # REVIEW THIS
 
     @classmethod
     def create(cls, description, owner_user_id):
