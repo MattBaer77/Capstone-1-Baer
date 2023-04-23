@@ -185,6 +185,7 @@ class Workout(db.Model):
         nullable=True
     )
 
+    workout_exercises = db.relationship('WorkoutExercise', backref='workout')
     exercises = db.relationship('Exercise', secondary='workout_exercises', backref='on_workouts')
     goals = db.relationship('Goal', secondary='workout_exercises', backref='from_workouts')
 
@@ -223,17 +224,34 @@ class Workout(db.Model):
             author_user_id=workout_to_copy.author_user_id
         )
 
-        workout.exercises = workout_to_copy.exercises
-        # copy exercises
-
-        # REPAIR THIS
-        # MAY NEED TO MAKE A DEEP COPY HERE
-        # workout.goals = workout_to_copy.goals
-        # copy goals
-        # MAY NEED TO MAKE A DEEP COPY HERE
-        # REPAIR THIS
+        for exercise in workout_to_copy.exercises:
+            workout.exercises.append(exercise)
 
         db.session.add(workout)
+        db.session.commit()
+
+        workout_exercises_ids = []
+        print(workout_exercises_ids)
+
+        for each in workout.workout_exercises:
+            workout_exercises_ids.append(each.id)
+
+        print(workout_exercises_ids)
+
+        for i in range(len(workout_to_copy.goals)):
+            print(workout_to_copy.goals[i].exercise_metric_id)
+            print(workout_exercises_ids[i])
+            print(workout_to_copy.goals[i].goal_value)
+            new_goal = Goal(
+                exercise_metric_id = workout_to_copy.goals[i].exercise_metric_id,
+                workout_exercise_id = workout_exercises_ids[i],
+                goal_value = workout_to_copy.goals[i].goal_value
+            )
+
+            db.session.add(new_goal)
+
+        # db.session.commit()
+
         return workout
 
 class WorkoutExercise(db.Model):
@@ -284,6 +302,10 @@ class Goal(db.Model):
     )
 
     exercises = db.relationship('Exercise', secondary = 'exercise_metrics', backref = 'goals')
+
+    # @classmethod
+    # def create(cls, ):
+    #     goal = Goal()
 
 class Performance(db.Model):
     """JOIN record a workout's actual performance to the workout's goals"""
