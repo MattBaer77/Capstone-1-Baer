@@ -35,7 +35,8 @@ class Exercise(db.Model):
         default="No Description"
         # nullable=False # Add this in later if neccessary.
     )
-
+ 
+    metrics = db.relationship('Metric', secondary='exercise_metrics', backref='exercises')
     
 class Metric(db.Model):
     """Metrics to measure exercise performance"""
@@ -144,7 +145,8 @@ class Workout(db.Model):
     #     nullable=False
     # )
 
-    exercises = db.relationship('Exercise', secondary='workout_exercises', backref='on_workout')
+    exercises = db.relationship('Exercise', secondary='workout_exercises', backref='on_workouts')
+    goals = db.relationship('Goal', secondary='workout_exercises', backref='from_workouts')
 
 class WorkoutExercise(db.Model):
     """JOIN TABLE workout_exercise"""
@@ -193,7 +195,7 @@ class Goal(db.Model):
         nullable=False
     )
 
-###
+    exercises = db.relationship('Exercise', secondary = 'exercise_metrics', backref = 'goals')
 
 class Performance(db.Model):
     """JOIN record a workout's actual performance to the workout's goals"""
@@ -226,6 +228,8 @@ class Performance(db.Model):
         db.Integer,
         nullable=False
     )
+
+    goals = db.relationship('Goal', backref = 'performance')
 
 ##############################################################################
 def connect_db(app):
