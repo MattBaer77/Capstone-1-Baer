@@ -144,7 +144,6 @@ class Workout(db.Model):
     )
 
     goals  = db.relationship('Goal', backref='on_workouts')
-    # exercieses = db.relationship('Exercise', secondary='goals')
 
     def get_author(self):
         """Returns the author based on the author_user_id"""
@@ -167,45 +166,41 @@ class Workout(db.Model):
         db.session.add(workout)
         return workout
 
-    # ADD COPY HERE
+    @classmethod
+    def copy(cls, workout_to_copy, owner_user_id):
+        """
+            Creates a copied workout.
+            Sets author_user_id to original author.
+            Copies the workout's goals.
+        """
 
-    # @classmethod
-    # def copy(cls, workout_to_copy, owner_user_id):
-    #     """
-    #         Creates a copied workout.
-    #         Sets author_user_id to original author.
-    #         Copies the workout's exercises and goals.
-    #     """
+        copy_workout = Workout(
+            description=workout_to_copy.description,
+            owner_user_id=owner_user_id,
+            author_user_id=workout_to_copy.author_user_id
+        )
 
-    #     workout = Workout(
-    #         description=workout_to_copy.description,
-    #         owner_user_id=owner_user_id,
-    #         author_user_id=workout_to_copy.author_user_id
-    #     )
+        # Copy Goals
+        # workout.goals = workout_to_copy.goals
 
-    #     # Copy Exercises
+        db.session.add(copy_workout)
+        db.session.commit()
 
-    #     workout.exercises = workout_to_copy.exercises
+        # OR
 
-    #     # for exercise in workout_to_copy.exercises:
-    #     #     workout.exercises.append(exercise)
+        for goal in workout_to_copy.goals:
+            copy = Goal(
+                workout_id=copy_workout.id,
+                exercise_id=goal.exercise_id,
+                goal_reps=goal.goal_reps,
+                goal_sets=goal.goal_sets,
+                goal_weight_lbs=goal.goal_weight_lbs,
+                goal_time_sec=goal.goal_time_sec
+            )
 
-    #     # Copy Goals - Implement Future
+            copy_workout.goals.append(copy)
 
-    #     # for goals in workout_to_copy.goals:
-    #     #     new_goal = Goal(
-    #     #         exercise_metric_id=workout_to_copy.goals.exercise_metric_id,
-    #     #         workout_exercise_id=workout.exercises,
-    #     #         goal_value=workout_to_copy.goals.goal_value
-    #     #     )
-
-    #     # workout.exercises.goals = workout_to_copy.exercises.goals
-
-    #     db.session.add(workout)
-
-    #     return workout
-
-    # ADD COPY HERE
+        db.session.commit()
 
 
 class Goal(db.Model):
@@ -225,7 +220,7 @@ class Goal(db.Model):
 
     exercise_id = db.Column(
         db.Integer,
-        db.ForeignKey('exercise.id', ondelete="CASCADE")
+        db.ForeignKey('exercises.id', ondelete="CASCADE")
     )
 
     goal_reps = db.Column(
@@ -242,14 +237,12 @@ class Goal(db.Model):
 
     goal_time_sec = db.Column(
         db.Integer,
-        nullable=True,
-        default=NULL
+        nullable=True
     )
 
     goal_weight_lbs = db.Column(
         db.Integer,
-        nullable=True,
-        default=NULL
+        nullable=True
     )
 
     exercise = db.relationship('Exercise')
@@ -261,7 +254,7 @@ class Goal(db.Model):
 
 
 
-# Level 3 - User Performs Exercise and records Performacne
+# Level 3 - User Performs Exercise and records Performance
 
 class Performance(db.Model):
     """JOIN record a workout's actual performance to the workout's goals"""
@@ -285,31 +278,31 @@ class Performance(db.Model):
         default=datetime.utcnow()
     )
 
-    performance_id = db.Column(
+    goal_id = db.Column(
         db.Integer,
         db.ForeignKey('goals.id', ondelete="CASCADE")
     )
 
-        goal_reps = db.Column(
+    performance_reps = db.Column(
         db.Integer,
-        nullable=False
+        nullable=False,
+        default=1
     )
 
     performance_sets = db.Column(
         db.Integer,
-        nullable=False
+        nullable=False,
+        default=1
     )
 
     performance_time_sec = db.Column(
         db.Integer,
-        nullable=True,
-        default=NULL
+        nullable=True
     )
 
     performance_weight_lbs = db.Column(
         db.Integer,
-        nullable=True,
-        default=NULL
+        nullable=True
     )
 
     # goals = db.relationship('Goal', backref = 'performance')

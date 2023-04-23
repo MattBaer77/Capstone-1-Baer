@@ -2,7 +2,7 @@
 
 # from csv import DictReader
 from app import db
-from models import Exercise, Metric, ExerciseMetric, User, Workout, WorkoutExercise, Goal, Performance
+from models import Exercise, User, Workout, Goal, Performance
 
 
 db.drop_all()
@@ -24,7 +24,6 @@ db.session.add_all([two_hand_kettle_swing, four_count_burpee, abdominal_stabiliz
 db.session.commit()
 
 # Add users
-
 bob_bobson = User.signup(email='bob@unoriginallastname.com', username='Bobbo', bio='I am here to do some workouts! I hope you are too!!!', password='bobson')
 mike_mikeson = User.signup(email='mike@gmail.com', username='Mikey', bio='I am here to do some workouts! I hope you are too!!!', password='mikeson')
 bob_alfredson = User.signup(email='bob@gmail.com', username='BobbyA', bio='I am here to do some workouts! I hope you are too!!!', password='alfredson')
@@ -34,7 +33,6 @@ bob_bo = User.signup(email='otherbob@otherbob.com', username='Bobbo2electricboo'
 db.session.commit()
 
 # Add workouts
-
 the_bobson_workout = Workout.create(description='Curls and Burpees Forever', owner_user_id='1')
 the_mikeson_workout = Workout.create(description='Kettles and Abs All Day', owner_user_id='2')
 the_bo_workout = Workout.create(description='I do very little', owner_user_id='5')
@@ -46,7 +44,7 @@ add_to_bobson_workout_1 = Goal(workout_id=1, exercise_id=5, goal_reps=10, goal_s
 add_to_bobson_workout_2 = Goal(workout_id=1, exercise_id=2, goal_reps=50, goal_sets=1)
 
 add_to_mikeson_workout_1 = Goal(workout_id=2, exercise_id=1, goal_reps=30, goal_weight_lbs=80)
-add_to_mikeson_workout_2 = Goal(workout_id=2, exercise_id=3, goal_sets=6, goal_time=60)
+add_to_mikeson_workout_2 = Goal(workout_id=2, exercise_id=3, goal_sets=6, goal_time_sec=60)
 
 db.session.add_all([
     add_to_bobson_workout_1,
@@ -57,4 +55,23 @@ db.session.add_all([
 db.session.commit()
 
 # Add performance
+the_bobson_workout_1_performance_4 = Performance(goal_id =1, performance_reps=10, performance_sets=3, performance_weight_lbs=45)
+the_bobson_workout_1_performance_1 = Performance(goal_id =1, performance_reps=10, performance_sets=3, performance_weight_lbs=30)
+the_bobson_workout_1_performance_2 = Performance(goal_id =1, performance_reps=10, performance_sets=3, performance_weight_lbs=35)
+the_bobson_workout_1_performance_3 = Performance(goal_id =1, performance_reps=10, performance_sets=3, performance_weight_lbs=40)
 
+the_bobson_workout_2_performance_1 = Performance(goal_id =2, performance_reps=36)
+the_bobson_workout_2_performance_2 = Performance(goal_id =2, performance_reps=39)
+the_bobson_workout_2_performance_3 = Performance(goal_id =2, performance_reps=50)
+
+db.session.add_all([
+    the_bobson_workout_1_performance_1,
+    the_bobson_workout_1_performance_2,
+    the_bobson_workout_1_performance_3,
+    the_bobson_workout_1_performance_4,
+    the_bobson_workout_2_performance_1,
+    the_bobson_workout_2_performance_2,
+    the_bobson_workout_2_performance_3
+])
+
+db.session.commit()
