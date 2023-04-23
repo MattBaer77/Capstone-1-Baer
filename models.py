@@ -224,35 +224,28 @@ class Workout(db.Model):
             author_user_id=workout_to_copy.author_user_id
         )
 
-        for exercise in workout_to_copy.exercises:
-            workout.exercises.append(exercise)
+        # Copy Exercises
+
+        workout.exercises = workout_to_copy.exercises
+
+        # for exercise in workout_to_copy.exercises:
+        #     workout.exercises.append(exercise)
+
+        # Copy Goals - Implement Future
 
         db.session.add(workout)
-        db.session.commit()
-
-        workout_exercises_ids = []
-        print(workout_exercises_ids)
-
-        for each in workout.workout_exercises:
-            workout_exercises_ids.append(each.id)
-
-        print(workout_exercises_ids)
-
-        for i in range(len(workout_to_copy.goals)):
-            print(workout_to_copy.goals[i].exercise_metric_id)
-            print(workout_exercises_ids[i])
-            print(workout_to_copy.goals[i].goal_value)
-            new_goal = Goal(
-                exercise_metric_id = workout_to_copy.goals[i].exercise_metric_id,
-                workout_exercise_id = workout_exercises_ids[i],
-                goal_value = workout_to_copy.goals[i].goal_value
-            )
-
-            db.session.add(new_goal)
-
-        # db.session.commit()
 
         return workout
+
+    # @classmethod
+    # def deepcopy(cls, workout_to_copy, owner_user_id):
+    #     """
+    #         Different approach to copy workout.
+    #         Sets author_user_id to original author.
+    #         Copies the workouts exercieses and goals.
+    #     """
+
+
 
 class WorkoutExercise(db.Model):
     """JOIN TABLE workout_exercise"""
