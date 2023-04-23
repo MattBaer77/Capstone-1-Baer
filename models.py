@@ -233,6 +233,17 @@ class Workout(db.Model):
 
         # Copy Goals - Implement Future
 
+        # for goals in workout_to_copy.goals:
+        #     new_goal = Goal(
+        #         exercise_metric_id=workout_to_copy.goals.exercise_metric_id,
+        #         workout_exercise_id=workout.exercises,
+        #         goal_value=workout_to_copy.goals.goal_value
+        #     )
+
+        # workout.exercises.goals = workout_to_copy.exercises.goals
+
+        
+
         db.session.add(workout)
 
         return workout
@@ -245,6 +256,14 @@ class Workout(db.Model):
     #         Copies the workouts exercieses and goals.
     #     """
 
+    #     db.session.expunge(workout_to_copy)
+    #     make_transient(workout_to_copy)
+
+    #     workout_to_copy.owner_user_id=owner_user_id
+        
+    #     db.session.add(workout_to_copy)
+
+    #     return workout_to_copy
 
 
 class WorkoutExercise(db.Model):
