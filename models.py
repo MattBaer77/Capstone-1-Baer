@@ -38,51 +38,11 @@ class Exercise(db.Model):
         # nullable=False # Add this in later if neccessary.
     )
  
-    metrics = db.relationship('Metric', secondary='exercise_metrics', backref='exercises')
-    
-class Metric(db.Model):
-    """Metrics to measure exercise performance"""
 
-    __tablename__ = 'metrics'
-
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
-
-    kind = db.Column(
-        db.Text,
-        nullable=False
-    )
-
-    units = db.Column(
-        db.Text,
-        nullable=False
-    )
-
-class ExerciseMetric(db.Model):
-    """JOIN TABLE exercise_metrics"""
-
-    __tablename__ = 'exercise_metrics'
-
-    id = db.Column(
-        db.Integer,
-        primary_key=True,
-    )
-
-    exercise_id = db.Column(
-        db.Integer,
-        db.ForeignKey('exercises.id', ondelete='CASCADE'),
-        nullable=False
-    )
-
-    metric_id = db.Column(
-        db.Integer,
-        db.ForeignKey('metrics.id', ondelete='CASCADE'),
-        nullable=False
-    )
 
 ###
+
+
 
 # Level 2 - User & Exercise Planning
 
@@ -96,13 +56,13 @@ class User(db.Model):
         primary_key=True,
     )
 
-    username = db.Column(
+    email = db.Column(
         db.Text,
         nullable=False,
         unique=True,
     )
 
-    email = db.Column(
+    username = db.Column(
         db.Text,
         nullable=False,
         unique=True,
@@ -118,8 +78,7 @@ class User(db.Model):
     )
 
     workouts = db.relationship('Workout', backref='owner', cascade='all, delete-orphan')
-    # workouts_authored = db.relationship('Workout', backref='author')
-
+    
     @classmethod
     def signup(cls, username, email, bio, password):
         """Sign up user.
@@ -158,7 +117,6 @@ class User(db.Model):
         return False
 
 
-
 class Workout(db.Model):
     """A Workout - a group of exercises"""
 
@@ -185,9 +143,8 @@ class Workout(db.Model):
         nullable=True
     )
 
-    workout_exercises = db.relationship('WorkoutExercise', backref='workout')
-    exercises = db.relationship('Exercise', secondary='workout_exercises', backref='on_workouts')
-    goals = db.relationship('Goal', secondary='workout_exercises', backref='from_workouts')
+    goals  = db.relationship('Goal', backref='on_workouts')
+    # exercieses = db.relationship('Exercise', secondary='goals')
 
     def get_author(self):
         """Returns the author based on the author_user_id"""
@@ -210,83 +167,46 @@ class Workout(db.Model):
         db.session.add(workout)
         return workout
 
-    @classmethod
-    def copy(cls, workout_to_copy, owner_user_id):
-        """
-            Creates a copied workout.
-            Sets author_user_id to original author.
-            Copies the workout's exercises and goals.
-        """
-
-        workout = Workout(
-            description=workout_to_copy.description,
-            owner_user_id=owner_user_id,
-            author_user_id=workout_to_copy.author_user_id
-        )
-
-        # Copy Exercises
-
-        workout.exercises = workout_to_copy.exercises
-
-        # for exercise in workout_to_copy.exercises:
-        #     workout.exercises.append(exercise)
-
-        # Copy Goals - Implement Future
-
-        # for goals in workout_to_copy.goals:
-        #     new_goal = Goal(
-        #         exercise_metric_id=workout_to_copy.goals.exercise_metric_id,
-        #         workout_exercise_id=workout.exercises,
-        #         goal_value=workout_to_copy.goals.goal_value
-        #     )
-
-        # workout.exercises.goals = workout_to_copy.exercises.goals
-
-        
-
-        db.session.add(workout)
-
-        return workout
+    # ADD COPY HERE
 
     # @classmethod
-    # def deepcopy(cls, workout_to_copy, owner_user_id):
+    # def copy(cls, workout_to_copy, owner_user_id):
     #     """
-    #         Different approach to copy workout.
+    #         Creates a copied workout.
     #         Sets author_user_id to original author.
-    #         Copies the workouts exercieses and goals.
+    #         Copies the workout's exercises and goals.
     #     """
 
-    #     db.session.expunge(workout_to_copy)
-    #     make_transient(workout_to_copy)
+    #     workout = Workout(
+    #         description=workout_to_copy.description,
+    #         owner_user_id=owner_user_id,
+    #         author_user_id=workout_to_copy.author_user_id
+    #     )
 
-    #     workout_to_copy.owner_user_id=owner_user_id
-        
-    #     db.session.add(workout_to_copy)
+    #     # Copy Exercises
 
-    #     return workout_to_copy
+    #     workout.exercises = workout_to_copy.exercises
 
+    #     # for exercise in workout_to_copy.exercises:
+    #     #     workout.exercises.append(exercise)
 
-class WorkoutExercise(db.Model):
-    """JOIN TABLE workout_exercise"""
+    #     # Copy Goals - Implement Future
 
-    __tablename__ = 'workout_exercises'
+    #     # for goals in workout_to_copy.goals:
+    #     #     new_goal = Goal(
+    #     #         exercise_metric_id=workout_to_copy.goals.exercise_metric_id,
+    #     #         workout_exercise_id=workout.exercises,
+    #     #         goal_value=workout_to_copy.goals.goal_value
+    #     #     )
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True,
-    )
+    #     # workout.exercises.goals = workout_to_copy.exercises.goals
 
-    workout_id = db.Column(
-        db.Integer,
-        db.ForeignKey('workouts.id', ondelete="CASCADE"),
-        nullable=False
-    )
+    #     db.session.add(workout)
 
-    exercise_id = db.Column(
-        db.Integer,
-        db.ForeignKey('exercises.id', ondelete="CASCADE"),
-        nullable=False
-    )
+    #     return workout
+
+    # ADD COPY HERE
+
 
 class Goal(db.Model):
     """JOIN exercise_metric and workout_exercise then add a goal_value"""
@@ -298,26 +218,50 @@ class Goal(db.Model):
         primary_key=True,
     )
 
-    exercise_metric_id = db.Column(
+    workout_id = db.Column(
         db.Integer,
-        db.ForeignKey('exercise_metrics.id', ondelete="CASCADE")
+        db.ForeignKey('workouts.id', ondelete="CASCADE")
     )
 
-    workout_exercise_id = db.Column(
+    exercise_id = db.Column(
         db.Integer,
-        db.ForeignKey('workout_exercises.id', ondelete="CASCADE")
+        db.ForeignKey('exercise.id', ondelete="CASCADE")
     )
 
-    goal_value = db.Column(
+    goal_reps = db.Column(
         db.Integer,
-        nullable=False
+        nullable=False,
+        default=1
     )
 
-    exercises = db.relationship('Exercise', secondary = 'exercise_metrics', backref = 'goals')
+    goal_sets = db.Column(
+        db.Integer,
+        nullable=False,
+        default=1
+    )
 
-    # @classmethod
-    # def create(cls, ):
-    #     goal = Goal()
+    goal_time_sec = db.Column(
+        db.Integer,
+        nullable=True,
+        default=NULL
+    )
+
+    goal_weight_lbs = db.Column(
+        db.Integer,
+        nullable=True,
+        default=NULL
+    )
+
+    exercise = db.relationship('Exercise')
+    performance = db.relationship('Performance', backref='goals')
+
+
+
+# 
+
+
+
+# Level 3 - User Performs Exercise and records Performacne
 
 class Performance(db.Model):
     """JOIN record a workout's actual performance to the workout's goals"""
@@ -341,17 +285,34 @@ class Performance(db.Model):
         default=datetime.utcnow()
     )
 
-    goal_id = db.Column(
+    performance_id = db.Column(
         db.Integer,
         db.ForeignKey('goals.id', ondelete="CASCADE")
     )
 
-    performance = db.Column(
+        goal_reps = db.Column(
         db.Integer,
         nullable=False
     )
 
-    goals = db.relationship('Goal', backref = 'performance')
+    performance_sets = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    performance_time_sec = db.Column(
+        db.Integer,
+        nullable=True,
+        default=NULL
+    )
+
+    performance_weight_lbs = db.Column(
+        db.Integer,
+        nullable=True,
+        default=NULL
+    )
+
+    # goals = db.relationship('Goal', backref = 'performance')
 
 ##############################################################################
 def connect_db(app):
