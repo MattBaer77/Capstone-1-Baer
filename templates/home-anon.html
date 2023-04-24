@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Join Routine!{% endblock %}
+
+{% block content %}
+
+<div align="center">
+
+    <h1>Join Routine and Get In The Game!</h1>
+
+    <div class="mt-5">
+
+        {% for workout in workouts %}
+            <div class="mb-5">
+                <h3>{{workout.description}}</h3>
+                <p><small><a href="/{{workout.id}}">Edit</a></small></p>
+                <p>by {{workout.owner.username}}</p>
+
+            </div>
+        {% endfor %}
+        
+    </div>
+
+</div>
+
+{% endblock %}

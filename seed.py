@@ -75,3 +75,10 @@ db.session.add_all([
 ])
 
 db.session.commit()
+
+# Copy a workout
+
+workout_to_copy=Workout.query.get(1)
+
+Workout.copy(workout_to_copy, 3)
+
