@@ -64,6 +64,9 @@ def home():
     user workouts
     """
 
-    workouts = Workout.query.all()
+    # workouts = Workout.query.all()
+
+    # All workouts, but filter out copied workouts
+    workouts = Workout.query.filter(Workout.owner_user_id == Workout.author_user_id).all()
 
     return render_template('home-anon.html', workouts=workouts)
