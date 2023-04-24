@@ -77,7 +77,8 @@ class User(db.Model):
         nullable=False,
     )
 
-    workouts = db.relationship('Workout', foreign_keys="[Workout.author_user_id]", backref='owner', cascade='all, delete-orphan')
+    workouts = db.relationship('Workout', foreign_keys="[Workout.owner_user_id]", backref='owner', cascade='all, delete-orphan')
+    workouts_authored = db.relationship('Workout', foreign_keys="[Workout.author_user_id]", backref='author', cascade='all, delete-orphan')
     
     @classmethod
     def signup(cls, username, email, bio, password):
@@ -182,12 +183,9 @@ class Workout(db.Model):
         )
 
         # Copy Goals
-        # workout.goals = workout_to_copy.goals
 
         db.session.add(copy_workout)
         db.session.commit()
-
-        # OR
 
         for goal in workout_to_copy.goals:
             copy = Goal(
