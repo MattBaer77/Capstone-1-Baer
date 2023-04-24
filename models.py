@@ -77,7 +77,7 @@ class User(db.Model):
         nullable=False,
     )
 
-    workouts = db.relationship('Workout', backref='owner', cascade='all, delete-orphan')
+    workouts = db.relationship('Workout', foreign_keys="[Workout.author_user_id]", backref='owner', cascade='all, delete-orphan')
     
     @classmethod
     def signup(cls, username, email, bio, password):
@@ -140,6 +140,7 @@ class Workout(db.Model):
 
     author_user_id = db.Column(
         db.Integer,
+        db.ForeignKey('users.id', ondelete="CASCADE"),
         nullable=True
     )
 
