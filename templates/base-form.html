@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ form.form_name }}{% endblock %}
+
+{% block content %}
+
+<div align="center">
+
+    <div class="w-25">
+
+        <h2>{{ form.form_title }}</h2>
+
+        <form method="POST">
+
+            {{ form.hidden_tag() }}
+            {% for field in form if field.widget.input_type != 'hidden'%}
+            <div class="form-group" align="start">
+                
+                {{field.label(class_="mt-4")}}
+                {{field(class_="form-control")}}
+            
+                {% for err in field.errors %}
+                {{err}}
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <button class="btn btn-primary mt-2">{{ form.submit_text }}</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

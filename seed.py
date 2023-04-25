@@ -24,11 +24,11 @@ db.session.add_all([two_hand_kettle_swing, four_count_burpee, abdominal_stabiliz
 db.session.commit()
 
 # Add users
-bob_bobson = User.signup(email='bob@unoriginallastname.com', username='Bobbo', bio='I am here to do some workouts! I hope you are too!!!', password='bobson')
-mike_mikeson = User.signup(email='mike@gmail.com', username='Mikey', bio='I am here to do some workouts! I hope you are too!!!', password='mikeson')
-bob_alfredson = User.signup(email='bob@gmail.com', username='BobbyA', bio='I am here to do some workouts! I hope you are too!!!', password='alfredson')
-jim_mikeson = User.signup(email='jim@gmail.com', username='JimmyMike', bio='I am here to do some workouts! I hope you are too!!!', password='mikeson')
-bob_bo = User.signup(email='otherbob@otherbob.com', username='Bobbo2electricboo', bio='I am here to do some workouts! I hope you are too!!!', password='bobson')
+bob_bobson = User.signup(email='bob@unoriginallastname.com', username='Bobbo', password='bobson')
+mike_mikeson = User.signup(email='mike@gmail.com', username='Mikey', password='mikeson')
+bob_alfredson = User.signup(email='bob@gmail.com', username='BobbyA', password='alfredson')
+jim_mikeson = User.signup(email='jim@gmail.com', username='JimmyMike', password='mikeson')
+bob_bo = User.signup(email='otherbob@otherbob.com', username='Bobbo2electricboo', password='bobson')
 
 db.session.commit()
 

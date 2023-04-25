@@ -70,6 +70,7 @@ class User(db.Model):
 
     bio = db.Column(
         db.Text,
+        nullable=True
     )
 
     password = db.Column(
@@ -81,7 +82,7 @@ class User(db.Model):
     workouts_authored = db.relationship('Workout', foreign_keys="[Workout.author_user_id]", backref='author', cascade='all, delete-orphan')
     
     @classmethod
-    def signup(cls, username, email, bio, password):
+    def signup(cls, username, email, password):
         """Sign up user.
         Hashes password and adds user to db session.
         """
@@ -91,7 +92,6 @@ class User(db.Model):
         user = User(
             username=username,
             email=email,
-            bio=bio,
             password=hashed_pwd,
         )
 

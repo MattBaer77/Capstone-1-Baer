@@ -10,7 +10,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
-# from forms import ...
+from forms import *
 from models import db, connect_db, Exercise, User, Workout, Goal, Performance
 
 
@@ -54,17 +54,29 @@ def do_logout():
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
+
+def check_for_user():
+    """
+    Check for a logged in user.
+    If User logged in, return True
+    """
+
+    if g.user:
+        flash("You are already logged in!", "success")
+        return True
+
+
+
 ##############################################################################
+
+# USER ROUTES
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     """Handle user signup.
-
     Create new user and add to DB. Redirect to home page.
-
     If form not valid, present form.
-
-    If the there already is a user with that username: flash message
+    If the there already is a user with that username or email: flash message
     and re-present form.
     """
 
@@ -88,7 +100,38 @@ def signup():
         return redirect("/")
 
     else:
-        return render_template('users/signup.html', form=form)
+        return render_template('generic-form-page.html', form=form)
+
+
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    """Handle user login."""
+
+    form = LoginForm()
+
+    # if g.user:
+    #     flash("You are already logged in!", "success")
+    #     return redirect('/')
+
+    if check_for_user():
+        return redirect('/')
+
+    if form.validate_on_submit():
+        user = User.authenticate(form.username.data,
+                                 form.password.data)
+
+        if user:
+            do_login(user)
+            flash(f"Hello, {user.username}!", "success")
+            return redirect("/")
+
+        flash("Invalid credentials.", 'danger')
+
+    return render_template('generic-form-page.html', form=form)
+
+##############################################################################
+
+# ROOT ROUTES / HOME
 
 @app.route('/')
 def home():
