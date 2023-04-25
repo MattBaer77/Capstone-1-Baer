@@ -148,7 +148,7 @@ def logout():
 
 # VIEW USERS
 @app.route('/users')
-def view_user():
+def view_users():
     """
     Page with listing of users.
     Can take a 'q' param in querystring to search by that username.
@@ -165,8 +165,22 @@ def view_user():
 
 
 # # VIEW USER
-# @app.route('/users/<int:user_id>')
-# def view_user():
+@app.route('/users/<int:user_id>')
+def view_user(user_id):
+    """Show user profile."""
+
+    user = User.query.get_or_404(user_id)
+
+    # snagging workouts in order from the database;
+    # user.workouts won't be in order by default
+    workouts = (Workout
+                .query
+                .filter(Workout.id == user_id)
+                .order_by(Workout.id.desc())
+                .limit(100)
+                .all())
+    return render_template('users/user.html', user=user, workouts=workouts)
+
 
 
 # # EDIT USER

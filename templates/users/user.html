@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row justify-content-end">
+      <div class="col-sm-9">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-12">
+              <div class="card user-card">
+                <div class="card-inner">
+                  <div class="image-wrapper">
+                    <img src="{{ user.header_image_url }}" alt="" class="card-hero">
+                  </div>
+                  <div class="card-contents">
+                    <a href="/users/{{ user.id }}" class="card-link">
+                      <img src="{{ user.image_url }}" alt="Image for {{ user.username }}" class="card-image">
+                      <p>{{ user.username }}</p>
+                    </a>
+                  </div>
+                  <p class="card-bio">{{ user.bio }}</p>
+                </div>
+              </div>
+
+              {% for workout in workouts %}
+
+              <div class="card">
+
+                <p>{{ workout.description }}</p>
+
+              </div>
+
+              {% endfor %}
+
+
+
+            </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
