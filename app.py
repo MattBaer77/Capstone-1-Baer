@@ -12,6 +12,7 @@ from sqlalchemy.exc import IntegrityError
 
 from forms import *
 from models import db, connect_db, Exercise, User, Workout, Goal, Performance
+from helpers import scrub_default_image_url, replace_default_image_url
 
 
 CURR_USER_KEY = "curr_user"
@@ -64,14 +65,24 @@ def check_for_user():
     if g.user:
         return True
 
-def check_for_user_with_message():
+def check_for_user_with_message(message, category):
     """
     Check for a logged in user.
     If User logged in, return True
     """
 
     if g.user:
-        flash("You are already logged in!", "success")
+        flash(message, category)
+        return True
+
+def check_for_not_user_with_message(message, category):
+    """
+    Check for a logged in user.
+    If User logged in, return True
+    """
+
+    if not g.user:
+        flash(message, category)
         return True
 
 
@@ -120,7 +131,7 @@ def login():
 
     form = LoginForm()
 
-    if check_for_user_with_message():
+    if check_for_user_with_message("You are already logged in!", "success"):
         return redirect('/')
 
     if form.validate_on_submit():
@@ -182,10 +193,37 @@ def view_user(user_id):
     return render_template('users/user.html', user=user, workouts=workouts)
 
 
+# EDIT USER
+@app.route('/users/edit', methods=["GET", "POST"])
+def edit_user():
+    """Update profile for current user."""
 
-# # EDIT USER
-# @app.route('/users/edit', methods=["GET", "POST"])
-# def edit_user():
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    form = UserEditForm(obj=g.user)
+
+    scrub_default_image_url(form)
+
+    if form.validate_on_submit():
+        user = User.authenticate(g.user.username,
+                                form.password.data)
+
+        if user:
+            user.email = form.email.data
+            user.username = form.username.data
+            user.image_url = form.image_url.data
+            replace_default_image_url(form, user)
+            user.bio = form.bio.data
+
+            db.session.commit()
+            return redirect("/")
+
+        else:
+            flash("Access something.", "danger")
+            return render_template('generic-form-page.html', form=form)
+
+    return render_template('generic-form-page.html', form=form)
 
 
 ##############################################################################
