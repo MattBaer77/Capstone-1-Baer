@@ -62,6 +62,15 @@ def check_for_user():
     """
 
     if g.user:
+        return True
+
+def check_for_user_with_message():
+    """
+    Check for a logged in user.
+    If User logged in, return True
+    """
+
+    if g.user:
         flash("You are already logged in!", "success")
         return True
 
@@ -113,7 +122,7 @@ def login():
     #     flash("You are already logged in!", "success")
     #     return redirect('/')
 
-    if check_for_user():
+    if check_for_user_with_message():
         return redirect('/')
 
     if form.validate_on_submit():
@@ -136,6 +145,41 @@ def logout():
     do_logout()
     flash("Goodbye!", "info")
     return redirect('/')
+
+# EDIT USER
+
+##############################################################################
+
+# ROUTES WORKOUTS
+
+# VIEW WORKOUTS
+
+# CREATE NEW WORKOUT
+# ADD EXERCISE
+# ADD GOALS
+# SAVE
+# SHOWS INFO
+# ADD ANOTHER EXERCISE
+# FINISH
+
+# GO BACK TO EDIT WORKOUT
+
+##############################################################################
+
+# ROUTES PERFORMANCE
+
+# VIEW LIST OF PERFORMANCE RECORDS - CONVERT TO CALENDAR IN FUTURE
+# VIEW INDIVIDUAL PERFORMANCE RECORDS
+# EDIT INDIVIDUAL PERFORMANCE RECORDS
+
+# START NEW WORKOUT - CREATE NEW PERFORMANCE RECORDS
+# GUIDED EDITOR FOR EACH EXERCISE IN WORKOUT
+
+##############################################################################
+
+# VIEW GRAPHICS SHOWING PERFORMANCE RECORD GRAPHS PER WORKOUT
+# PERFORMANCE UP TO INDIVIDUAL PERFORMANCE RECORD FROM CALENDAR
+# PEFRORMANCE UP TO TODAY
 
 ##############################################################################
 
