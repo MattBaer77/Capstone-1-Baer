@@ -68,6 +68,11 @@ class User(db.Model):
         unique=True,
     )
 
+    image_url = db.Column(
+        db.Text,
+        default="/static/images/noun-weights-49996.png",
+    )
+
     bio = db.Column(
         db.Text,
         nullable=True

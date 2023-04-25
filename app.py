@@ -80,9 +80,11 @@ def check_for_user_with_message():
 
 # USER ROUTES
 
+
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
-    """Handle user signup.
+    """
+    Handle user signup.
     Create new user and add to DB. Redirect to home page.
     If form not valid, present form.
     If the there already is a user with that username or email: flash message
@@ -118,10 +120,6 @@ def login():
 
     form = LoginForm()
 
-    # if g.user:
-    #     flash("You are already logged in!", "success")
-    #     return redirect('/')
-
     if check_for_user_with_message():
         return redirect('/')
 
@@ -138,6 +136,7 @@ def login():
 
     return render_template('generic-form-page.html', form=form)
 
+
 @app.route('/logout', methods=['POST'])
 def logout():
     """Handle logout of user."""
@@ -146,7 +145,34 @@ def logout():
     flash("Goodbye!", "info")
     return redirect('/')
 
-# EDIT USER
+
+# VIEW USERS
+@app.route('/users')
+def view_user():
+    """
+    Page with listing of users.
+    Can take a 'q' param in querystring to search by that username.
+    """
+
+    search = request.args.get('q')
+
+    if not search:
+        users = User.query.all()
+    else:
+        users = User.query.filter(User.username.like(f"%{search}%")).all()
+
+    return render_template('users/index.html', users=users)
+
+
+# # VIEW USER
+# @app.route('/users/<int:user_id>')
+# def view_user():
+
+
+# # EDIT USER
+# @app.route('/users/edit', methods=["GET", "POST"])
+# def edit_user():
+
 
 ##############################################################################
 
