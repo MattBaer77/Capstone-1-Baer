@@ -129,6 +129,14 @@ def login():
 
     return render_template('generic-form-page.html', form=form)
 
+@app.route('/logout', methods=['POST'])
+def logout():
+    """Handle logout of user."""
+
+    do_logout()
+    flash("Goodbye!", "info")
+    return redirect('/')
+
 ##############################################################################
 
 # ROOT ROUTES / HOME
@@ -141,9 +149,11 @@ def home():
     user workouts
     """
 
-    # workouts = Workout.query.all()
-
     # All workouts, but filter out copied workouts
     workouts = Workout.query.filter(Workout.owner_user_id == Workout.author_user_id).all()
 
-    return render_template('home-anon.html', workouts=workouts)
+    if check_for_user():
+        return render_template('home.html', workouts=workouts)
+
+    else:
+        return render_template('home-anon.html', workouts=workouts)
