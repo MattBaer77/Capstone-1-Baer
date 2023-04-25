@@ -147,7 +147,6 @@ def login():
 
     return render_template('generic-form-page.html', form=form)
 
-
 @app.route('/logout', methods=['POST'])
 def logout():
     """Handle logout of user."""
@@ -157,7 +156,6 @@ def logout():
     return redirect('/')
 
 
-# VIEW USERS
 @app.route('/users')
 def view_users():
     """
@@ -175,7 +173,6 @@ def view_users():
     return render_template('users/index.html', users=users)
 
 
-# # VIEW USER
 @app.route('/users/<int:user_id>')
 def view_user(user_id):
     """Show user profile."""
@@ -193,7 +190,6 @@ def view_user(user_id):
     return render_template('users/user.html', user=user, workouts=workouts)
 
 
-# EDIT USER
 @app.route('/users/edit', methods=["GET", "POST"])
 def edit_user():
     """Update profile for current user."""
