@@ -1,6 +1,7 @@
 # from app import *
 import requests
 from write_to_local import write_to_local
+from models import Exercise
 
 def wger_parse_relevant(r):
     """
@@ -16,7 +17,7 @@ def wger_parse_relevant(r):
         name = each["name"]
         description = each["description"]
 
-        parsed_data.append({f'"name":"{name}", "description":"{description}"'})
+        parsed_data.append({"name":f"{name}", "description":f"{description}"})
 
     return parsed_data
 
@@ -26,7 +27,7 @@ def wger_fetch(filename, revision, limit):
     Calls WGER API
     Calls wger_parse_relevant
     Calls write_to_local
-    Returns nothing
+    Returns parsed_content
     """
 
     url = f"https://wger.de/api/v2/exercise/?language=2&limit={limit}"
@@ -38,6 +39,8 @@ def wger_fetch(filename, revision, limit):
     parsed_content = wger_parse_relevant(r)
 
     write_to_local(filename, revision, parsed_content)
+
+    return parsed_content
 
 
 

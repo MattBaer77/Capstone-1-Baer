@@ -3,6 +3,7 @@
 # from csv import DictReader
 from app import db
 from models import Exercise, User, Workout, Goal, Performance
+from fetch_wger_exercises import *
 
 
 db.drop_all()
@@ -13,14 +14,23 @@ db.create_all()
 # Manual entry of some data - no API Call
 
 # Add exercises
-two_hand_kettle_swing = Exercise(name='Two handed kettlebell swing', description='Two Handed Russian Style Kettlebell swing')
-four_count_burpee = Exercise(name='Four-count burpees', description='Starting position: Stand straight, feet hip-width apart. Steps: Sqat low and support yourself on the floor with your hands between the knees and in front of your feet, your back straight. Keeping your hands on the floor, jump your legs backward into high plank position. Jump your feet forward to return to the squat position. Repeat.')
-abdominal_stabilization = Exercise(name='Abdominal Stabilization', description='Do something')
-alternate_back_lunges = Exercise(name='Alternate back lunges', description='The posterior muscles of the buttocks, hamstrings, soleus and gastrocnemius are trained more')
-alternating_bicep_curl = Exercise(name='Alternating bicep curls', description='Starting position: Start standing up with dumbbells in each hand, your back straight and feet hip-width apart. Your arms should be relaxed, pointing down. Your knees should be slightly bent, your abs contracted, and your shoulders down. Steps: Bend one arm at the elbow, bringing the dumbbell up to your shoulder. Your upper arm should remain motionless during this movement. Bring the dumbbell back down until your arm is in its original relaxed position. Repeat, switching arms.')
+# two_hand_kettle_swing = Exercise(name='Two handed kettlebell swing', description='Two Handed Russian Style Kettlebell swing')
+# four_count_burpee = Exercise(name='Four-count burpees', description='Starting position: Stand straight, feet hip-width apart. Steps: Sqat low and support yourself on the floor with your hands between the knees and in front of your feet, your back straight. Keeping your hands on the floor, jump your legs backward into high plank position. Jump your feet forward to return to the squat position. Repeat.')
+# abdominal_stabilization = Exercise(name='Abdominal Stabilization', description='Do something')
+# alternate_back_lunges = Exercise(name='Alternate back lunges', description='The posterior muscles of the buttocks, hamstrings, soleus and gastrocnemius are trained more')
+# alternating_bicep_curl = Exercise(name='Alternating bicep curls', description='Starting position: Start standing up with dumbbells in each hand, your back straight and feet hip-width apart. Your arms should be relaxed, pointing down. Your knees should be slightly bent, your abs contracted, and your shoulders down. Steps: Bend one arm at the elbow, bringing the dumbbell up to your shoulder. Your upper arm should remain motionless during this movement. Bring the dumbbell back down until your arm is in its original relaxed position. Repeat, switching arms.')
 
-# Commit exercises
-db.session.add_all([two_hand_kettle_swing, four_count_burpee, abdominal_stabilization, alternate_back_lunges, alternating_bicep_curl])
+# # Commit exercises
+# db.session.add_all([two_hand_kettle_swing, four_count_burpee, abdominal_stabilization, alternate_back_lunges, alternating_bicep_curl])
+# db.session.commit()
+
+# Add exercises - from API Call
+data = wger_fetch("fetch", "A", 10000)
+
+for each in data:
+    exercise = Exercise(name=each["name"], description=each["description"])
+    db.session.add(exercise)
+
 db.session.commit()
 
 # Add users
