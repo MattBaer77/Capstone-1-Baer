@@ -25,7 +25,7 @@ db.create_all()
 # db.session.commit()
 
 # Add exercises - from API Call
-data = wger_fetch("fetch", "A", 10)
+data = wger_fetch("fetch", "A", 10000)
 
 for each in data:
     exercise = Exercise(name=each["name"], description=each["description"])
