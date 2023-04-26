@@ -224,7 +224,16 @@ def edit_user():
 
 ##############################################################################
 
-# ROUTES WORKOUTS
+# ROUTES EXERCISES and WORKOUTS
+
+# VIEW EXERCISES
+@app.route('/exercises')
+def view_all_exercises():
+    """"""
+
+    exercises = Exercise.query.order_by(Exercise.id.desc()).all()
+
+    return render_template('exercises.html', exercises=exercises)
 
 # VIEW WORKOUTS
 @app.route('/workouts')
@@ -250,6 +259,22 @@ def view_workouts():
 
 
 # CREATE NEW WORKOUT
+# @app.route('/workout/add', methods=["GET", "POST"])
+# def add_workout():
+#     """"""
+
+#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
+#         return redirect('/')
+
+#     form = WorkoutAddForm()
+
+#     # if form.validate_on_submit():
+#     #     workout = Workout.create(
+#     #         description=form.description.data
+#     #         owner_user_id=g.user.id
+#     #     )
+
+#     return render_template('generic-form-page.html', form=form)
 
 
 

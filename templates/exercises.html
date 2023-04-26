@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Exercise List{% endblock %}
+
+{% block content %}
+
+
+<div class="mt-5">
+
+    {% for exercise in exercises %}
+        <div class="mb-5">
+            <h4>{{exercise.name}} <small>{{ exercise.id }}</small></h4>
+            <ul>
+                <li>{{ exercise.name }}</li>
+                <li>{{ exercise.description }}</li>
+            </ul>
+
+        </div>
+    {% endfor %}
+    
+</div>
+
+{% endblock %}
