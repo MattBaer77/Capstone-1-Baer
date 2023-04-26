@@ -267,11 +267,20 @@ def home():
     user workouts
     """
 
-    # All workouts, but filter out copied workouts
-    workouts = Workout.query.filter(Workout.owner_user_id == Workout.author_user_id).all()
+ 
 
     if check_for_user():
-        return render_template('home.html', workouts=workouts)
+
+        # All workouts, but filter out copied workouts and users own workouts
+        workouts = Workout.query.filter((Workout.owner_user_id == Workout.author_user_id) & (Workout.owner_user_id != g.user.id)).all()
+
+        my_workouts = Workout.query.filter(Workout.owner_user_id == g.user.id).all()
+
+        return render_template('home.html', user=g.user, workouts=workouts, my_workouts=my_workouts)
 
     else:
+
+        # All workouts, but filter out copied workouts
+        workouts = Workout.query.filter(Workout.owner_user_id == Workout.author_user_id).all()
+
         return render_template('home-anon.html', workouts=workouts)

@@ -6,7 +6,7 @@
 
 <div align="center">
 
-    <h1>Join Routine and Get In The Game!</h1>
+    <h1>Let's do this {{ user.username }}!</h1>
 
     <div class="mt-5">
         <form action="/logout" method="POST">
@@ -17,11 +17,53 @@
         
     </div>
 
+    <hr>
+
+    <div class="col-lg-6 col-md-6 col-12">
+      <div class="card user-card">
+        <div class="card-inner">
+          <div class="image-wrapper">
+            <img src="{{ user.header_image_url }}" alt="" class="card-hero">
+          </div>
+          <div class="card-contents">
+            <a href="/users/{{ user.id }}" class="card-link">
+              <img src="{{ user.image_url }}" alt="Image for {{ user.username }}" class="card-image">
+              <p>{{ user.username }}</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5">
+        <form action="" method="POST">
+            <button class="btn btn-primary">
+                Create New Workout
+            </button>
+        </form>
+    </div>
+
+    <div class="mt-5">
+
+        {% for my_workout in my_workouts %}
+            <div class="mb-5">
+                <h4>{{my_workout.description}}</h4>
+                <p>by {{my_workout.author.username}}</p>
+
+            </div>
+        {% endfor %}
+        
+    </div>
+
+    <hr>
+
+    <h2>Need inspiration? Check out these workouts!</h2>
+
     <div class="mt-5">
 
         {% for workout in workouts %}
             <div class="mb-5">
-                <h3>{{workout.description}}</h3>
+                <h4>{{workout.description}}</h4>
                 <p>by {{workout.author.username}}</p>
 
             </div>
