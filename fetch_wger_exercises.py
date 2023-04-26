@@ -26,8 +26,8 @@ def wger_parse_relevant(r):
     parsed_data = []
     
     for each in r["results"]:
-        name = ptag_scrub(each["name"])
-        description = ptag_scrub(each["description"])
+        name = tag_scrub(each["name"])
+        description = tag_scrub(each["description"])
 
         parsed_data.append({"name":f"{name}", "description":f"{description}"})
 
