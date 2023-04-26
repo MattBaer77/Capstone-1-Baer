@@ -227,8 +227,32 @@ def edit_user():
 # ROUTES WORKOUTS
 
 # VIEW WORKOUTS
+@app.route('/workouts')
+def view_workouts():
+    """
+    Page with listing of workouts.
+    Can take a 'q' param in querystring to search by that description.
+    """
+
+    if check_for_user():
+
+        search = request.args.get('q')
+
+        if not search:
+            workouts = Workout.query.order_by(Workout.id.desc()).all()
+        else:
+            workouts = Workout.query.filter(Workout.description.like(f"%{search}%")).order_by(Workout.id.desc()).all()
+
+        return render_template('workouts/index.html', user=g.user, workouts=workouts)
+
+    else:
+        return redirect('/')
+
 
 # CREATE NEW WORKOUT
+
+
+
 # ADD EXERCISE
 # ADD GOALS
 # SAVE
@@ -267,20 +291,32 @@ def home():
     user workouts
     """
 
- 
+
 
     if check_for_user():
 
         # All workouts, but filter out copied workouts and users own workouts
-        workouts = Workout.query.filter((Workout.owner_user_id == Workout.author_user_id) & (Workout.owner_user_id != g.user.id)).all()
+        workouts = (Workout
+                    .query
+                    .filter((Workout.owner_user_id == Workout.author_user_id) & (Workout.owner_user_id != g.user.id))
+                    .order_by(Workout.id.desc())
+                    .all())
 
-        my_workouts = Workout.query.filter(Workout.owner_user_id == g.user.id).all()
+        my_workouts = (Workout
+                    .query
+                    .filter(Workout.owner_user_id == g.user.id)
+                    .order_by(Workout.id.desc())
+                    .all())
 
         return render_template('home.html', user=g.user, workouts=workouts, my_workouts=my_workouts)
 
     else:
 
         # All workouts, but filter out copied workouts
-        workouts = Workout.query.filter(Workout.owner_user_id == Workout.author_user_id).all()
+        workouts = (Workout
+                    .query.
+                    filter(Workout.owner_user_id == Workout.author_user_id)
+                    .order_by(Workout.id.desc())
+                    .all())
 
         return render_template('home-anon.html', workouts=workouts)
