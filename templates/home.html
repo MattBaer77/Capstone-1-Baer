@@ -45,12 +45,17 @@
 
     <div class="mt-5">
 
-        {% for my_workout in my_workouts %}
+        {% for workout in my_workouts %}
             <div class="mb-5">
-                <h4>{{my_workout.description}}</h4>
-                <p>by {{my_workout.author.username}}</p>
+                <h4>{{workout.description}}</h4>
+                <p>by {{workout.author.username}}</p>
 
             </div>
+
+            <form action="/workout/{{workout.id}}/delete" method="POST">
+                <button class="btn btn-danger mt-2">Delete</button>
+            </form>
+
         {% endfor %}
         
     </div>

@@ -150,7 +150,7 @@ class Workout(db.Model):
         nullable=True
     )
 
-    goals  = db.relationship('Goal', backref='on_workouts')
+    goals  = db.relationship('Goal', backref='on_workouts', cascade='all, delete-orphan')
 
     def get_author(self):
         """Returns the author based on the author_user_id"""
@@ -219,7 +219,8 @@ class Goal(db.Model):
 
     workout_id = db.Column(
         db.Integer,
-        db.ForeignKey('workouts.id', ondelete="CASCADE")
+        db.ForeignKey('workouts.id', ondelete="CASCADE"),
+        nullable=False
     )
 
     exercise_id = db.Column(

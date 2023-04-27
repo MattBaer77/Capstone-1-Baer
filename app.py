@@ -85,6 +85,10 @@ def check_for_not_user_with_message(message, category):
         flash(message, category)
         return True
 
+def check_correct_user_with_message(message, category, variable_to_check):
+    if g.user.id != variable_to_check:
+        flash(message, category)
+        return True
 
 
 ##############################################################################
@@ -183,10 +187,11 @@ def view_user(user_id):
     # user.workouts won't be in order by default
     workouts = (Workout
                 .query
-                .filter(Workout.id == user_id)
+                .filter(Workout.owner_user_id == user_id)
                 .order_by(Workout.id.desc())
                 .limit(100)
                 .all())
+
     return render_template('users/user.html', user=user, workouts=workouts)
 
 
@@ -296,6 +301,9 @@ def add_workout_goal(workout_id):
 
     workout = Workout.query.get(workout_id)
 
+    if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
+        return redirect("/")
+
     form = GoalAddForm()
 
     exercises = [(e.id, e.name) for e in Exercise.query.order_by(Exercise.id.asc()).all()]
@@ -331,6 +339,9 @@ def edit_workout(workout_id):
 
     workout = Workout.query.get(workout_id)
 
+    if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
+        return redirect("/")
+
     form = WorkoutEditForm(obj=workout)
 
     if form.validate_on_submit():
@@ -358,6 +369,9 @@ def edit_goal(goal_id):
 
     goal = Goal.query.get(goal_id)
 
+    if check_correct_user_with_message("Access unauthorized.", "danger", goal.on_workouts.owner_user_id):
+        return redirect("/")
+
     workout = Workout.query.get(goal.workout_id)
 
     form = GoalEditForm(obj=goal)
@@ -368,14 +382,12 @@ def edit_goal(goal_id):
 
     if form.validate_on_submit():
         try:
-            goal = Goal(
-                workout_id=workout.id,
-                exercise_id= form.exercise.data,
-                goal_reps=form.goal_reps.data,
-                goal_sets=form.goal_sets.data,
-                goal_time_sec=form.goal_time_sec.data,
-                goal_weight_lbs=form.goal_weight_lbs.data
-            )
+            goal.workout_id=workout.id,
+            goal.exercise_id= form.exercise.data,
+            goal.goal_reps=form.goal_reps.data,
+            goal.goal_sets=form.goal_sets.data,
+            goal.goal_time_sec=form.goal_time_sec.data,
+            goal.goal_weight_lbs=form.goal_weight_lbs.data
             db.session.add(goal)
             db.session.commit()
 
@@ -388,7 +400,6 @@ def edit_goal(goal_id):
     return render_template('goals/goal-edit-form.html', workout=workout, form=form)
 
 # DELETE GOAL
-
 @app.route('/goal/<int:goal_id>/delete', methods=["POST"])
 def delete_goal(goal_id):
     """"""
@@ -405,10 +416,38 @@ def delete_goal(goal_id):
 
     return redirect(f'/workout/{workout.id}/goal-add')
 
-
 # DELETE WORKOUT
+@app.route('/workout/<int:workout_id>/delete', methods=["POST"])
+def delete_workout(workout_id):
+    """"""
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    workout = Workout.query.get(workout_id)
+
+    db.session.delete(workout)
+    db.session.commit()
+
+    return redirect('/')
 
 # DELETE USER
+@app.route('/users/delete', methods=["POST"])
+def delete_user():
+    """Delete user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    do_logout()
+
+    db.session.delete(g.user)
+    db.session.commit()
+
+    return redirect("/signup")
+
+# CHECK FOR APPROPRIATE VALIDATION BEFORE CONTINUING - MAKE SURE USERS CANNOT EDIT OTHER USER'S INFO
 
 ##############################################################################
 
