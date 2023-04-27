@@ -42,7 +42,19 @@ class LoginForm(FlaskForm):
 
 ##############################################################################
 
-# class WorkoutAddForm(FlaskForm):
-#     """Form for adding workouts."""
+class WorkoutAddForm(FlaskForm):
+    """Form for adding/edit workouts."""
 
-#     # Select field for all workout types
+    # Select field for all workout types
+    description = StringField("Let's give your workout a Name or Description:", validators=[DataRequired()])
+
+class GoalAddForm(FlaskForm):
+    """Form for adding exercises to your workout."""
+
+    exercise = SelectField('Exercise', choices=[('c1', 'Choice 1'), ('c2', 'Choice2')])
+    goal_reps = IntegerField("Reps:" validators=[InputRequired(message='Must have at least 1 "rep."')])
+    goal_sets = IntegerField("Sets:" validators=[InputRequired(message='Must have at least 1 "set."')])
+    goal_time = IntegerField("Time (seconds):" validators=[Optional()])
+    goal_time = IntegerField("Weight (lbs):" validators=[Optional()])
+
+# class WorkoutEditExerciseForm
