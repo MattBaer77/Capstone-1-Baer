@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField
-from wtforms.validators import DataRequired, Email, Length
+from wtforms import StringField, PasswordField, TextAreaField, SelectField, IntegerField
+from wtforms.validators import DataRequired, Email, Length, InputRequired, Optional
 
 class UserAddForm(FlaskForm):
     """Form for adding users."""
@@ -48,13 +48,21 @@ class WorkoutAddForm(FlaskForm):
     # Select field for all workout types
     description = StringField("Let's give your workout a Name or Description:", validators=[DataRequired()])
 
+    form_name = "Add Workout"
+    form_title = "Create A New Workout"
+    submit_text = "Create"
+
 class GoalAddForm(FlaskForm):
     """Form for adding exercises to your workout."""
 
-    exercise = SelectField('Exercise', choices=[('c1', 'Choice 1'), ('c2', 'Choice2')])
-    goal_reps = IntegerField("Reps:" validators=[InputRequired(message='Must have at least 1 "rep."')])
-    goal_sets = IntegerField("Sets:" validators=[InputRequired(message='Must have at least 1 "set."')])
-    goal_time = IntegerField("Time (seconds):" validators=[Optional()])
-    goal_time = IntegerField("Weight (lbs):" validators=[Optional()])
+    exercise = SelectField('Exercise', coerce=int)
+    goal_reps = IntegerField('Reps:', validators=[InputRequired(message='Must have at least 1 "rep."')])
+    goal_sets = IntegerField('Sets:', validators=[InputRequired(message='Must have at least 1 "set."')])
+    goal_time_sec = IntegerField('Time (seconds):', validators=[Optional()])
+    goal_weight_lbs = IntegerField('Weight (lbs):', validators=[Optional()])
+
+    form_name = "Add Exercise"
+    form_title = "Add an Exercise to your Workout!"
+    submit_text = "Add"
 
 # class WorkoutEditExerciseForm

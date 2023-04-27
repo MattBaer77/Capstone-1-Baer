@@ -268,17 +268,19 @@ def add_workout():
 
     form = WorkoutAddForm()
 
-    # if form.validate_on_submit():
-    #     try:
-    #         workout = Workout.create(
-    #             description=form.description.data
-    #             owner_user_id=g.user.id
-    #         )
-    #         db.session.commit()
+    if form.validate_on_submit():
+        try:
+            workout = Workout.create(
+                description=form.description.data,
+                owner_user_id=g.user.id
+            )
+            db.session.commit()
 
-    #     except IntegrityError:
-    #         flash("Unknown Integrity Error - /workout/add - POST", 'danger')
-    #         return redirect('/workout/add')
+        except IntegrityError:
+            flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+            return redirect('/workout/add')
+
+        return redirect(f'/workout/{workout.id}/goal-add')
 
 
     return render_template('generic-form-page.html', form=form)
@@ -296,27 +298,30 @@ def add_workout_goal(workout_id):
 
     form = GoalAddForm()
 
-    # if form.validate_on_submit():
-    #     try:
-    #         goal = Goal(
-    #             workout_id=workout.id,
-    #             exercise_id= #???,
-    #             goal_reps=form.goal_reps.data,
-    #             goal_sets=form.goal_sets.data,
-    #             goal_time=form.goal_time.data,
-    #             goal_weight=form.goal_weight.data,
-    #             description=form.description.data,
-    #             owner_user_id=g.user.id
-    #         )
-    #         db.session.add(goal)
-    #         db.session.commit()
+    # exercises = Exercise.query.order_by(Exercise.id.asc()).all()
 
-    except IntegrityError:
+    exercises = [(e.id, e.name) for e in Exercise.query.order_by(Exercise.id.asc()).all()]
+
+    form.exercise.choices=exercises
+
+    if form.validate_on_submit():
+        try:
+            goal = Goal(
+                workout_id=workout.id,
+                exercise_id= form.exercise.data,
+                goal_reps=form.goal_reps.data,
+                goal_sets=form.goal_sets.data,
+                goal_time_sec=form.goal_time_sec.data,
+                goal_weight_lbs=form.goal_weight_lbs.data
+            )
+            db.session.add(goal)
+            db.session.commit()
+
+        except IntegrityError:
             flash("Unknown Integrity Error - /workout/<int:workout_id>/goal-add - POST", 'danger')
             return redirect('/workout/add')
 
-    else:
-        return render_template('generic-form-page.html', workout=workout, form=form)
+    return render_template('goals/goals-form.html', workout=workout, form=form)
 
 # SAVE
 # SHOWS INFO
