@@ -65,14 +65,27 @@ class WorkoutEditForm(FlaskForm):
 class GoalAddForm(FlaskForm):
     """Form for adding exercises to your workout."""
 
-    exercise = SelectField('Exercise', coerce=int)
+    exercise = SelectField('Exercise Goal:', coerce=int)
     goal_reps = IntegerField('Reps:', validators=[InputRequired(message='Must have at least 1 "rep."')])
     goal_sets = IntegerField('Sets:', validators=[InputRequired(message='Must have at least 1 "set."')])
     goal_time_sec = IntegerField('Time (seconds):', validators=[Optional()])
     goal_weight_lbs = IntegerField('Weight (lbs):', validators=[Optional()])
 
-    form_name = "Add Exercise"
-    form_title = "Add an Exercise To Your Workout!"
+    form_name = "Add Exercise Goal"
+    form_title = "Add an Exercise Goal To Your Workout!"
     submit_text = "Add"
+
+class GoalEditForm(FlaskForm):
+    """Form for adding exercises to your workout."""
+
+    exercise = SelectField('Exercise Goal:', coerce=int)
+    goal_reps = IntegerField('Reps:', validators=[InputRequired(message='Must have at least 1 "rep."')])
+    goal_sets = IntegerField('Sets:', validators=[InputRequired(message='Must have at least 1 "set."')])
+    goal_time_sec = IntegerField('Time (seconds):', validators=[Optional()])
+    goal_weight_lbs = IntegerField('Weight (lbs):', validators=[Optional()])
+
+    form_name = "Edit Exercise Goal"
+    form_title = "Edit Your Exercise Goal"
+    submit_text = "Save Changes"
 
 # class WorkoutEditExerciseForm

@@ -224,7 +224,7 @@ def edit_user():
 
 ##############################################################################
 
-# ROUTES EXERCISES and WORKOUTS
+# ROUTES EXERCISES + WORKOUTS + GOALS
 
 # VIEW EXERCISES
 @app.route('/exercises')
@@ -298,8 +298,6 @@ def add_workout_goal(workout_id):
 
     form = GoalAddForm()
 
-    # exercises = Exercise.query.order_by(Exercise.id.asc()).all()
-
     exercises = [(e.id, e.name) for e in Exercise.query.order_by(Exercise.id.asc()).all()]
 
     form.exercise.choices=exercises
@@ -321,7 +319,7 @@ def add_workout_goal(workout_id):
             flash("Unknown Integrity Error - /workout/<int:workout_id>/goal-add - POST", 'danger')
             return redirect('/workout/add')
 
-    return render_template('goals/goals-form.html', workout=workout, form=form)
+    return render_template('goals/goals-add-form.html', workout=workout, form=form)
 
 # EDIT WORKOUT
 @app.route('/workout/<int:workout_id>/edit', methods=["GET", "POST"])
@@ -350,20 +348,50 @@ def edit_workout(workout_id):
 
     return render_template('generic-form-page.html', form=form)
 
-# GO BACK TO EDIT GOAL
-# @app.route('/workout/<int:workout_id>/edit', methods=["GET", "POST"])
-# def add_workout_goal(workout_id):
-#     """"""
+# EDIT GOAL
+@app.route('/goal/<int:goal_id>/edit', methods=["GET", "POST"])
+def edit_goal(goal_id):
+    """"""
 
-#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
-#         return redirect('/')
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
 
-#     workout = Workout.query.get(workout_id)
+    goal = Goal.query.get(goal_id)
 
-#     form = GoaleditForm()
+    workout = Workout.query.get(goal.workout_id)
 
+    form = GoalEditForm(obj=goal)
 
-# GO BACK TO EDIT GOAL
+    exercises = [(e.id, e.name) for e in Exercise.query.order_by(Exercise.id.asc()).all()]
+
+    form.exercise.choices=exercises
+
+    if form.validate_on_submit():
+        try:
+            goal = Goal(
+                workout_id=workout.id,
+                exercise_id= form.exercise.data,
+                goal_reps=form.goal_reps.data,
+                goal_sets=form.goal_sets.data,
+                goal_time_sec=form.goal_time_sec.data,
+                goal_weight_lbs=form.goal_weight_lbs.data
+            )
+            db.session.add(goal)
+            db.session.commit()
+
+        except IntegrityError:
+            flash("Unknown Integrity Error - /workout/<int:workout_id>/goal-add - POST", 'danger')
+            return redirect(f'/workout/{workout.id}/goal-add')
+
+        return redirect(f'/workout/{workout.id}/goal-add')
+
+    return render_template('goals/goal-edit-form.html', workout=workout, form=form)
+
+# DELETE GOAL
+
+# DELETE WORKOUT
+
+# DELETE USER
 
 ##############################################################################
 

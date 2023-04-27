@@ -20,6 +20,15 @@
         {{goal.goal_sets}}
         {{goal.goal_time_sec}}
         {{goal.goal_weight_lbs}}
+
+        <a href="/goal/{{goal.id}}/edit">
+            <button class="btn btn-primary mt-2">Edit</button>
+        </a>
+
+        <a href="/goal/{{goal.id}}/delete">
+            <button class="btn btn-danger mt-2">Delete</button>
+        </a>
+
     </div>
     {% endfor %}
 
