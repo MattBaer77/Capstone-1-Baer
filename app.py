@@ -389,6 +389,23 @@ def edit_goal(goal_id):
 
 # DELETE GOAL
 
+@app.route('/goal/<int:goal_id>/delete', methods=["POST"])
+def delete_goal(goal_id):
+    """"""
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    goal = Goal.query.get(goal_id)
+
+    workout = Workout.query.get(goal.workout_id)
+
+    db.session.delete(goal)
+    db.session.commit()
+
+    return redirect(f'/workout/{workout.id}/goal-add')
+
+
 # DELETE WORKOUT
 
 # DELETE USER

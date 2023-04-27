@@ -25,9 +25,9 @@
             <button class="btn btn-primary mt-2">Edit</button>
         </a>
 
-        <a href="/goal/{{goal.id}}/delete">
+        <form action="/goal/{{goal.id}}/delete" method="POST">
             <button class="btn btn-danger mt-2">Delete</button>
-        </a>
+        </form>
 
     </div>
     {% endfor %}
