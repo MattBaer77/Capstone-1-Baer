@@ -52,6 +52,16 @@ class WorkoutAddForm(FlaskForm):
     form_title = "Create A New Workout"
     submit_text = "Create"
 
+class WorkoutEditForm(FlaskForm):
+    """Form for adding/edit workouts."""
+
+    # Select field for all workout types
+    description = StringField("Edit workout Name or Description:", validators=[DataRequired()])
+
+    form_name = "Edit Workout"
+    form_title = "Edit Your Workout"
+    submit_text = "Update"
+
 class GoalAddForm(FlaskForm):
     """Form for adding exercises to your workout."""
 
@@ -62,7 +72,7 @@ class GoalAddForm(FlaskForm):
     goal_weight_lbs = IntegerField('Weight (lbs):', validators=[Optional()])
 
     form_name = "Add Exercise"
-    form_title = "Add an Exercise to your Workout!"
+    form_title = "Add an Exercise To Your Workout!"
     submit_text = "Add"
 
 # class WorkoutEditExerciseForm

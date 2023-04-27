@@ -323,12 +323,47 @@ def add_workout_goal(workout_id):
 
     return render_template('goals/goals-form.html', workout=workout, form=form)
 
-# SAVE
-# SHOWS INFO
-# ADD ANOTHER EXERCISE
-# FINISH
+# EDIT WORKOUT
+@app.route('/workout/<int:workout_id>/edit', methods=["GET", "POST"])
+def edit_workout(workout_id):
+    """"""
 
-# GO BACK TO EDIT WORKOUT
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    workout = Workout.query.get(workout_id)
+
+    form = WorkoutEditForm(obj=workout)
+
+    if form.validate_on_submit():
+        try:
+            workout.description=form.description.data,
+
+            db.session.add(workout)
+            db.session.commit()
+
+        except IntegrityError:
+            flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+            return redirect('/workout/add')
+
+        return redirect('/')
+
+    return render_template('generic-form-page.html', form=form)
+
+# GO BACK TO EDIT GOAL
+# @app.route('/workout/<int:workout_id>/edit', methods=["GET", "POST"])
+# def add_workout_goal(workout_id):
+#     """"""
+
+#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
+#         return redirect('/')
+
+#     workout = Workout.query.get(workout_id)
+
+#     form = GoaleditForm()
+
+
+# GO BACK TO EDIT GOAL
 
 ##############################################################################
 
