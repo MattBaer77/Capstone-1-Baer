@@ -65,10 +65,10 @@ db.session.add_all([
 db.session.commit()
 
 # Add performance
-the_bobson_workout_1_performance_4 = Performance(goal_id =1, performance_reps=10, performance_sets=3, performance_weight_lbs=45)
 the_bobson_workout_1_performance_1 = Performance(goal_id =1, performance_reps=10, performance_sets=3, performance_weight_lbs=30)
 the_bobson_workout_1_performance_2 = Performance(goal_id =1, performance_reps=10, performance_sets=3, performance_weight_lbs=35)
 the_bobson_workout_1_performance_3 = Performance(goal_id =1, performance_reps=10, performance_sets=3, performance_weight_lbs=40)
+the_bobson_workout_1_performance_4 = Performance(goal_id =1, performance_reps=10, performance_sets=3, performance_weight_lbs=45)
 
 the_bobson_workout_2_performance_1 = Performance(goal_id =2, performance_reps=36)
 the_bobson_workout_2_performance_2 = Performance(goal_id =2, performance_reps=39)

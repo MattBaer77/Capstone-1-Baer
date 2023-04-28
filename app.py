@@ -259,7 +259,7 @@ def view_all_exercises():
 
 ##############################################################################
 
-# WORKOUTS + GOALS
+# ROUTES WORKOUTS + GOALS
 
 # VIEW WORKOUTS
 @app.route('/workouts')
@@ -475,9 +475,63 @@ def delete_user():
 
 # ROUTES PERFORMANCE
 
-# VIEW LIST OF PERFORMANCE RECORDS - CONVERT TO CALENDAR IN FUTURE
-# VIEW INDIVIDUAL PERFORMANCE RECORDS
+# VIEW LIST OF PERFORMANCE RECORDS - ALL GOALS in WORKOUT - CONVERT TO CALENDAR IN FUTURE?
+@app.route('/workout/<int:workout_id>/performance')
+def view_workout_goals_performance(workout_id):
+    """
+    View all of the performance toward all the goals in a workout over time.
+    """
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    workout = Workout.query.get(workout_id)
+
+    return render_template('/performance/view-all.html', workout=workout)
+
+# VIEW LIST OF PERFORMANCE RECORDS - INDIVIDUAL GOAL - CONVERT TO CALENDAR IN FUTURE?
+@app.route('/goal/<int:goal_id>/performance')
+def view_goal_performance(goal_id):
+    """
+    View all of the performance toward a single goal over time.
+    """
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    goal = Goal.query.get(goal_id)
+
+    return render_template('/performance/view.html', goal=goal)
+
 # EDIT INDIVIDUAL PERFORMANCE RECORDS
+@app.route('/performance/<int:performance_id>/edit', methods=["GET"])
+def edit_performance_record(performance_id):
+    """
+    Edit an individual performance record.
+    """
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    performance = Performance.query.get(performance_id)
+
+    if check_correct_user_with_message("Access unauthorized.", "danger", performance.goal.workout.owner.id):
+        return redirect("/")
+
+    form = PerformanceEditForm(obj=performance)
+
+    form.title = f"Edit record for Workout:{performance.goal.workout.description} - Goal:{performance.goal.exercise}"
+
+    # ADD FORM VALIDATE ON SUBMIT AND POST METHOD ABOVE
+
+    return render_template('generic-form-page.html', form=form)
+
+
+
+    
+##############################################################################
+
+# PERFORMING A WORKOUT
 
 # START NEW WORKOUT - CREATE NEW PERFORMANCE RECORDS
 # GUIDED EDITOR FOR EACH EXERCISE IN WORKOUT
