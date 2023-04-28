@@ -65,6 +65,7 @@ def check_for_user():
     if g.user:
         return True
 
+
 def check_for_user_with_message(message, category):
     """
     Check for a logged in user.
@@ -75,6 +76,7 @@ def check_for_user_with_message(message, category):
         flash(message, category)
         return True
 
+
 def check_for_not_user_with_message(message, category):
     """
     Check for a logged in user.
@@ -84,6 +86,7 @@ def check_for_not_user_with_message(message, category):
     if not g.user:
         flash(message, category)
         return True
+
 
 def check_correct_user_with_message(message, category, variable_to_check):
     if g.user.id != variable_to_check:
@@ -153,6 +156,7 @@ def login():
         flash("Invalid credentials.", 'danger')
 
     return render_template('generic-form-page.html', form=form)
+
 
 @app.route('/logout', methods=['POST'])
 def logout():
@@ -239,20 +243,18 @@ def edit_user():
 def view_all_exercises():
     """"""
 
-    if check_for_user():
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
 
-        search = request.args.get('q')
+    search = request.args.get('q')
 
-        if not search:
-            exercises = Exercise.query.order_by(Exercise.id.asc()).all()
-
-        else:
-            exercises = Exercise.query.filter(Exercise.name.like(f"%{search}%")).order_by(Exercise.id.desc()).all()
-
-        return render_template('exercises.html', exercises=exercises)
+    if not search:
+        exercises = Exercise.query.order_by(Exercise.id.asc()).all()
 
     else:
-        return redirect('/')
+        exercises = Exercise.query.filter(Exercise.name.like(f"%{search}%")).order_by(Exercise.id.desc()).all()
+
+    return render_template('exercises.html', exercises=exercises)
 
 
 ##############################################################################
@@ -267,19 +269,17 @@ def view_workouts():
     Can take a 'q' param in querystring to search by that description.
     """
 
-    if check_for_user():
-
-        search = request.args.get('q')
-
-        if not search:
-            workouts = Workout.query.order_by(Workout.id.desc()).all()
-        else:
-            workouts = Workout.query.filter(Workout.description.like(f"%{search}%")).order_by(Workout.id.desc()).all()
-
-        return render_template('workouts/index.html', user=g.user, workouts=workouts)
-
-    else:
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
+
+    search = request.args.get('q')
+
+    if not search:
+        workouts = Workout.query.order_by(Workout.id.desc()).all()
+    else:
+        workouts = Workout.query.filter(Workout.description.like(f"%{search}%")).order_by(Workout.id.desc()).all()
+
+    return render_template('workouts/index.html', user=g.user, workouts=workouts)
 
 
 # CREATE NEW WORKOUT
@@ -348,6 +348,7 @@ def add_workout_goal(workout_id):
 
     return render_template('goals/goals-add-form.html', workout=workout, form=form)
 
+
 # EDIT WORKOUT
 @app.route('/workout/<int:workout_id>/edit', methods=["GET", "POST"])
 def edit_workout(workout_id):
@@ -377,6 +378,7 @@ def edit_workout(workout_id):
         return redirect('/')
 
     return render_template('generic-form-page.html', form=form)
+
 
 # EDIT GOAL
 @app.route('/goal/<int:goal_id>/edit', methods=["GET", "POST"])
@@ -418,6 +420,7 @@ def edit_goal(goal_id):
 
     return render_template('goals/goal-edit-form.html', workout=workout, form=form)
 
+
 # DELETE GOAL
 @app.route('/goal/<int:goal_id>/delete', methods=["POST"])
 def delete_goal(goal_id):
@@ -435,6 +438,7 @@ def delete_goal(goal_id):
 
     return redirect(f'/workout/{workout.id}/goal-add')
 
+
 # DELETE WORKOUT
 @app.route('/workout/<int:workout_id>/delete', methods=["POST"])
 def delete_workout(workout_id):
@@ -450,6 +454,7 @@ def delete_workout(workout_id):
 
     return redirect('/')
 
+
 # DELETE USER
 @app.route('/users/delete', methods=["POST"])
 def delete_user():
@@ -464,6 +469,7 @@ def delete_user():
     db.session.commit()
 
     return redirect("/signup")
+
 
 ##############################################################################
 
