@@ -487,6 +487,11 @@ def view_workout_goals_performance(workout_id):
 
     workout = Workout.query.get(workout_id)
 
+    workout.goals.sort(key=lambda x: x.id, reverse=False)
+
+    for goal in workout.goals:
+        goal.performance.sort(key=lambda x: x.id, reverse=False)
+
     if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
         return redirect("/")
 
@@ -503,6 +508,8 @@ def view_goal_performance(goal_id):
         return redirect('/')
 
     goal = Goal.query.get(goal_id)
+
+    goal.performance.sort(key=lambda x: x.id, reverse=False)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
         return redirect("/")
