@@ -1,0 +1,9 @@
+
+<div align="center">
+    <div class="w-25">
+        <h1>{{ user.username }}</h1>
+        <form action="/users/delete" method="POST"><button class="btn btn-danger mt-2">Delete User "{{user.username}}"</button></form>
+    </div>
+</div>
+
+{% extends 'base-form.html' %}

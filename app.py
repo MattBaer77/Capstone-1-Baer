@@ -106,6 +106,9 @@ def signup():
     and re-present form.
     """
 
+    if check_for_user_with_message("You are already logged in!", "success"):
+        return redirect('/')
+
     form = UserAddForm()
 
     if form.validate_on_submit():
@@ -133,10 +136,10 @@ def signup():
 def login():
     """Handle user login."""
 
-    form = LoginForm()
-
     if check_for_user_with_message("You are already logged in!", "success"):
         return redirect('/')
+
+    form = LoginForm()
 
     if form.validate_on_submit():
         user = User.authenticate(form.username.data,
@@ -222,23 +225,39 @@ def edit_user():
 
         else:
             flash("Access something.", "danger")
-            return render_template('generic-form-page.html', form=form)
+            return render_template('users/edit.html', form=form)
 
-    return render_template('generic-form-page.html', form=form)
+    return render_template('users/edit.html', form=form, user=g.user)
 
 
 ##############################################################################
 
-# ROUTES EXERCISES + WORKOUTS + GOALS
+# ROUTES EXERCISES
 
 # VIEW EXERCISES
 @app.route('/exercises')
 def view_all_exercises():
     """"""
 
-    exercises = Exercise.query.order_by(Exercise.id.asc()).all()
+    if check_for_user():
 
-    return render_template('exercises.html', exercises=exercises)
+        search = request.args.get('q')
+
+        if not search:
+            exercises = Exercise.query.order_by(Exercise.id.asc()).all()
+
+        else:
+            exercises = Exercise.query.filter(Exercise.name.like(f"%{search}%")).order_by(Exercise.id.desc()).all()
+
+        return render_template('exercises.html', exercises=exercises)
+
+    else:
+        return redirect('/')
+
+
+##############################################################################
+
+# WORKOUTS + GOALS
 
 # VIEW WORKOUTS
 @app.route('/workouts')
@@ -436,9 +455,8 @@ def delete_workout(workout_id):
 def delete_user():
     """Delete user."""
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
 
     do_logout()
 
@@ -446,8 +464,6 @@ def delete_user():
     db.session.commit()
 
     return redirect("/signup")
-
-# CHECK FOR APPROPRIATE VALIDATION BEFORE CONTINUING - MAKE SURE USERS CANNOT EDIT OTHER USER'S INFO
 
 ##############################################################################
 
