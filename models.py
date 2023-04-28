@@ -251,7 +251,7 @@ class Goal(db.Model):
     )
 
     exercise = db.relationship('Exercise')
-    performance = db.relationship('Performance', backref='goals')
+    performance = db.relationship('Performance', backref='goal')
 
 
 

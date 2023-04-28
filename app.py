@@ -487,6 +487,9 @@ def view_workout_goals_performance(workout_id):
 
     workout = Workout.query.get(workout_id)
 
+    if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
+        return redirect("/")
+
     return render_template('/performance/view-all.html', workout=workout)
 
 # VIEW LIST OF PERFORMANCE RECORDS - INDIVIDUAL GOAL - CONVERT TO CALENDAR IN FUTURE?
@@ -501,10 +504,13 @@ def view_goal_performance(goal_id):
 
     goal = Goal.query.get(goal_id)
 
+    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+        return redirect("/")
+
     return render_template('/performance/view.html', goal=goal)
 
 # EDIT INDIVIDUAL PERFORMANCE RECORDS
-@app.route('/performance/<int:performance_id>/edit', methods=["GET"])
+@app.route('/performance/<int:performance_id>/edit', methods=["GET", "POST"])
 def edit_performance_record(performance_id):
     """
     Edit an individual performance record.
@@ -520,9 +526,24 @@ def edit_performance_record(performance_id):
 
     form = PerformanceEditForm(obj=performance)
 
-    form.title = f"Edit record for Workout:{performance.goal.workout.description} - Goal:{performance.goal.exercise}"
+    form.form_title = f"Edit record for Workout: {performance.goal.workout.description} - Goal: {performance.goal.exercise.name}"
 
-    # ADD FORM VALIDATE ON SUBMIT AND POST METHOD ABOVE
+    if form.validate_on_submit():
+        try:
+            performance.performance_reps=form.performance_reps.data,
+            performance.performance_sets=form.performance_sets.data,
+            performance.performance_time_sec=form.performance_time_sec.data,
+            performance.performance_weight_lbs=form.performance_weight_lbs.data
+
+            db.session.add(performance)
+            db.session.commit()
+
+        except IntegrityError:
+            flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+            return redirect(f'/workout/{performance.goal.workout.id}/performance')
+
+        return redirect(f'/goal/{performance.goal.id}/performance')
+
 
     return render_template('generic-form-page.html', form=form)
 
