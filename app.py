@@ -184,7 +184,7 @@ def view_users():
     return render_template('users/index.html', users=users)
 
 
-@app.route('/users/<int:user_id>')
+@app.route('/user/<int:user_id>')
 def view_user(user_id):
     """Show user profile."""
 
@@ -202,7 +202,7 @@ def view_user(user_id):
     return render_template('users/user.html', user=user, workouts=workouts)
 
 
-@app.route('/users/edit', methods=["GET", "POST"])
+@app.route('/user/edit', methods=["GET", "POST"])
 def edit_user():
     """Update profile for current user."""
 
@@ -235,7 +235,7 @@ def edit_user():
 
 
 # DELETE USER
-@app.route('/users/delete', methods=["POST"])
+@app.route('/user/delete', methods=["POST"])
 def delete_user():
     """Delete user."""
 
