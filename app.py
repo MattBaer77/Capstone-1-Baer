@@ -234,6 +234,22 @@ def edit_user():
     return render_template('users/edit.html', form=form, user=g.user)
 
 
+# DELETE USER
+@app.route('/users/delete', methods=["POST"])
+def delete_user():
+    """Delete user."""
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    do_logout()
+
+    db.session.delete(g.user)
+    db.session.commit()
+
+    return redirect("/signup")
+
+
 ##############################################################################
 
 # ROUTES EXERCISES
@@ -453,22 +469,6 @@ def delete_workout(workout_id):
     db.session.commit()
 
     return redirect('/')
-
-
-# DELETE USER
-@app.route('/users/delete', methods=["POST"])
-def delete_user():
-    """Delete user."""
-
-    if check_for_not_user_with_message("Access unauthorized.", "danger"):
-        return redirect('/')
-
-    do_logout()
-
-    db.session.delete(g.user)
-    db.session.commit()
-
-    return redirect("/signup")
 
 
 ##############################################################################
