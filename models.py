@@ -291,13 +291,13 @@ class Performance(db.Model):
     performance_reps = db.Column(
         db.Integer,
         nullable=False,
-        default=1
+        default=0
     )
 
     performance_sets = db.Column(
         db.Integer,
         nullable=False,
-        default=1
+        default=0
     )
 
     performance_time_sec = db.Column(
