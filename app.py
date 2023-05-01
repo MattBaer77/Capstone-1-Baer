@@ -559,6 +559,67 @@ def edit_performance_record(performance_id):
     
 ##############################################################################
 
+# PERFORMING A WORKOUT - ALL IN ONE ROUTE
+# @app.route('/workout/<int:workout_id>/performance/add')
+# def create_performance_records():
+
+#     """
+#     Displays & hanldes a form to create a performance record for every goal in a workout.
+#     """
+
+    # if check_for_not_user_with_message("Access unauthorized.", "danger"):
+    #     return redirect('/')
+
+    # workout = Workout.query.get(workout_id)
+
+    # if check_correct_user_with_message("Access unauthorized.", "danger", performance.goal.workout.owner.id):
+    #     return redirect("/")
+
+
+# PERFORMING A WORKOUT - SINGLE GOAL ROUTE
+@app.route('/goal/<int:goal_id>/performance/add', methods=["GET", "POST"])
+def create__performance_record(goal_id):
+    """
+    Displays & handles a form to create a performance record for a single goal in a workout.
+    """
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    # performance = Performance.query.get(performance_id)
+    goal = Goal.query.get(goal_id)
+
+    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+        return redirect("/")
+
+    form = PerformanceAddForm()
+
+    form.form_title = f"Create Record For: {goal.workout.description} - Goal: {goal.exercise.name}"
+
+    if form.validate_on_submit():
+        try:
+            performance = Performance(
+
+                goal_id=goal.id,
+
+                performance_reps=form.performance_reps.data,
+                performance_sets=form.performance_sets.data,
+                performance_time_sec=form.performance_time_sec.data,
+                performance_weight_lbs=form.performance_weight_lbs.data
+
+            )
+
+            db.session.add(performance)
+            db.session.commit()
+
+        except IntegrityError:
+            flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+            return redirect(f'/workout/{performance.goal.workout.id}/performance')
+
+        return redirect(f'/goal/{performance.goal.id}/performance')
+
+    return render_template('generic-form-page.html', form=form, goal=goal)
+
 # PERFORMING A WORKOUT
 
 # START NEW WORKOUT - CREATE NEW PERFORMANCE RECORDS
