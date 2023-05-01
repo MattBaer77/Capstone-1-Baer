@@ -94,6 +94,8 @@ def check_correct_user_with_message(message, category, variable_to_check):
         return True
 
 
+# 
+
 ##############################################################################
 
 # USER ROUTES
@@ -577,7 +579,7 @@ def edit_performance_record(performance_id):
 
 
 # PERFORMING A WORKOUT - SINGLE GOAL ROUTE
-@app.route('/goal/<int:goal_id>/performance/add', methods=["GET", "POST"])
+@app.route('/goal/<int:goal_id>/performance-add', methods=["GET", "POST"])
 def create__performance_record(goal_id):
     """
     Displays & handles a form to create a performance record for a single goal in a workout.
@@ -595,6 +597,11 @@ def create__performance_record(goal_id):
     form = PerformanceAddForm()
 
     form.form_title = f"Create Record For: {goal.workout.description} - Goal: {goal.exercise.name}"
+
+    form.performance_reps.data=goal.goal_reps
+    form.performance_sets.data=goal.goal_sets
+    form.performance_time_sec.data=goal.goal_time_sec
+    form.performance_weight_lbs.data=goal.goal_weight_lbs
 
     if form.validate_on_submit():
         try:
@@ -616,9 +623,9 @@ def create__performance_record(goal_id):
             flash("Unknown Integrity Error - /workout/add - POST", 'danger')
             return redirect(f'/workout/{performance.goal.workout.id}/performance')
 
-        return redirect(f'/goal/{performance.goal.id}/performance')
+        return redirect(f'/')
 
-    return render_template('generic-form-page.html', form=form, goal=goal)
+    return render_template('performance/performance-add-single.html', form=form, goal=goal)
 
 # PERFORMING A WORKOUT
 

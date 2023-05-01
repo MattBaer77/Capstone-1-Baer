@@ -91,10 +91,10 @@ class GoalEditForm(FlaskForm):
 class PerformanceAddForm(FlaskForm):
     """Form for adding exercises to your workout."""
 
-    performance_reps = IntegerField('Reps:', validators=[InputRequired(message='Must have at least 1 "rep."')])
-    performance_sets = IntegerField('Sets:', validators=[InputRequired(message='Must have at least 1 "set."')])
-    performance_time_sec = IntegerField('Time (seconds):', validators=[Optional()])
-    performance_weight_lbs = IntegerField('Weight (lbs):', validators=[Optional()])
+    performance_reps = IntegerField('Actual Reps:')
+    performance_sets = IntegerField('Actual Sets:')
+    performance_time_sec = IntegerField('Actual Time (seconds):', validators=[Optional()])
+    performance_weight_lbs = IntegerField('Actual Weight (lbs):', validators=[Optional()])
 
     form_name = "Create Performance Record"
     form_title = ""
@@ -103,8 +103,8 @@ class PerformanceAddForm(FlaskForm):
 class PerformanceEditForm(FlaskForm):
     """Form for adding exercises to your workout."""
 
-    performance_reps = IntegerField('Reps:', validators=[InputRequired(message='Must have at least 1 "rep."')])
-    performance_sets = IntegerField('Sets:', validators=[InputRequired(message='Must have at least 1 "set."')])
+    performance_reps = IntegerField('Reps:')
+    performance_sets = IntegerField('Sets:')
     performance_time_sec = IntegerField('Time (seconds):', validators=[Optional()])
     performance_weight_lbs = IntegerField('Weight (lbs):', validators=[Optional()])
 

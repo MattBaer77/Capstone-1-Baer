@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ form.form_name }}{% endblock %}
+
+{% block content %}
+
+<div align="center">
+
+    <div class="w-25">
+
+        <h2>{{ form.form_title }}</h2>
+
+        <form method="POST">
+
+            {{ form.hidden_tag() }}
+
+            {% if goal.goal_reps > 1%}
+
+            <div class="form-group" align="start">
+
+                {{form.performance_reps.label(class_="mt-4")}}
+                {{form.performance_reps(class_="form-control")}}
+                <label for="performance_reps" class="text-secondary">Goal Reps: {{goal.goal_reps}}</label>
+                
+            </div>
+            
+            {% endif %}
+
+            {% if goal.goal_sets > 1%}
+
+            <div class="form-group" align="start">
+
+                {{form.performance_sets.label(class_="mt-4")}}
+                {{form.performance_sets(class_="form-control")}}
+                <label for="performance_sets" class="text-secondary">Goal Reps: {{goal.goal_sets}}</label>
+                
+            </div>
+
+            {% endif %}
+
+            {% if goal.goal_time_sec %}
+
+            <div class="form-group" align="start">
+
+                {{form.performance_time_sec.label(class_="mt-4")}}
+                {{form.performance_time_sec(class_="form-control")}}
+                <label for="performance_time_sec" class="text-secondary">Goal Reps: {{goal.goal_time_sec}}</label>
+                
+            </div>
+
+            {% endif %}
+
+            {% if goal.goal_weight_lbs %}
+
+            <div class="form-group" align="start">
+
+                {{form.performance_weight_lbs.label(class_="mt-4")}}
+                {{form.performance_weight_lbs(class_="form-control")}}
+                <label for="performance_weight_lbs" class="text-secondary">Goal Reps: {{goal.goal_weight_lbs}}</label>
+                
+            </div>
+
+            {% endif %}
+
+            <button class="btn btn-primary mt-2">{{ form.submit_text }}</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
