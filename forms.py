@@ -43,7 +43,7 @@ class LoginForm(FlaskForm):
 ##############################################################################
 
 class WorkoutAddForm(FlaskForm):
-    """Form for adding/edit workouts."""
+    """Form for adding workouts."""
 
     # Select field for all workout types
     description = StringField("Let's give your workout a Name or Description:", validators=[DataRequired()])
@@ -53,7 +53,7 @@ class WorkoutAddForm(FlaskForm):
     submit_text = "Create"
 
 class WorkoutEditForm(FlaskForm):
-    """Form for adding/edit workouts."""
+    """Form for editing workouts."""
 
     # Select field for all workout types
     description = StringField("Edit workout Name or Description:", validators=[DataRequired()])
@@ -63,7 +63,7 @@ class WorkoutEditForm(FlaskForm):
     submit_text = "Update"
 
 class GoalAddForm(FlaskForm):
-    """Form for adding exercises to your workout."""
+    """Form for adding goals to your workout."""
 
     exercise = SelectField('Exercise Goal:', coerce=int)
     goal_reps = IntegerField('Reps:', validators=[InputRequired(message='Must have at least 1 "rep."')])
@@ -76,7 +76,7 @@ class GoalAddForm(FlaskForm):
     submit_text = "Add"
 
 class GoalEditForm(FlaskForm):
-    """Form for adding exercises to your workout."""
+    """Form for editing a goal."""
 
     exercise = SelectField('Exercise Goal:', coerce=int)
     goal_reps = IntegerField('Reps:', validators=[InputRequired(message='Must have at least 1 "rep."')])
@@ -89,7 +89,7 @@ class GoalEditForm(FlaskForm):
     submit_text = "Save Changes"
 
 class PerformanceAddForm(FlaskForm):
-    """Form for adding exercises to your workout."""
+    """Form for adding a performacne record."""
 
     performance_reps = IntegerField('Actual Reps:')
     performance_sets = IntegerField('Actual Sets:')
@@ -101,7 +101,7 @@ class PerformanceAddForm(FlaskForm):
     submit_text = "Next Exercise"
 
 class PerformanceEditForm(FlaskForm):
-    """Form for adding exercises to your workout."""
+    """"""
 
     performance_reps = IntegerField('Reps:')
     performance_sets = IntegerField('Sets:')
@@ -112,6 +112,23 @@ class PerformanceEditForm(FlaskForm):
     form_title = ""
     submit_text = "Save Changes"
 
+#################################################
+
+# FOR STEP-THROUGH (FIRST ATTEMPT)
+
+class PerformanceStepForm(FlaskForm):
+    """"""
+
+    performance_reps = IntegerField('Actual Reps:')
+    performance_sets = IntegerField('Actual Sets:')
+    performance_time_sec = IntegerField('Actual Time (seconds):', validators=[Optional()])
+    performance_weight_lbs = IntegerField('Actual Weight (lbs):', validators=[Optional()])
+
+    form_name = "Create Performance Record"
+    form_title = None
+    previous_text = None
+    next_text = None
+    finish_text = None
 
 #################################################
 
