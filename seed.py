@@ -52,6 +52,8 @@ db.session.commit()
 # Add goals
 add_to_bobson_workout_1 = Goal(workout_id=1, exercise_id=5, goal_reps=10, goal_sets=3, goal_weight_lbs=45)
 add_to_bobson_workout_2 = Goal(workout_id=1, exercise_id=2, goal_reps=50, goal_sets=1)
+add_to_bobson_workout_3 = Goal(workout_id=1, exercise_id=1, goal_reps=50, goal_sets=1)
+add_to_bobson_workout_4 = Goal(workout_id=1, exercise_id=7, goal_reps=50, goal_sets=1)
 
 add_to_mikeson_workout_1 = Goal(workout_id=2, exercise_id=1, goal_reps=30, goal_weight_lbs=80)
 add_to_mikeson_workout_2 = Goal(workout_id=2, exercise_id=3, goal_sets=6, goal_time_sec=60)
@@ -59,6 +61,8 @@ add_to_mikeson_workout_2 = Goal(workout_id=2, exercise_id=3, goal_sets=6, goal_t
 db.session.add_all([
     add_to_bobson_workout_1,
     add_to_bobson_workout_2,
+    add_to_bobson_workout_3,
+    add_to_bobson_workout_4,
     add_to_mikeson_workout_1,
     add_to_mikeson_workout_2,
     ])
