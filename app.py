@@ -335,7 +335,7 @@ def add_workout_goal(workout_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    workout = Workout.query.get(workout_id)
+    workout = Workout.query.get_or_404(workout_id)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
         return redirect("/")
@@ -374,7 +374,7 @@ def edit_workout(workout_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    workout = Workout.query.get(workout_id)
+    workout = Workout.query.get_or_404(workout_id)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
         return redirect("/")
@@ -405,12 +405,12 @@ def edit_goal(goal_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    goal = Goal.query.get(goal_id)
+    goal = Goal.query.get_or_404(goal_id)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.on_workouts.owner_user_id):
         return redirect("/")
 
-    workout = Workout.query.get(goal.workout_id)
+    workout = Workout.query.get_or_404(goal.workout_id)
 
     form = GoalEditForm(obj=goal)
 
@@ -446,9 +446,9 @@ def delete_goal(goal_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    goal = Goal.query.get(goal_id)
+    goal = Goal.query.get_or_404(goal_id)
 
-    workout = Workout.query.get(goal.workout_id)
+    workout = Workout.query.get_or_404(goal.workout_id)
 
     db.session.delete(goal)
     db.session.commit()
@@ -464,7 +464,7 @@ def delete_workout(workout_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    workout = Workout.query.get(workout_id)
+    workout = Workout.query.get_or_404(workout_id)
 
     db.session.delete(workout)
     db.session.commit()
@@ -486,7 +486,7 @@ def view_workout_goals_performance(workout_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    workout = Workout.query.get(workout_id)
+    workout = Workout.query.get_or_404(workout_id)
 
     workout.goals.sort(key=lambda x: x.id, reverse=False)
 
@@ -508,7 +508,7 @@ def view_goal_performance(goal_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    goal = Goal.query.get(goal_id)
+    goal = Goal.query.get_or_404(goal_id)
 
     goal.performance.sort(key=lambda x: x.id, reverse=False)
 
@@ -527,7 +527,7 @@ def edit_performance_record(performance_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    performance = Performance.query.get(performance_id)
+    performance = Performance.query.get_or_404(performance_id)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", performance.goal.workout.owner.id):
         return redirect("/")
@@ -571,7 +571,7 @@ def create__performance_record(goal_id):
         return redirect('/')
 
     # performance = Performance.query.get(performance_id)
-    goal = Goal.query.get(goal_id)
+    goal = Goal.query.get_or_404(goal_id)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
         return redirect("/")
@@ -617,6 +617,13 @@ def create__performance_record(goal_id):
 # INITIATING A STEP-THROUGH
 @app.route('/workout/<int:workout_id>/begin-step')
 def begin_step(workout_id):
+    """
+    Redirects to start a step-through.
+    """
+
+    workout = Workout.query.get_or_404(workout_id)
+
+
 
 
 
@@ -636,7 +643,7 @@ def create__performance_record_step():
 
 
     # performance = Performance.query.get(performance_id)
-    goal = Goal.query.get(goal_id)
+    goal = Goal.query.get_or_404(goal_id)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
         return redirect("/")
@@ -708,7 +715,7 @@ def create_performance_records(workout_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    workout = Workout.query.get(workout_id)
+    workout = Workout.query.get_or_404(workout_id)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
         return redirect("/")
