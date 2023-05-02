@@ -580,14 +580,17 @@ def create__performance_record(goal_id):
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
         return redirect("/")
 
-    form = PerformanceAddForm()
+    temp = Performance(
+        goal_id = goal.id,
+        performance_reps = goal.goal_reps,
+        performance_sets = goal.goal_sets,
+        performance_time_sec = goal.goal_time_sec,
+        performance_weight_lbs = goal.goal_weight_lbs
+    )
+
+    form = PerformanceAddForm(obj=temp)
 
     form.form_title = f"Create Record For: {goal.workout.description} - Goal: {goal.exercise.name}"
-
-    form.performance_reps.data=goal.goal_reps
-    form.performance_sets.data=goal.goal_sets
-    form.performance_time_sec.data=goal.goal_time_sec
-    form.performance_weight_lbs.data=goal.goal_weight_lbs
 
     if form.validate_on_submit():
         try:
@@ -615,6 +618,14 @@ def create__performance_record(goal_id):
 
 
 ##############################################################################
+
+# UTILITY - CLEAR STEP DATA IN SESSION
+@app.route('/clear')
+def clear():
+    del session[WORKOUT_CURRENT_STEP]
+
+    return redirect('/')
+
 
 # STEP-THROUGH PERFORMANCE ROUTES
 
@@ -650,41 +661,33 @@ def begin_step(workout_id):
     # session[WORKOUT_STEP] = workout.goals
 
 
-# INCREMENTING TO NEXT STEP
-@app.route('/next-step')
-def next_step():
-    """
-    Increments to next step of workout
-    """
+# # INCREMENTING TO NEXT STEP
+# # ELIMINATING THIS BECAUSE IT IS SLOW / REQUIRES ADDITIONAL QUERIES
+# @app.route('/next-step')
+# def next_step():
+#     """
+#     Increments to next step of workout
+#     """
 
-    if check_for_not_user_with_message("Access unauthorized.", "danger"):
-        return redirect('/')
+#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
+#         return redirect('/')
 
-    goal = Goal.query.get_or_404(session[WORKOUT_CURRENT_STEP])
+#     goal = Goal.query.get_or_404(session[WORKOUT_CURRENT_STEP])
 
-    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
-        return redirect("/")
+#     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+#         return redirect("/")
 
-    goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
+#     goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
 
-    # FIND INDEX OF GOAL IN GOALS WITH SAME ID
-    next_step_index = goals.index(goal) + 1
+#     next_step_index = goals.index(goal) + 1
 
-    session[WORKOUT_CURRENT_STEP] = goals[(goals.index(goal) + 1)].id
+#     session[WORKOUT_CURRENT_STEP] = goals[(goals.index(goal) + 1)].id
 
-    # raise
+#     return redirect('/goal/performance-step')
 
-    # session[WORKOUT_CURRENT_STEP] = goals[next_step_index]
-
-    return redirect('/goal/performance-step')
-
-    # ADD LOGIC FOR NO NEXT - REDIRECT TO SAME AND HAVE THEM FINISH
-    # MAYBE CHECK FOR FINISH ELSWHERE AND MODIFY THE NEXT BUTTON TO FINISH
-    # WILL NEED LOGIC IN PREVIOUS AND A LIST OF PREVIOUSLY SUBMITTED IN SESSION TO CHECK FOR TO POPULATE / WRITE OVER SUBMISSION
-
-
-
-
+#     # ADD LOGIC FOR NO NEXT - REDIRECT TO SAME AND HAVE THEM FINISH
+#     # MAYBE CHECK FOR FINISH ELSWHERE AND MODIFY THE NEXT BUTTON TO FINISH
+#     # WILL NEED LOGIC IN PREVIOUS AND A LIST OF PREVIOUSLY SUBMITTED IN SESSION TO CHECK FOR TO POPULATE / WRITE OVER SUBMISSION
 
 
 
@@ -709,14 +712,19 @@ def create__performance_record_step():
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
         return redirect("/")
 
-    form = PerformanceAddForm()
+    goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
+
+    temp = Performance(
+        goal_id = goal.id,
+        performance_reps = goal.goal_reps,
+        performance_sets = goal.goal_sets,
+        performance_time_sec = goal.goal_time_sec,
+        performance_weight_lbs = goal.goal_weight_lbs
+    )
+
+    form = PerformanceAddForm(obj=temp)
 
     form.form_title = f"Create Record For: {goal.workout.description} - Goal: {goal.exercise.name}"
-
-    form.performance_reps.data=goal.goal_reps
-    form.performance_sets.data=goal.goal_sets
-    form.performance_time_sec.data=goal.goal_time_sec
-    form.performance_weight_lbs.data=goal.goal_weight_lbs
 
     if form.validate_on_submit():
         try:
@@ -738,7 +746,9 @@ def create__performance_record_step():
             flash("Unknown Integrity Error - /workout/add - POST", 'danger')
             return redirect(f'/workout/{performance.goal.workout.id}/performance')
 
-        return redirect(f'/next-step')
+        # session[WORKOUT_CURRENT_STEP] = goals[(goals.index(goal) + 1)].id
+
+        return redirect('/')
 
     return render_template('performance/performance-add-single.html', form=form, goal=goal)
 
