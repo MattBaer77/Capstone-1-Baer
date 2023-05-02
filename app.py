@@ -16,6 +16,10 @@ from helpers import scrub_default_image_url, replace_default_image_url
 
 
 CURR_USER_KEY = "curr_user"
+WORKOUT_TO_STEP = "workout_to_step"
+WORKOUT_PREVIOUS_STEP = "previous_step"
+WORKOUT_CURRENT_STEP = "current_step"
+WORKOUT_NEXT_STEP = "next_step"
 
 app = Flask(__name__)
 
@@ -621,7 +625,63 @@ def begin_step(workout_id):
     Redirects to start a step-through.
     """
 
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
     workout = Workout.query.get_or_404(workout_id)
+
+    if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
+        return redirect("/")
+
+    goals = Goal.query.filter(Goal.workout_id == workout_id).order_by(Goal.id.asc()).all()
+
+    session[WORKOUT_TO_STEP] = workout.id
+
+    if WORKOUT_CURRENT_STEP in session:
+        return redirect('/step/next')
+
+    session[WORKOUT_CURRENT_STEP] = goals[0].id
+
+    return redirect(f"/goal/performance-step")
+ 
+
+    # if WORKOUT_CURRENT_STEP in session:
+
+    # session[WORKOUT_STEP] = workout.goals
+
+
+# INCREMENTING TO NEXT STEP
+@app.route('/next-step')
+def next_step():
+    """
+    Increments to next step of workout
+    """
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    goal = Goal.query.get_or_404(session[WORKOUT_CURRENT_STEP])
+
+    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+        return redirect("/")
+
+    goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
+
+    # FIND INDEX OF GOAL IN GOALS WITH SAME ID
+    next_step_index = goals.index(goal) + 1
+
+    session[WORKOUT_CURRENT_STEP] = goals[(goals.index(goal) + 1)].id
+
+    # raise
+
+    # session[WORKOUT_CURRENT_STEP] = goals[next_step_index]
+
+    return redirect('/goal/performance-step')
+
+    # ADD LOGIC FOR NO NEXT - REDIRECT TO SAME AND HAVE THEM FINISH
+    # MAYBE CHECK FOR FINISH ELSWHERE AND MODIFY THE NEXT BUTTON TO FINISH
+    # WILL NEED LOGIC IN PREVIOUS AND A LIST OF PREVIOUSLY SUBMITTED IN SESSION TO CHECK FOR TO POPULATE / WRITE OVER SUBMISSION
+
 
 
 
@@ -638,12 +698,13 @@ def create__performance_record_step():
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-
     # CHECK FOR DATA IN SESSION TO DETERMINE WHICH GOAL ID
+    if WORKOUT_CURRENT_STEP in session:
+        goal = Goal.query.get_or_404(session[WORKOUT_CURRENT_STEP])
 
-
-    # performance = Performance.query.get(performance_id)
-    goal = Goal.query.get_or_404(goal_id)
+    else:
+        flash("You have not started a workout", "danger")
+        return redirect("/")
 
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
         return redirect("/")
@@ -677,7 +738,7 @@ def create__performance_record_step():
             flash("Unknown Integrity Error - /workout/add - POST", 'danger')
             return redirect(f'/workout/{performance.goal.workout.id}/performance')
 
-        return redirect(f'/')
+        return redirect(f'/next-step')
 
     return render_template('performance/performance-add-single.html', form=form, goal=goal)
 
