@@ -17,11 +17,13 @@ from helpers import scrub_default_image_url, replace_default_image_url
 
 CURR_USER_KEY = "curr_user"
 WORKOUT_TO_STEP = "workout_to_step"
-PERFORMANCE_ID_PREVIOUS_STEP = "previous_step"
+GOAL_ID_PREVIOUS_STEP = "previous_step"
 GOAL_ID_CURRENT_STEP = "current_step"
 GOAL_ID_NEXT_STEP = "next_step"
 
-PERFORMANCE_ID_TO_EDIT = "performance_step_to_edit_id"
+# PERFORMANCE_ID_TO_EDIT = "performance_step_to_edit_id"
+
+PERFORMANCE_RECORDS_CAPTURED_IDS = "performance_records_captured"
 
 app = Flask(__name__)
 
@@ -628,8 +630,8 @@ def clear():
     if PERFORMANCE_ID_TO_EDIT in session:
         del session[PERFORMANCE_ID_TO_EDIT]
     
-    if PERFORMANCE_ID_PREVIOUS_STEP in session:
-        del session[PERFORMANCE_ID_PREVIOUS_STEP]
+    if GOAL_ID_PREVIOUS_STEP in session:
+        del session[GOAL_ID_PREVIOUS_STEP]
 
     if GOAL_ID_CURRENT_STEP in session:
         del session[GOAL_ID_CURRENT_STEP]
@@ -663,6 +665,8 @@ def begin_step(workout_id):
 
     session[GOAL_ID_CURRENT_STEP] = goals[0].id
 
+    session[PERFORMANCE_RECORDS_CAPTURED_IDS] = []
+
     return redirect(f"/goal/performance-step")
 
 # FINISHING A STEP-THROUGH
@@ -679,19 +683,61 @@ def finish_step():
 @app.route('/previous')
 def previous_step():
     """
-    Adds PERFORMANCE_ID_TO_EDIT to session.
     Increments GOAL_ID_CURRENT_STEP backwards.
-    Increments PERFORMANCE_ID_PREVIOUS_STEP backwards.
+    Increments GOAL_ID_PREVIOUS_STEP backwards.
     """
 
-    # Add PERFORMANCE_ID_TO_EDIT to session
-    session[PERFORMANCE_ID_TO_EDIT] = session[PERFORMANCE_ID_PREVIOUS_STEP]
+    # CHECK IF A WORKOUT STEP-THROUGH HAS BEEN STARTED AT ALL
+    if [GOAL_ID_CURRENT_STEP] not in session:
+        flash("You have not started a workout", "danger")
+        return redirect("/")
 
-    session[GOAL_ID_CURRENT_STEP] = 
+    # CHECK IF WE ARE ON THE FIRST STEP
+    # IF WE ARE DO NOTHING ELSE AND REDIRECT TO THE STEPPER
+    if [GOAL_ID_PREVIOUS_STEP] not in session:
+        return redirect('/goal/performance-step')
 
-    performance_step_to_edit = Performance.query.get(session[PERFORMANCE_ID_TO_EDIT])
+    goal = Goal.query.get_or_404(session[GOAL_ID_CURRENT_STEP])
+    goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
 
-    # goal_id_of_performance_step_to_edit = performance_step_to_edit.goal_id
+    current_step_goal_id = goals[(goals.index(goal))].id
+    previous_step_goal_id = goals[(goals.index(goal) - 1)].id
+    next_previous_step_goal_id = goals[(goal.index(goal) - 2)].id
+
+    session[GOAL_ID_CURRENT_STEP] = previous_step_goal_id
+    session[GOAL_ID_PREVIOUS_STEP] = next_previous_step_goal_id
+
+    return redirect('/goal/performance-step')
+
+
+
+
+    # # FROM THE CURRENT STEP - LOOK FOR A PREVIOUS STEP
+    # # IF A PREVIOUS STEP EXISTS - MAKE THAT THE CURRENT STEP
+    # # IF A PREVIOUS STEP DOES NOT EXIST...
+    # try:
+    #     previous_step_goal_id = goals[(goals.index(goal) - 1)].id
+    #     session[GOAL_ID_CURRENT_STEP] = previous_step_goal_id
+
+    # except IndexError:
+    #     previous_step_goal_id = None
+    #     del session[GOAL_ID_PREVIOUS_STEP]
+
+
+
+    # # IF THE PREVIOUS STEP EXISTED - LOOK FOR THE NEXT PREVIOUS STEP FROM THE ORIGINAL CURRENT STEP
+    # # IF THAT EXISTS - MAKE IT THE PREVIOUS STEP
+    # # IF NOT, DELETE FROM SESSION
+
+    # if previous_step_goal_id:
+    #     try:
+    #         next_previous_step_goal_id = goals[(goal.index(goal) - 2)].id
+    #         session[GOAL_ID_PREVIOUS_STEP] = next_previous_step_goal_id
+
+
+    #     except IndexError:
+    #         next_previous_step_goal_id = None
+    #         del session[GOAL_ID_PREVIOUS_STEP]
 
     
 
@@ -759,7 +805,7 @@ def create__performance_record_step():
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    # WHAT GOAL AM I ON? AM I ON A GOAL?
+    # AM I ON A GOAL? WHAT GOAL AM I ON?
     if GOAL_ID_CURRENT_STEP in session:
         goal = Goal.query.get_or_404(session[GOAL_ID_CURRENT_STEP])
     else:
@@ -772,27 +818,35 @@ def create__performance_record_step():
 
     goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
 
-    # AM I EDITING A PREVIOUS STEP?
-    # WHAT IS THE PERFORMANCE ID OF THAT PREVIOUS STEP?
-    # THAT PERFORMANCE RECORD MUST BE PASSED TO THE FORM
-    # THAT PERORMANCE_ID_TO_EDIT IN SESSION SHOULD BE CLEARED???
-    if [PERFORMANCE_ID_TO_EDIT] in session:
-        obj = Performance.query.get(PERFORMANCE_ID_TO_EDIT)
-        del session[PERFORMANCE_ID_TO_EDIT]
-
+    # I NEED TO -
+    # CHECK IF I AM EDITING A STEP FOR WHICH WE HAVE CAPTURED A PERFORNACE RECORD
+    # DO THIS BY CHECKING FOR IT IN PERFORMANCE_RECORDS_CAPTURED_IDS
+    # IF SO, GET THAT RECORD BY ITS ID
+    # PASS THE RELATED INFO INTO THE FORM
     # IF I AM NOT EDITING A PREVIOUS STEP - I SHOULD FILL SOME OF THE FORM WITH GOAL VALUES TO FACILITATE EASY USE
+
+    editing_existing=None
+
+    for record_id in session[PERFORMANCE_RECORDS_CAPTURED_IDS]:
+        record = Performance.query.get(record_id)
+        if record.goal_id == goal.id:
+            editing_existing = record
+
+    if editing_existing:
+        obj = editing_existing
+
     else:
         obj = Performance(
-            goal_id = goal.id,
-            performance_reps = goal.goal_reps,
-            performance_sets = goal.goal_sets
-        )
+                goal_id = goal.id,
+                performance_reps = goal.goal_reps,
+                performance_sets = goal.goal_sets
+            )
 
     # CREATE THE FORM AND FILL WITH THE APPROPRIATE DATA
     form = PerformanceStepForm(obj=obj)
 
     # CHECK FOR PREVIOUS STEP (IF THERE IS ONE) - MODIFY FORM ACCORDINGLY
-    if PERFORMANCE_ID_PREVIOUS_STEP in session:
+    if GOAL_ID_PREVIOUS_STEP in session:
         form.previous_text = "Previous Exercise Goal"
 
     # FIGURE OUT THE ID OF THE NEXT STEP BASED ON YOUR CURRENT STEP
@@ -833,8 +887,9 @@ def create__performance_record_step():
 
         # IF THERE IS A NEXT STEP - INCREMENT APPROPRIATE VALUES UP - MOVE TO NEXT STEP
         if next_step_goal_id:
-            session[PERFORMANCE_ID_PREVIOUS_STEP] = performance.id
+            session[GOAL_ID_PREVIOUS_STEP] = goal.id
             session[GOAL_ID_CURRENT_STEP] = next_step_goal_id
+            session[PERFORMANCE_RECORDS_CAPTURED_IDS].append(performance.id)
             return redirect('/goal/performance-step')
 
         # IF THERE IS NOT A NEXT STEP - FINISH THIS WORKOUT STEP-THROUGH
