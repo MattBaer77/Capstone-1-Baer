@@ -627,8 +627,8 @@ def create__performance_record(goal_id):
 @app.route('/clear')
 def clear():
 
-    if PERFORMANCE_ID_TO_EDIT in session:
-        del session[PERFORMANCE_ID_TO_EDIT]
+    if PERFORMANCE_RECORDS_CAPTURED_IDS in session:
+        del session[PERFORMANCE_RECORDS_CAPTURED_IDS]
     
     if GOAL_ID_PREVIOUS_STEP in session:
         del session[GOAL_ID_PREVIOUS_STEP]
@@ -688,13 +688,13 @@ def previous_step():
     """
 
     # CHECK IF A WORKOUT STEP-THROUGH HAS BEEN STARTED AT ALL
-    if [GOAL_ID_CURRENT_STEP] not in session:
+    if GOAL_ID_CURRENT_STEP not in session:
         flash("You have not started a workout", "danger")
         return redirect("/")
 
     # CHECK IF WE ARE ON THE FIRST STEP
     # IF WE ARE DO NOTHING ELSE AND REDIRECT TO THE STEPPER
-    if [GOAL_ID_PREVIOUS_STEP] not in session:
+    if GOAL_ID_PREVIOUS_STEP not in session:
         return redirect('/goal/performance-step')
 
     goal = Goal.query.get_or_404(session[GOAL_ID_CURRENT_STEP])
@@ -702,7 +702,7 @@ def previous_step():
 
     current_step_goal_id = goals[(goals.index(goal))].id
     previous_step_goal_id = goals[(goals.index(goal) - 1)].id
-    next_previous_step_goal_id = goals[(goal.index(goal) - 2)].id
+    next_previous_step_goal_id = goals[(goals.index(goal) - 2)].id
 
     session[GOAL_ID_CURRENT_STEP] = previous_step_goal_id
     session[GOAL_ID_PREVIOUS_STEP] = next_previous_step_goal_id
@@ -864,6 +864,35 @@ def create__performance_record_step():
 
     # GIVE THE FORM AN APPROPRIATE TITLE
     form.form_title = f"Create Record For: {goal.workout.description} - Goal: {goal.exercise.name}"
+
+    if editing_existing:
+        if form.validate_on_submit():
+            try:
+                editing_existing.goal_id=goal.id,
+
+                editing_existing.performance_reps=form.performance_reps.data,
+                editing_existing.performance_sets=form.performance_sets.data,
+                editing_existing.performance_time_sec=form.performance_time_sec.data,
+                editing_existing.performance_weight_lbs=form.performance_weight_lbs.data
+
+                db.session.add(editing_existing)
+                db.session.commit()
+
+            except IntegrityError:
+                flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+                return redirect(f'/workout/{performance.goal.workout.id}/performance')
+
+            # IF THERE IS A NEXT STEP - INCREMENT APPROPRIATE VALUES UP - MOVE TO NEXT STEP
+            if next_step_goal_id:
+                session[GOAL_ID_PREVIOUS_STEP] = goal.id
+                session[GOAL_ID_CURRENT_STEP] = next_step_goal_id
+                session[PERFORMANCE_RECORDS_CAPTURED_IDS].append(editing_existing.id)
+                return redirect('/goal/performance-step')
+
+            # IF THERE IS NOT A NEXT STEP - FINISH THIS WORKOUT STEP-THROUGH
+            else:
+                return redirect('/finish')
+
 
     if form.validate_on_submit():
         try:
