@@ -128,7 +128,7 @@ class PerformanceStepForm(FlaskForm):
     form_title = None
     previous_text = None
     next_text = None
-    finish_text = None
+    # finish_text = None
 
 #################################################
 
