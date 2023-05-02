@@ -1,5 +1,5 @@
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, SelectField, IntegerField
+from flask_wtf import FlaskForm, Form
+from wtforms import StringField, PasswordField, TextAreaField, SelectField, IntegerField, FieldList, FormField
 from wtforms.validators import DataRequired, Email, Length, InputRequired, Optional
 
 class UserAddForm(FlaskForm):
@@ -112,4 +112,29 @@ class PerformanceEditForm(FlaskForm):
     form_title = ""
     submit_text = "Save Changes"
 
-# class WorkoutEditExerciseForm
+
+#################################################
+
+# FOR MULTIPLE PERFORMANCE ENTRIES ON SINGLE PAGE
+
+class PerformanceAddSingle(Form):
+    """
+    SUBFORM. - Add a performance record for a single goal of a workout.
+    Never used by itself.
+    """
+
+    performance_reps = IntegerField('Actual Reps:')
+    performance_sets = IntegerField('Actual Sets:')
+    performance_time_sec = IntegerField('Actual Time (seconds):', validators=[Optional()])
+    performance_weight_lbs = IntegerField('Actual Weight (lbs):', validators=[Optional()])
+
+class PerformanceAddBulk(FlaskForm):
+    """
+    SUPERFORM. - Add instances of PerformanceAddSingle to capture all performance records for all goals of a workout.
+    """
+
+    performance_records  = FieldList(
+        FormField(PerformanceAddSingle),
+        min_entries=1,
+        max_entries=20
+    )

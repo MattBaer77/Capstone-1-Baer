@@ -562,20 +562,61 @@ def edit_performance_record(performance_id):
 ##############################################################################
 
 # PERFORMING A WORKOUT - ALL IN ONE ROUTE
-# @app.route('/workout/<int:workout_id>/performance/add')
-# def create_performance_records():
+@app.route('/workout/<int:workout_id>/performance-add', methods=["GET", "POST"])
+def create_performance_records(workout_id):
 
-#     """
-#     Displays & hanldes a form to create a performance record for every goal in a workout.
-#     """
+    """
+    Displays & hanldes a form to create a performance record for every goal in a workout.
+    """
 
-    # if check_for_not_user_with_message("Access unauthorized.", "danger"):
-    #     return redirect('/')
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
 
-    # workout = Workout.query.get(workout_id)
+    workout = Workout.query.get(workout_id)
 
-    # if check_correct_user_with_message("Access unauthorized.", "danger", performance.goal.workout.owner.id):
-    #     return redirect("/")
+    if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
+        return redirect("/")
+
+    performance_records = []
+
+    for goal in workout.goals:
+        record = {
+            "performance_reps":goal.goal_reps,
+            "performance_sets":goal.goal_sets,
+            "performance_time_sec":goal.goal_time_sec,
+            "performance_weight_lbs":goal.goal_weight_lbs
+        }
+
+        performance_records.append(record)
+
+    data = {"performance_records":performance_records}
+
+    form = PerformanceAddBulk(data=data)
+
+    if form.validate_on_submit():
+        for field in form.performance_records:
+            try:
+                performance = Performance(
+
+                    goal_id=goal.id,
+
+                    performance_reps=field.performance_reps.data,
+                    performance_sets=field.performance_sets.data,
+                    performance_time_sec=field.performance_time_sec.data,
+                    performance_weight_lbs=field.performance_weight_lbs.data
+
+                )
+
+                db.session.add(performance)
+                db.session.commit()
+
+            except IntegrityError:
+                flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+                return redirect(f'/workout/{performance.goal.workout.id}/performance')
+
+        return redirect(f'/')
+
+    return render_template('performance/performance-add.html', form=form, workout=workout)
 
 
 # PERFORMING A WORKOUT - SINGLE GOAL ROUTE
