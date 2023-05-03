@@ -741,7 +741,7 @@ def previous_step():
 
 # PERFORMING A WORKOUT - SINGLE GOAL ROUTE
 @app.route('/step', methods=["GET", "POST"])
-def create__performance_record_step():
+def step():
     """
     Primary route for a STEP-THROUGH
     Displays & handles a form to create a performance record for a single goal in a workout.
@@ -766,6 +766,9 @@ def create__performance_record_step():
         return redirect("/")
 
     record = check_if_editing_existing(goal)
+
+    if record:
+        return redirect('step-edit')
 
     if record:
         obj = record
@@ -863,6 +866,102 @@ def create__performance_record_step():
             return redirect('/finish')
 
     return render_template('performance/performance-step-single.html', form=form, goal=goal)
+
+
+# PERFORMING A WORKOUT - EDIT PERFORMANCE RECORD AFTER NAVIGATING TO PREVIOUS
+@app.route('/step-edit', methods=["GET", "POST"])
+def step_edit():
+    """
+    Edit route for a STEP-THROUGH
+    Displays & handles a form to create a performance record for a single goal in a workout.
+    Passes data to session in order to maintain location / state.
+    """
+    # raise
+
+    # IS A USER NOT LOGGED IN?
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    # CHECK IF WORKOUT NOT STARTED
+    if GOAL_ID_CURRENT not in session:
+        flash("You have not started a workout", "danger")
+        return redirect("/")
+
+    # FIND THE GOAL THAT I AM ON
+    goal = Goal.query.get_or_404(session[GOAL_ID_CURRENT])
+
+    # DOES THIS GOAL BELONG TO THIS USER?
+    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+        return redirect("/")
+
+    record = check_if_editing_existing(goal)
+
+    if not record:
+        return redirect('/step')
+
+    obj=record
+
+    goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
+
+    # CREATE THE FORM AND FILL WITH THE APPROPRIATE DATA
+    form = PerformanceStepForm(obj=obj)
+
+    # CHECK FOR PREVIOUS STEP (IF THERE IS ONE) - MODIFY FORM ACCORDINGLY
+    if GOAL_ID_PREVIOUS in session:
+        form.previous_text = "Previous Exercise Goal"
+
+    # FIGURE OUT THE ID OF THE NEXT STEP BASED ON YOUR CURRENT STEP
+    try:
+        next_step_goal_id = goals[(goals.index(goal) + 1)].id
+
+    except IndexError:
+        next_step_goal_id = None
+
+    # IF THERE IS NO NEXT STEP - FILL THE FORM WITH DATA APPROPRIATE TO FINISH
+    if next_step_goal_id:
+        form.next_text = "Next Exercise Goal"
+    else:
+        form.next_text = "Finish Workout"
+
+    # GIVE THE FORM AN APPROPRIATE TITLE
+    form.form_title = f"Create Record For: {goal.workout.description} - Goal: {goal.exercise.name}"
+
+    if form.validate_on_submit():
+        try:
+            record.goal_id=goal.id,
+
+            record.performance_reps=form.performance_reps.data,
+            record.performance_sets=form.performance_sets.data,
+            record.performance_time_sec=form.performance_time_sec.data,
+            record.performance_weight_lbs=form.performance_weight_lbs.data
+
+            db.session.add(record)
+            db.session.commit()
+
+        except IntegrityError:
+            flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+            return redirect(f'/workout/{performance.goal.workout.id}/performance')
+
+        # IF THERE IS A NEXT STEP - INCREMENT APPROPRIATE VALUES UP - MOVE TO NEXT STEP
+        if next_step_goal_id:
+            session[GOAL_ID_PREVIOUS] = goal.id
+            session[GOAL_ID_CURRENT] = next_step_goal_id
+            session[PERFORMANCE_RECORDS_CAPTURED_IDS].append(record.id)
+            return redirect('/step')
+
+        # IF THERE IS NOT A NEXT STEP - FINISH THIS WORKOUT STEP-THROUGH
+        else:
+            return redirect('/finish')
+
+    return render_template('performance/performance-step-single.html', form=form, goal=goal)
+
+
+
+
+
+
+
+
 
 
 ##############################################################################
