@@ -115,8 +115,17 @@ def check_if_editing_existing(goal):
         if record.goal_id == goal.id:
             return record
 
+
 def title_form(action, workout_description, goal_exercise_name):
     return f"{action} Record For: {workout_description} - Goal: {goal_exercise_name}"
+
+
+def determine_next_step(goals, goal):
+    try:
+        return goals[(goals.index(goal) + 1)].id
+
+    except IndexError:
+        return None
 
 
 ##############################################################################
@@ -789,11 +798,7 @@ def step():
         form.previous_text = "Previous Exercise Goal"
 
     # FIGURE OUT THE ID OF THE NEXT STEP BASED ON YOUR CURRENT STEP
-    try:
-        next_step_goal_id = goals[(goals.index(goal) + 1)].id
-
-    except IndexError:
-        next_step_goal_id = None
+    next_step_goal_id = determine_next_step(goals,goal)
 
     # IF THERE IS NO NEXT STEP - FILL THE FORM WITH DATA APPROPRIATE TO FINISH
     if not next_step_goal_id:
@@ -880,11 +885,7 @@ def step_edit():
         form.previous_text = "Previous Exercise Goal"
 
     # FIGURE OUT THE ID OF THE NEXT STEP BASED ON YOUR CURRENT STEP
-    try:
-        next_step_goal_id = goals[(goals.index(goal) + 1)].id
-
-    except IndexError:
-        next_step_goal_id = None
+    next_step_goal_id = determine_next_step(goals,goal)
 
     # IF THERE IS NO NEXT STEP - FILL THE FORM WITH DATA APPROPRIATE TO FINISH
     if not next_step_goal_id:
