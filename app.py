@@ -128,6 +128,12 @@ def determine_next_step(goals, goal):
         return None
 
 
+def increment_step(goal_id, next_step_goal_id, performance_record_id):
+    session[GOAL_ID_PREVIOUS] = goal_id
+    session[GOAL_ID_CURRENT] = next_step_goal_id
+    session[PERFORMANCE_RECORDS_CAPTURED_IDS].append(performance_record_id)
+
+
 ##############################################################################
 
 # USER ROUTES
@@ -830,10 +836,9 @@ def step():
 
         # IF THERE IS A NEXT STEP - INCREMENT APPROPRIATE VALUES UP - MOVE TO NEXT STEP
         if next_step_goal_id:
-            session[GOAL_ID_PREVIOUS] = goal.id
-            session[GOAL_ID_CURRENT] = next_step_goal_id
-            session[PERFORMANCE_RECORDS_CAPTURED_IDS].append(performance.id)
+            increment_step(goal.id, next_step_goal_id, performance.id)
             return redirect('/step')
+
 
         # IF THERE IS NOT A NEXT STEP - FINISH THIS WORKOUT STEP-THROUGH
         else:
@@ -912,10 +917,9 @@ def step_edit():
 
         # IF THERE IS A NEXT STEP - INCREMENT APPROPRIATE VALUES UP - MOVE TO NEXT STEP
         if next_step_goal_id:
-            session[GOAL_ID_PREVIOUS] = goal.id
-            session[GOAL_ID_CURRENT] = next_step_goal_id
-            session[PERFORMANCE_RECORDS_CAPTURED_IDS].append(record.id)
+            increment_step(goal.id, next_step_goal_id, record.id)
             return redirect('/step')
+
 
         # IF THERE IS NOT A NEXT STEP - FINISH THIS WORKOUT STEP-THROUGH
         else:
