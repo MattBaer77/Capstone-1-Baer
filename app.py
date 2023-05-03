@@ -733,6 +733,9 @@ def previous_step():
     session[GOAL_ID_CURRENT] = previous_step_goal_id
     session[GOAL_ID_PREVIOUS] = next_previous_step_goal_id
 
+    if session[GOAL_ID_PREVIOUS] > session[GOAL_ID_CURRENT]:
+        del session[GOAL_ID_PREVIOUS]
+
     return redirect('/step')
 
 
