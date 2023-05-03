@@ -793,9 +793,7 @@ def step():
         next_step_goal_id = None
 
     # IF THERE IS NO NEXT STEP - FILL THE FORM WITH DATA APPROPRIATE TO FINISH
-    if next_step_goal_id:
-        form.next_text = "Next Exercise Goal"
-    else:
+    if not next_step_goal_id:
         form.next_text = "Finish Workout"
 
     # GIVE THE FORM AN APPROPRIATE TITLE
@@ -885,9 +883,7 @@ def step_edit():
         next_step_goal_id = None
 
     # IF THERE IS NO NEXT STEP - FILL THE FORM WITH DATA APPROPRIATE TO FINISH
-    if next_step_goal_id:
-        form.next_text = "Next Exercise Goal"
-    else:
+    if not next_step_goal_id:
         form.next_text = "Finish Workout"
 
     # GIVE THE FORM AN APPROPRIATE TITLE

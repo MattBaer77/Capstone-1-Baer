@@ -127,7 +127,7 @@ class PerformanceStepForm(FlaskForm):
     form_name = "Create Performance Record"
     form_title = None
     previous_text = None
-    next_text = None
+    next_text = "Next Exercise Goal"
     # finish_text = None
 
 ##############################################################################
