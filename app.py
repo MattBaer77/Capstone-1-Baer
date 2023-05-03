@@ -733,29 +733,9 @@ def previous_step():
 @app.route('/step', methods=["GET", "POST"])
 def create__performance_record_step():
     """
+    Primary route for a STEP-THROUGH
     Displays & handles a form to create a performance record for a single goal in a workout.
-
-    GET-
-    Check if there is not a user.
-    Check for WOROUT_CURRENT_STEP in session.
-    If yes, query the goal of the current step.
-    Check that the correct user is accessing this route - owner of the workout.
-    Get a list of all goals for this workout in order.
-    -
-    Determine previous goal.
-    Determine next goal.
-    (THIS WILL EVENTUALLY REQUIRE LOGIC TO SAVE AND RELOAD PERFORMANCE RECORDS IF YOU NAVIGATE TO PREVIOUS)
-    -
-    Load default values - (from goals) into form.
-    Render Template for form.
-
-    POST-
-    Validate form.
-    Try to create new performance record from form data.
-    If successful - increment stored goal ids to next
-    Redirect to next goal.
-
-
+    Passes data to session in order to maintain location / state.
     """
     # raise
 
@@ -763,12 +743,15 @@ def create__performance_record_step():
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    # AM I ON A GOAL? WHAT GOAL AM I ON?
-    if GOAL_ID_CURRENT in session:
-        goal = Goal.query.get_or_404(session[GOAL_ID_CURRENT])
-    else:
+    # CHECK IF WORKOUT NOT STARTED
+    if GOAL_ID_CURRENT not in session:
         flash("You have not started a workout", "danger")
         return redirect("/")
+
+    # FIND THE GOAL THAT I AM ON
+    goal = Goal.query.get_or_404(session[GOAL_ID_CURRENT])
+
+    # EDITING HERE
 
     # DOES THIS GOAL BELONG TO THIS USER?
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
