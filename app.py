@@ -564,6 +564,7 @@ def edit_performance_record(performance_id):
 
 # ROUTES USED WHEN PERFORMING A WORKOUT
 
+# CONSIDER DELETEME IF NOT USED
 # PERFORMING A WORKOUT - SINGLE GOAL ROUTE
 @app.route('/goal/<int:goal_id>/performance-add', methods=["GET", "POST"])
 def create__performance_record(goal_id):
@@ -635,7 +636,7 @@ def clear():
         del session[GOAL_ID_CURRENT]
 
     return redirect('/')
-# UTILITY - CLEAR ALL STEP DATA IN SESSION - DELETEME BEFORE FINISHING
+
 
 # INITIATING A STEP-THROUGH
 @app.route('/workout/<int:workout_id>/step')
@@ -647,15 +648,15 @@ def begin_step(workout_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
+    if GOAL_ID_CURRENT in session:
+        return redirect('/step')
+
     workout = Workout.query.get_or_404(workout_id)
 
-    if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
+    if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner_id):
         return redirect("/")
 
     goals = Goal.query.filter(Goal.workout_id == workout_id).order_by(Goal.id.asc()).all()
-
-    if GOAL_ID_CURRENT in session:
-        return redirect('/step/next')
 
     session[GOAL_ID_CURRENT] = goals[0].id
 
