@@ -101,7 +101,7 @@ class PerformanceAddForm(FlaskForm):
     submit_text = "Next Exercise"
 
 class PerformanceEditForm(FlaskForm):
-    """"""
+    """Form for editing a performance record."""
 
     performance_reps = IntegerField('Reps:')
     performance_sets = IntegerField('Sets:')
@@ -112,12 +112,12 @@ class PerformanceEditForm(FlaskForm):
     form_title = ""
     submit_text = "Save Changes"
 
-#################################################
+##############################################################################
 
-# FOR STEP-THROUGH (FIRST ATTEMPT)
+# FOR STEP-THROUGH
 
 class PerformanceStepForm(FlaskForm):
-    """"""
+    """Performance Add/Edit form for STEP-THROUGH functionality."""
 
     performance_reps = IntegerField('Actual Reps:')
     performance_sets = IntegerField('Actual Sets:')
@@ -130,7 +130,7 @@ class PerformanceStepForm(FlaskForm):
     next_text = None
     # finish_text = None
 
-#################################################
+##############################################################################
 
 # FOR MULTIPLE PERFORMANCE ENTRIES ON SINGLE PAGE
 
