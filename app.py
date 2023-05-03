@@ -109,6 +109,13 @@ def session_step_data_clearout():
         del session[GOAL_ID_CURRENT]
 
 
+def check_if_editing_existing(goal):
+    for performance_record_id in session[PERFORMANCE_RECORDS_CAPTURED_IDS]:
+        record = Performance.query.get(performance_record_id)
+        if record.goal_id == goal.id:
+            return record
+
+
 ##############################################################################
 
 # USER ROUTES
@@ -757,13 +764,9 @@ def create__performance_record_step():
 
     goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
 
-    def check_if_editing_existing():
-        for performance_record_id in session[PERFORMANCE_RECORDS_CAPTURED_IDS]:
-            record = Performance.query.get(performance_record_id)
-            if record.goal_id == goal.id:
-                return record
+    record = check_if_editing_existing(goal)
 
-    record = check_if_editing_existing()
+    # EDITING HERE / SLIGHTLY BELOW
 
     if record:
         obj = record
