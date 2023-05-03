@@ -98,7 +98,16 @@ def check_correct_user_with_message(message, category, variable_to_check):
         return True
 
 
-# 
+def session_step_data_clearout():
+    if PERFORMANCE_RECORDS_CAPTURED_IDS in session:
+        del session[PERFORMANCE_RECORDS_CAPTURED_IDS]
+    
+    if GOAL_ID_PREVIOUS in session:
+        del session[GOAL_ID_PREVIOUS]
+
+    if GOAL_ID_CURRENT in session:
+        del session[GOAL_ID_CURRENT]
+
 
 ##############################################################################
 
@@ -673,20 +682,16 @@ def finish_step():
     Present user with navigation to get to their home page.
     """
 
-    # SESSION STEP DATA CLEAROUT
     # CHECK IF NOT USER
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if PERFORMANCE_RECORDS_CAPTURED_IDS in session:
-        del session[PERFORMANCE_RECORDS_CAPTURED_IDS]
-    
-    if GOAL_ID_PREVIOUS in session:
-        del session[GOAL_ID_PREVIOUS]
+    # CHECK IF WORKOUT NOT STARTED
+    if GOAL_ID_CURRENT not in session:
+        flash("You have not started a workout", "danger")
+        return redirect("/")
 
-    if GOAL_ID_CURRENT in session:
-        del session[GOAL_ID_CURRENT]
-    # SESSION STEP DATA CLEAROUT
+    session_step_data_clearout()
 
     return render_template('/step-through/finish.html')
 
@@ -698,7 +703,7 @@ def previous_step():
     Increments GOAL_ID_PREVIOUS backwards.
     """
 
-    # CHECK IF A WORKOUT STEP-THROUGH HAS BEEN STARTED AT ALL
+    # CHECK IF WORKOUT NOT STARTED
     if GOAL_ID_CURRENT not in session:
         flash("You have not started a workout", "danger")
         return redirect("/")
@@ -973,6 +978,7 @@ def home():
     user info
     user workouts
     """
+    # raise
 
 
 
