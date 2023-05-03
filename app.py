@@ -720,7 +720,6 @@ def previous_step():
         return redirect("/")
 
     # CHECK IF WE ARE ON THE FIRST STEP
-    # IF WE ARE DO NOTHING ELSE AND REDIRECT TO THE STEPPER
     if GOAL_ID_PREVIOUS not in session:
         return redirect('/step')
 
@@ -733,6 +732,7 @@ def previous_step():
     session[GOAL_ID_CURRENT] = previous_step_goal_id
     session[GOAL_ID_PREVIOUS] = next_previous_step_goal_id
 
+    # PREVENT /previous INFINITE LOOP
     if session[GOAL_ID_PREVIOUS] > session[GOAL_ID_CURRENT]:
         del session[GOAL_ID_PREVIOUS]
 
