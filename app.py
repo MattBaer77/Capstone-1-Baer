@@ -115,6 +115,9 @@ def check_if_editing_existing(goal):
         if record.goal_id == goal.id:
             return record
 
+def title_form(action, workout_description, goal_exercise_name):
+    return f"{action} Record For: {workout_description} - Goal: {goal_exercise_name}"
+
 
 ##############################################################################
 
@@ -554,7 +557,7 @@ def edit_performance_record(performance_id):
 
     form = PerformanceEditForm(obj=performance)
 
-    form.form_title = f"Edit record for Workout: {performance.goal.workout.description} - Goal: {performance.goal.exercise.name}"
+    form.form_title = title_form("Edit", performacne.goal.workout.description, performacne.goal.exercise.name)
 
     if form.validate_on_submit():
         try:
@@ -607,7 +610,7 @@ def create__performance_record(goal_id):
 
     form = PerformanceAddForm(obj=temp)
 
-    form.form_title = f"Create Record For: {goal.workout.description} - Goal: {goal.exercise.name}"
+    form.form_title = title_form("Create", goal.workout.description, goal.exercise.name)
 
     if form.validate_on_submit():
         try:
@@ -797,7 +800,8 @@ def step():
         form.next_text = "Finish Workout"
 
     # GIVE THE FORM AN APPROPRIATE TITLE
-    form.form_title = f"Create Record For: {goal.workout.description} - Goal: {goal.exercise.name}"
+    form.form_title = title_form("Create", goal.workout.description, goal.exercise.name)
+
 
     if form.validate_on_submit():
         try:
@@ -887,7 +891,7 @@ def step_edit():
         form.next_text = "Finish Workout"
 
     # GIVE THE FORM AN APPROPRIATE TITLE
-    form.form_title = f"Create Record For: {goal.workout.description} - Goal: {goal.exercise.name}"
+    form.form_title = title_form("Edit", goal.workout.description, goal.exercise.name)
 
     if form.validate_on_submit():
         try:
