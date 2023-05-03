@@ -736,7 +736,7 @@ def previous_step():
     if session[GOAL_ID_PREVIOUS] > session[GOAL_ID_CURRENT]:
         del session[GOAL_ID_PREVIOUS]
 
-    return redirect('/step')
+    return redirect('/step-edit')
 
 
 # PERFORMING A WORKOUT - SINGLE GOAL ROUTE
@@ -770,15 +770,11 @@ def step():
     if record:
         return redirect('step-edit')
 
-    if record:
-        obj = record
-
-    else:
-        obj = Performance(
-                goal_id = goal.id,
-                performance_reps = goal.goal_reps,
-                performance_sets = goal.goal_sets
-            )
+    obj = Performance(
+            goal_id = goal.id,
+            performance_reps = goal.goal_reps,
+            performance_sets = goal.goal_sets
+        )
 
     goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
 
@@ -804,35 +800,6 @@ def step():
 
     # GIVE THE FORM AN APPROPRIATE TITLE
     form.form_title = f"Create Record For: {goal.workout.description} - Goal: {goal.exercise.name}"
-
-    if record:
-        if form.validate_on_submit():
-            try:
-                record.goal_id=goal.id,
-
-                record.performance_reps=form.performance_reps.data,
-                record.performance_sets=form.performance_sets.data,
-                record.performance_time_sec=form.performance_time_sec.data,
-                record.performance_weight_lbs=form.performance_weight_lbs.data
-
-                db.session.add(record)
-                db.session.commit()
-
-            except IntegrityError:
-                flash("Unknown Integrity Error - /workout/add - POST", 'danger')
-                return redirect(f'/workout/{performance.goal.workout.id}/performance')
-
-            # IF THERE IS A NEXT STEP - INCREMENT APPROPRIATE VALUES UP - MOVE TO NEXT STEP
-            if next_step_goal_id:
-                session[GOAL_ID_PREVIOUS] = goal.id
-                session[GOAL_ID_CURRENT] = next_step_goal_id
-                session[PERFORMANCE_RECORDS_CAPTURED_IDS].append(record.id)
-                return redirect('/step')
-
-            # IF THERE IS NOT A NEXT STEP - FINISH THIS WORKOUT STEP-THROUGH
-            else:
-                return redirect('/finish')
-
 
     if form.validate_on_submit():
         try:
