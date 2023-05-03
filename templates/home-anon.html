@@ -4,32 +4,34 @@
 
 {% block content %}
 
-<div align="center">
+<div align="center" class="m-5 card" style="box-shadow: 3px 3px 4px rgba(200, 200, 200, 1);">
 
-    <h1>Join Routine and Get In The Game!</h1>
+    <h1 class="py-2">Join Routine and Get In The Game!</h1>
 
-    <div class="mt-5">
-        <a href="/login">
-            <button class="btn btn-primary">
-                LOG IN
-            </button>
-        </a>
+    <div class="my-5">
+            <form action="/login" method="GET" style="display:inline" class="mx-1">
+                <button class="btn btn-primary">
+                    Log In
+                </button>
+            </form>
 
-        <a href="/signup">
-            <button class="btn btn-primary">
-                JOIN
-            </button>
-        </a>
+            <form action="/signup" method="GET" style="display:inline" class="mx-1">
+                <button class="btn btn-secondary">
+                    Sign Up
+                </button>
+            </form>
 
     </div>
 
-    <div class="mt-5">
+    <div class="m-5 w-50 mx-auto">
 
         {% for workout in workouts %}
-            <div class="mb-5">
-                <h3>{{workout.description}}</h3>
-                <p>by {{workout.author.username}}</p>
-
+            <div class="my-3 card">
+                <div class="card-body" style="box-shadow: 3px 3px 4px rgba(200, 200, 200, 1);">
+                    <h5 class="card-title">{{workout.description}}</h5>
+                    <h6 class="crd-subtitle text-muted">by {{workout.author.username}}</h6>
+                    <img class="w-25" src="{{workout.author.image_url}}" alt="{{workout.author.username}}'s user image.">
+                </div>
             </div>
         {% endfor %}
         
