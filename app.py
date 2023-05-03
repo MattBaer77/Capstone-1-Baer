@@ -765,11 +765,7 @@ def create__performance_record_step():
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
         return redirect("/")
 
-    goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
-
     record = check_if_editing_existing(goal)
-
-    # EDITING HERE / SLIGHTLY BELOW
 
     if record:
         obj = record
@@ -780,6 +776,8 @@ def create__performance_record_step():
                 performance_reps = goal.goal_reps,
                 performance_sets = goal.goal_sets
             )
+
+    goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
 
     # CREATE THE FORM AND FILL WITH THE APPROPRIATE DATA
     form = PerformanceStepForm(obj=obj)
