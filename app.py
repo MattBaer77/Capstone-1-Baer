@@ -703,6 +703,10 @@ def previous_step():
     Increments GOAL_ID_PREVIOUS backwards.
     """
 
+    # CHECK IF NOT USER
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
     # CHECK IF WORKOUT NOT STARTED
     if GOAL_ID_CURRENT not in session:
         flash("You have not started a workout", "danger")
@@ -716,7 +720,6 @@ def previous_step():
     goal = Goal.query.get_or_404(session[GOAL_ID_CURRENT])
     goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
 
-    current_step_goal_id = goals[(goals.index(goal))].id
     previous_step_goal_id = goals[(goals.index(goal) - 1)].id
     next_previous_step_goal_id = goals[(goals.index(goal) - 2)].id
 
