@@ -653,7 +653,7 @@ def begin_step(workout_id):
 
     workout = Workout.query.get_or_404(workout_id)
 
-    if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner_id):
+    if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner_user_id):
         return redirect("/")
 
     goals = Goal.query.filter(Goal.workout_id == workout_id).order_by(Goal.id.asc()).all()
