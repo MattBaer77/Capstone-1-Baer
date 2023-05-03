@@ -638,7 +638,7 @@ def clear():
 # UTILITY - CLEAR ALL STEP DATA IN SESSION - DELETEME BEFORE FINISHING
 
 # INITIATING A STEP-THROUGH
-@app.route('/workout/<int:workout_id>/begin')
+@app.route('/workout/<int:workout_id>/step')
 def begin_step(workout_id):
     """
     Redirects to start a step-through.
@@ -661,7 +661,7 @@ def begin_step(workout_id):
 
     session[PERFORMANCE_RECORDS_CAPTURED_IDS] = []
 
-    return redirect(f"/goal/performance-step")
+    return redirect(f"/step")
 
 # FINISHING A STEP-THROUGH
 @app.route('/finish')
@@ -705,7 +705,7 @@ def previous_step():
     # CHECK IF WE ARE ON THE FIRST STEP
     # IF WE ARE DO NOTHING ELSE AND REDIRECT TO THE STEPPER
     if GOAL_ID_PREVIOUS not in session:
-        return redirect('/goal/performance-step')
+        return redirect('/step')
 
     goal = Goal.query.get_or_404(session[GOAL_ID_CURRENT])
     goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
@@ -717,11 +717,11 @@ def previous_step():
     session[GOAL_ID_CURRENT] = previous_step_goal_id
     session[GOAL_ID_PREVIOUS] = next_previous_step_goal_id
 
-    return redirect('/goal/performance-step')
+    return redirect('/step')
 
 
 # PERFORMING A WORKOUT - SINGLE GOAL ROUTE
-@app.route('/goal/performance-step', methods=["GET", "POST"])
+@app.route('/step', methods=["GET", "POST"])
 def create__performance_record_step():
     """
     Displays & handles a form to create a performance record for a single goal in a workout.
@@ -748,6 +748,7 @@ def create__performance_record_step():
 
 
     """
+    # raise
 
     # IS A USER NOT LOGGED IN?
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
@@ -834,7 +835,7 @@ def create__performance_record_step():
                 session[GOAL_ID_PREVIOUS] = goal.id
                 session[GOAL_ID_CURRENT] = next_step_goal_id
                 session[PERFORMANCE_RECORDS_CAPTURED_IDS].append(editing_existing.id)
-                return redirect('/goal/performance-step')
+                return redirect('/step')
 
             # IF THERE IS NOT A NEXT STEP - FINISH THIS WORKOUT STEP-THROUGH
             else:
@@ -866,7 +867,7 @@ def create__performance_record_step():
             session[GOAL_ID_PREVIOUS] = goal.id
             session[GOAL_ID_CURRENT] = next_step_goal_id
             session[PERFORMANCE_RECORDS_CAPTURED_IDS].append(performance.id)
-            return redirect('/goal/performance-step')
+            return redirect('/step')
 
         # IF THERE IS NOT A NEXT STEP - FINISH THIS WORKOUT STEP-THROUGH
         else:
