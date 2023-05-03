@@ -751,29 +751,22 @@ def create__performance_record_step():
     # FIND THE GOAL THAT I AM ON
     goal = Goal.query.get_or_404(session[GOAL_ID_CURRENT])
 
-    # EDITING HERE
-
     # DOES THIS GOAL BELONG TO THIS USER?
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
         return redirect("/")
 
     goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
 
-    # I NEED TO -
-    # CHECK IF I AM EDITING A STEP FOR WHICH WE HAVE CAPTURED A PERFORNACE RECORD
-    # DO THIS BY CHECKING FOR IT IN PERFORMANCE_RECORDS_CAPTURED_IDS
-    # IF SO, GET THAT RECORD BY ITS ID
-    # PASS THE RELATED INFO INTO THE FORM
-    # IF I AM NOT EDITING A PREVIOUS STEP - I SHOULD FILL SOME OF THE FORM WITH GOAL VALUES TO FACILITATE EASY USE
-    editing_existing=None
+    def check_if_editing_existing():
+        for performance_record_id in session[PERFORMANCE_RECORDS_CAPTURED_IDS]:
+            record = Performance.query.get(performance_record_id)
+            if record.goal_id == goal.id:
+                return record
 
-    for record_id in session[PERFORMANCE_RECORDS_CAPTURED_IDS]:
-        record = Performance.query.get(record_id)
-        if record.goal_id == goal.id:
-            editing_existing = record
+    record = check_if_editing_existing()
 
-    if editing_existing:
-        obj = editing_existing
+    if record:
+        obj = record
 
     else:
         obj = Performance(
@@ -805,17 +798,17 @@ def create__performance_record_step():
     # GIVE THE FORM AN APPROPRIATE TITLE
     form.form_title = f"Create Record For: {goal.workout.description} - Goal: {goal.exercise.name}"
 
-    if editing_existing:
+    if record:
         if form.validate_on_submit():
             try:
-                editing_existing.goal_id=goal.id,
+                record.goal_id=goal.id,
 
-                editing_existing.performance_reps=form.performance_reps.data,
-                editing_existing.performance_sets=form.performance_sets.data,
-                editing_existing.performance_time_sec=form.performance_time_sec.data,
-                editing_existing.performance_weight_lbs=form.performance_weight_lbs.data
+                record.performance_reps=form.performance_reps.data,
+                record.performance_sets=form.performance_sets.data,
+                record.performance_time_sec=form.performance_time_sec.data,
+                record.performance_weight_lbs=form.performance_weight_lbs.data
 
-                db.session.add(editing_existing)
+                db.session.add(record)
                 db.session.commit()
 
             except IntegrityError:
@@ -826,7 +819,7 @@ def create__performance_record_step():
             if next_step_goal_id:
                 session[GOAL_ID_PREVIOUS] = goal.id
                 session[GOAL_ID_CURRENT] = next_step_goal_id
-                session[PERFORMANCE_RECORDS_CAPTURED_IDS].append(editing_existing.id)
+                session[PERFORMANCE_RECORDS_CAPTURED_IDS].append(record.id)
                 return redirect('/step')
 
             # IF THERE IS NOT A NEXT STEP - FINISH THIS WORKOUT STEP-THROUGH
