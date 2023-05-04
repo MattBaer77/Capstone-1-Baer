@@ -223,22 +223,22 @@ def logout():
 #     return render_template('users/index.html', users=users)
 
 
-@app.route('/user')
-def view_user():
-    """Show user profile."""
+# @app.route('/user')
+# def view_user():
+#     """Show user profile."""
 
-    if check_for_not_user_with_message("Access unauthorized.", "danger"):
-        return redirect('/')
+#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
+#         return redirect('/')
 
-    user = g.user
+#     user = g.user
 
-    workouts = (Workout
-                .query
-                .filter(Workout.owner_user_id == g.user.id)
-                .order_by(Workout.id.desc())
-                .all())
+#     workouts = (Workout
+#                 .query
+#                 .filter(Workout.owner_user_id == g.user.id)
+#                 .order_by(Workout.id.desc())
+#                 .all())
 
-    return render_template('users/user.html', user=user, workouts=workouts)
+#     return render_template('users/user.html', user=user, workouts=workouts)
 
 
 @app.route('/user/edit', methods=["GET", "POST"])
@@ -286,7 +286,7 @@ def delete_user():
     db.session.delete(g.user)
     db.session.commit()
 
-    return redirect("/signup")
+    return redirect("/")
 
 
 ##############################################################################
@@ -363,6 +363,22 @@ def add_workout():
 
 
     return render_template('base-form.html', form=form)
+
+# VIEW WORKOUT
+# SHOWS WORKOUT INFO WITH 1 COPY FORM
+
+
+# # COPY WORKOUT - POST ONLY
+# @app.route('/workout/<int:workout_id>/copy', methods=["GET", "POST"])
+# def copy_workout():
+#     """"""
+
+#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
+#         return redirect('/')
+
+#     workout = Workout.query.get_or_404(workout_id)
+
+
 
 
 # ADD GOALS

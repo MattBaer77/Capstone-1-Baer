@@ -1,9 +1,33 @@
+{% extends 'base-card.html' %}
 
-<div align="center">
-    <div class="w-25">
-        <h1>{{ user.username }}</h1>
-        <form action="/users/delete" method="POST"><button class="btn btn-danger mt-2">Delete User "{{user.username}}"</button></form>
-    </div>
+{% block title %}{{ form.form_name }}{% endblock %}
+
+{% block content %}
+
+<div class="my-4">
+    <h1 class="mb-4">{{ form.form_title }}</h1>
+
+    <form method="POST" class="mx-5">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.widget.input_type != 'hidden'%}
+        <div class="form-group mx-5" align="start">
+            {{field.label(class_="mt-4")}}
+            {{field(class_="form-control")}}
+        
+            {% for err in field.errors %}
+            {{err}}
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <button class="btn btn-primary my-4">{{ form.submit_text }}</button>
+    </form>
+
+    <hr>
+
+    <form action="/user/delete" method="POST">
+        <button class="btn btn-danger my-4">Delete User "{{user.username}}"</button>
+    </form>
+
 </div>
 
-{% extends 'base-form.html' %}
+{% endblock %}

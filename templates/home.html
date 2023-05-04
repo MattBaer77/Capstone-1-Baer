@@ -18,13 +18,17 @@
 <div class="my-1 w-50 mx-auto">
     <div class="my-3 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
         <div class="card-body">
-            <img class="w-50" src="{{user.image_url}}" alt="{{user.username}}'s user image.">
-            <a href="/user/{{ user.id }}">
-                <p>{{ user.username }}</p>
-            </a>
+            <h5 class="card-title">{{ user.username }}</h5>
+            <img class="w-50 mb-2" src="{{user.image_url}}" alt="{{user.username}}'s user image." style="border-radius: 20px;">
+
             {% if user.bio %}
-                <p>{{ user.bio }}</p>
+                <p class="card-text my-1">{{ user.bio }}</p>
             {% endif %}
+
+            <form action="/user/edit" method="POST" class="my-1">
+                <button class="btn btn-secondary mt-2">Edit</button>
+            </form>
+
         </div>
     </div>
 </div>
@@ -66,7 +70,12 @@
     <div class="my-3 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
         <div class="card-body">
             <h5 class="card-title">{{ workout.description }}</h5>
+
+            {% if workout.author %}
             <h6 class="crd-subtitle text-muted">by {{workout.author.username}}</h6>
+            {% else %}
+            <h6 class="crd-subtitle text-muted">by {{workout.owner.username}}</h6>
+            {% endif %}
 
             <div class="my-3 mx-5">
                 <ol>
@@ -120,7 +129,12 @@
     <div class="my-3 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
         <div class="card-body">
             <h5 class="card-title">{{ workout.description }}</h5>
+
+            {% if workout.author %}
             <h6 class="crd-subtitle text-muted">by {{workout.author.username}}</h6>
+            {% else %}
+            <h6 class="crd-subtitle text-muted">by {{workout.owner.username}}</h6>
+            {% endif %}
 
             <div class="my-3 mx-5">
                 <ol>
@@ -144,8 +158,8 @@
                 </ol>
             </div>
 
-            <form action="/workout/{{workout.id}}/copy" method="POST" style="display: inline;" class="mx-1">
-                <button class="btn btn-secondary mt-2">Copy This Workout</button>
+            <form action="/workout/{{workout.id}}" method="GET" style="display: inline;" class="mx-1">
+                <button class="btn btn-secondary mt-2">View This Workout</button>
             </form>
 
         </div>
