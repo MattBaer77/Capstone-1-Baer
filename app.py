@@ -801,7 +801,7 @@ def step():
 
     # CHECK FOR PREVIOUS STEP (IF THERE IS ONE) - MODIFY FORM ACCORDINGLY
     if GOAL_ID_PREVIOUS in session:
-        form.previous_text = "Previous Exercise Goal"
+        form.previous_text = "Previous Goal"
 
     # FIGURE OUT THE ID OF THE NEXT STEP BASED ON YOUR CURRENT STEP
     next_step_goal_id = determine_next_step(goals,goal)
@@ -809,6 +809,7 @@ def step():
     # IF THERE IS NO NEXT STEP - FILL THE FORM WITH DATA APPROPRIATE TO FINISH
     if not next_step_goal_id:
         form.next_text = "Finish Workout"
+        form.next_style = "btn-success"
 
     # GIVE THE FORM AN APPROPRIATE TITLE
     form.form_title = title_form("Create", goal.workout.description, goal.exercise.name)
@@ -887,7 +888,7 @@ def step_edit():
 
     # CHECK FOR PREVIOUS STEP (IF THERE IS ONE) - MODIFY FORM ACCORDINGLY
     if GOAL_ID_PREVIOUS in session:
-        form.previous_text = "Previous Exercise Goal"
+        form.previous_text = "Previous Goal"
 
     # FIGURE OUT THE ID OF THE NEXT STEP BASED ON YOUR CURRENT STEP
     next_step_goal_id = determine_next_step(goals,goal)
@@ -895,6 +896,7 @@ def step_edit():
     # IF THERE IS NO NEXT STEP - FILL THE FORM WITH DATA APPROPRIATE TO FINISH
     if not next_step_goal_id:
         form.next_text = "Finish Workout"
+        form.next_style = "btn-success"
 
     # GIVE THE FORM AN APPROPRIATE TITLE
     form.form_title = title_form("Edit", goal.workout.description, goal.exercise.name)
