@@ -432,7 +432,7 @@ def edit_workout(workout_id):
 
         return redirect('/')
 
-    return render_template('generic-form-page.html', form=form)
+    return render_template('/workouts/edit.html', form=form)
 
 
 # EDIT GOAL
@@ -445,7 +445,7 @@ def edit_goal(goal_id):
 
     goal = Goal.query.get_or_404(goal_id)
 
-    if check_correct_user_with_message("Access unauthorized.", "danger", goal.on_workouts.owner_user_id):
+    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner_user_id):
         return redirect("/")
 
     workout = Workout.query.get_or_404(goal.workout_id)
@@ -473,7 +473,7 @@ def edit_goal(goal_id):
 
         return redirect(f'/workout/{workout.id}/goal-add')
 
-    return render_template('goals/goal-edit-form.html', workout=workout, form=form)
+    return render_template('generic-form-page.html', workout=workout, form=form)
 
 
 # DELETE GOAL

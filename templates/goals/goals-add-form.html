@@ -1,39 +1,67 @@
-<div align="center">
+{% extends 'base-no-card.html' %}
 
-<div class="mt-5">
+{% block title %}{{ form.form_name }}{% endblock %}
 
-        <div class="mb-5">
-            <h1>{{workout.description}}</h1>
-            <p>by {{workout.owner.username}}</p>
+{% block content %}
+
+<div align="center" class="m-5 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
+
+    <div class="my-4">
+        <h1 class="mb-4">{{ form.form_title }}</h1>
+    
+        <form method="POST" class="mx-5">
+            {{ form.hidden_tag() }}
+            {% for field in form if field.widget.input_type != 'hidden'%}
+            <div class="form-group mx-5" align="start">
+                {{field.label(class_="mt-4")}}
+                {{field(class_="form-control")}}
+            
+                {% for err in field.errors %}
+                {{err}}
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <button class="btn btn-primary my-4">{{ form.submit_text }}</button>
+        </form>
+    
+    </div>
+
+</div>
+
+<div align="center" class="m-5">
+    {% for goal in workout.goals %}
+    <div align="center" class="card w-50 m-2" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
+        <div class="card-body">
+            <h5 class="card-title">{{ goal.exercise.name }}</h5>
+            <h6 class="crd-subtitle text-muted">{{goal.exercise.description}}</h6>
+
+            <div align="center">
+                <ul class="" style="padding-left: 0em; width: 6em;">
+                    {% if goal.goal_reps %}
+                    <li class="text-start text-muted" style="list-style-type: none;">Reps: {{goal.goal_reps}}</li>
+                    {% endif %}
+                    {% if goal.goal_sets %}
+                    <li class="text-start text-muted" style="list-style-type: none;">Sets: {{goal.goal_sets}}</li>
+                    {% endif %}
+                    {% if goal.goal_time_sec %}
+                    <li class="text-start text-muted" style="list-style-type: none;">Time: {{goal.goal_time_sec}}</li>
+                    {% endif %}
+                    {% if goal.goal_weight_lbs %}
+                    <li class="text-start text-muted" style="list-style-type: none;">Weight: {{goal.goal_weight_lbs}}</li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <form action="/goal/{{goal.id}}/delete" method="POST" style="display: inline;" class="mx-1">
+                <button class="btn btn-danger mt-2">Delete</button>
+            </form>
 
         </div>
-    
-</div>
-
-<div class="mt-5">
-
-    {% for goal in workout.goals %}
-
-    <div class="mb-5">
-        {{goal.exercise.name}}
-        {{goal.goal_reps}}
-        {{goal.goal_sets}}
-        {{goal.goal_time_sec}}
-        {{goal.goal_weight_lbs}}
-
-        <a href="/goal/{{goal.id}}/edit">
-            <button class="btn btn-primary mt-2">Edit</button>
-        </a>
-
-        <form action="/goal/{{goal.id}}/delete" method="POST">
-            <button class="btn btn-danger mt-2">Delete</button>
-        </form>
-
     </div>
     {% endfor %}
-
 </div>
 
-</div>
 
-{% extends 'base-form.html' %}
+
+{% endblock %}
+

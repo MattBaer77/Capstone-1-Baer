@@ -76,6 +76,10 @@
                 <button class="btn btn-success mt-2">Start This Workout!</button>
             </form>
 
+            <form action="/workout/{{workout.id}}/edit" method="POST" style="display: inline;" class="mx-1">
+                <button class="btn btn-secondary mt-2">Edit</button>
+            </form>
+
             <form action="/workout/{{workout.id}}/delete" method="POST" style="display: inline;" class="mx-1">
                 <button class="btn btn-danger mt-2">Delete</button>
             </form>
