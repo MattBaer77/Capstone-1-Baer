@@ -379,7 +379,6 @@ def view_workout(workout_id):
     return render_template('/workouts/view.html', workout=workout, form=form)
 
 
-
 # # COPY WORKOUT - POST ONLY
 @app.route('/workout/<int:workout_id>/copy', methods=["POST"])
 def copy_workout(workout_id):
@@ -400,8 +399,7 @@ def copy_workout(workout_id):
             flash("Unknown Integrity Error - /workout/add - POST", 'danger')
             return redirect('/')
 
-        form = WorkoutEditForm(obj=copied_workout)
-        return render_template('/workouts/edit.html', form=form, workout=copied_workout)
+        return redirect(f'/workout/{copied_workout.id}/edit')
 
     return redirect(f'/workouts/{workout_id}')
 

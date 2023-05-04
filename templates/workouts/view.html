@@ -4,6 +4,41 @@
 
 {% block content %}
 
+<div class="card-body">
+    <h1 class="card-title">{{ workout.description }}</h1>
+
+    {% if workout.author %}
+    <h2 class="crd-subtitle text-muted">by {{workout.author.username}}</h2>
+    {% else %}
+    <h2 class="crd-subtitle text-muted">by {{workout.owner.username}}</h2>
+    {% endif %}
+
+    <hr>
+
+    <div class="w-50">
+        <ol>
+            {% for goal in workout.goals %}
+            <li class="text-start">{{goal.exercise.name}}</li>
+            <ul style="padding-left: 1em;">
+                {% if goal.goal_reps %}
+                <li class="text-start text-muted" style="list-style-type: none;">Reps: {{goal.goal_reps}}</li>
+                {% endif %}
+                {% if goal.goal_sets %}
+                <li class="text-start text-muted" style="list-style-type: none;">Sets: {{goal.goal_sets}}</li>
+                {% endif %}
+                {% if goal.goal_time_sec %}
+                <li class="text-start text-muted" style="list-style-type: none;">Time: {{goal.goal_time_sec}}</li>
+                {% endif %}
+                {% if goal.goal_weight_lbs %}
+                <li class="text-start text-muted" style="list-style-type: none;">Weight: {{goal.goal_weight_lbs}}</li>
+                {% endif %}
+            </ul>
+            {% endfor %}
+        </ol>
+    </div>
+    <hr>
+</div>
+
 <form action="/workout/{{workout.id}}/copy" method="POST" class="mx-5">
     {{ form.hidden_tag() }}
     {% for field in form if field.widget.input_type != 'hidden'%}
