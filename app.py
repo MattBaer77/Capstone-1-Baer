@@ -171,7 +171,7 @@ def signup():
         return redirect("/")
 
     else:
-        return render_template('generic-form-page.html', form=form)
+        return render_template('base-form.html', form=form)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -194,7 +194,7 @@ def login():
 
         flash("Invalid credentials.", 'danger')
 
-    return render_template('generic-form-page.html', form=form)
+    return render_template('base-form.html', form=form)
 
 
 @app.route('/logout', methods=['POST'])
@@ -362,7 +362,7 @@ def add_workout():
         return redirect(f'/workout/{workout.id}/goal-add')
 
 
-    return render_template('generic-form-page.html', form=form)
+    return render_template('base-form.html', form=form)
 
 
 # ADD GOALS
@@ -401,8 +401,47 @@ def add_workout_goal(workout_id):
             flash("Unknown Integrity Error - /workout/<int:workout_id>/goal-add - POST", 'danger')
             return redirect('/workout/add')
 
-    return render_template('goals/goals-add-form.html', workout=workout, form=form)
+    return render_template('goals/add.html', workout=workout, form=form)
 
+# ADD SINGLE GOAL
+@app.route('/workout/<int:workout_id>/goal-add-single', methods=["GET", "POST"])
+def add_workout_goal_single(workout_id):
+    """"""
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    workout = Workout.query.get_or_404(workout_id)
+
+    if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
+        return redirect("/")
+
+    form = GoalAddForm()
+
+    exercises = [(e.id, e.name) for e in Exercise.query.order_by(Exercise.id.asc()).all()]
+
+    form.exercise.choices=exercises
+
+    if form.validate_on_submit():
+        try:
+            goal = Goal(
+                workout_id=workout.id,
+                exercise_id= form.exercise.data,
+                goal_reps=form.goal_reps.data,
+                goal_sets=form.goal_sets.data,
+                goal_time_sec=form.goal_time_sec.data,
+                goal_weight_lbs=form.goal_weight_lbs.data
+            )
+            db.session.add(goal)
+            db.session.commit()
+
+            return redirect(f'/workout/{workout_id}/edit')
+
+        except IntegrityError:
+            flash("Unknown Integrity Error - /workout/<int:workout_id>/goal-add - POST", 'danger')
+            return redirect('/workout/add')
+
+    return render_template('goals/add-single.html', workout=workout, form=form)
 
 # EDIT WORKOUT
 @app.route('/workout/<int:workout_id>/edit', methods=["GET", "POST"])
@@ -432,7 +471,7 @@ def edit_workout(workout_id):
 
         return redirect('/')
 
-    return render_template('/workouts/edit.html', form=form)
+    return render_template('/workouts/edit.html', form=form, workout=workout)
 
 
 # EDIT GOAL
@@ -473,7 +512,7 @@ def edit_goal(goal_id):
 
         return redirect(f'/workout/{workout.id}/goal-add')
 
-    return render_template('generic-form-page.html', workout=workout, form=form)
+    return render_template('base-form.html', workout=workout, form=form)
 
 
 # DELETE GOAL
@@ -591,7 +630,7 @@ def edit_performance_record(performance_id):
         return redirect(f'/goal/{performance.goal.id}/performance')
 
 
-    return render_template('generic-form-page.html', form=form)
+    return render_template('base-form.html', form=form)
 
 
 ##############################################################################
@@ -649,7 +688,7 @@ def create__performance_record(goal_id):
 
         return redirect(f'/')
 
-    return render_template('performance/performance-add-single.html', form=form, goal=goal)
+    return render_template('performance/add-single.html', form=form, goal=goal)
 
 
 ##############################################################################
@@ -718,7 +757,7 @@ def finish_step():
 
     session_step_data_clearout()
 
-    return render_template('/step-through/finish.html')
+    return render_template('/performance/step-finish.html')
 
 # STEPPING TO PREVIOUS IN STEP-THROUGH
 @app.route('/previous')
@@ -845,7 +884,7 @@ def step():
         else:
             return redirect('/finish')
 
-    return render_template('performance/performance-step-single.html', form=form, goal=goal)
+    return render_template('performance/step-single.html', form=form, goal=goal)
 
 
 # PERFORMING A WORKOUT - EDIT PERFORMANCE RECORD AFTER NAVIGATING TO PREVIOUS
@@ -927,7 +966,7 @@ def step_edit():
         else:
             return redirect('/finish')
 
-    return render_template('performance/performance-step-single.html', form=form, goal=goal)
+    return render_template('performance/step-single.html', form=form, goal=goal)
 
 
 ##############################################################################
@@ -1007,7 +1046,7 @@ def create_performance_records(workout_id):
 
         return redirect(f'/')
 
-    return render_template('performance/performance-add.html', form=form, workout=workout)
+    return render_template('performance/add.html', form=form, workout=workout)
 
 
 ##############################################################################

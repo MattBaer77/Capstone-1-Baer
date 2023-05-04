@@ -1,1 +1,36 @@
-{% extends 'base-form.html' %}
+{% extends 'base.html' %}
+
+{% block title %}{{ form.form_name }}{% endblock %}
+
+{% block content %}
+
+<div align="center" class="m-5 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
+
+    <div class="my-4">
+        <h1 class="mb-4">{{ form.form_title }}</h1>
+    
+        <form method="POST" class="mx-5">
+            {{ form.hidden_tag() }}
+            {% for field in form if field.widget.input_type != 'hidden'%}
+            <div class="form-group mx-5" align="start">
+                {{field.label(class_="mt-4")}}
+                {{field(class_="form-control")}}
+            
+                {% for err in field.errors %}
+                {{err}}
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <button class="btn btn-primary my-4">{{ form.submit_text }}</button>
+        </form>
+
+        <form action="/workout/{{workout.id}}/goal-add">
+            <button class="btn btn-primary my-4">Edit Workout Goals</button>
+        </form>
+    
+    </div>
+
+</div>
+
+{% endblock %}
+
