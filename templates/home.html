@@ -32,8 +32,26 @@
 <div class="my-1 w-50 mx-auto">
     <div class="my-3 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
         <div class="card-body">
+
+            <h5 class="card-title">Not seeing something you like?</h5>
+
+            <hr>
+
+            <form action="/workouts" method="GET">
+                <label class="card-text my-1" for="workout-serach">Search other user's workouts:</label>
+                <input id="workout-search" class="form-control my-1" type="text" name="q">
+                <div><button class="btn btn-secondary my-1">Search</button></div>
+            </form>
+
+            <hr>
+
+            <form action="/workouts">
+                <button class="btn btn-secondary">View All Workouts in Routine</button>
+            </form>
+
+            <hr>
+
             <form action="/workout/add" method="GET">
-                <h5 class="card-title">Not seeing something you like?</h5>
                 <button id="create-new" class="btn btn-primary">
                     Create New Workout
                 </button>
