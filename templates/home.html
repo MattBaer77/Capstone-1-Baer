@@ -4,78 +4,132 @@
 
 {% block content %}
 
-<div align="center">
+<div class="my-4">
+    <h1 class="mb-4">Let's do this {{ user.username }}!</h1>
+    <form action="/logout" method="POST" class="mx-1">
+        <button class="btn btn-secondary">
+            LOG OUT
+        </button>
+    </form>
+</div>
 
-    <h1>Let's do this {{ user.username }}!</h1>
+<hr>
 
-    <div class="mt-5">
-        <form action="/logout" method="POST">
-            <button class="btn btn-primary">
-                LOG OUT
-            </button>
-        </form>
-        
-    </div>
-
-    <hr>
-
-    <div class="col-lg-6 col-md-6 col-12">
-      <div class="card user-card">
-        <div class="card-inner">
-          <div class="image-wrapper">
-            <img src="{{ user.header_image_url }}" alt="" class="card-hero">
-          </div>
-          <div class="card-contents">
-            <a href="/user/{{ user.id }}" class="card-link">
-              <img src="{{ user.image_url }}" alt="Image for {{ user.username }}" class="card-image">
-              <p>{{ user.username }}</p>
+<div class="my-1 w-50 mx-auto">
+    <div class="my-3 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
+        <div class="card-body">
+            <img class="w-50" src="{{user.image_url}}" alt="{{user.username}}'s user image.">
+            <a href="/user/{{ user.id }}">
+                <p>{{ user.username }}</p>
             </a>
-          </div>
+            {% if user.bio %}
+                <p>{{ user.bio }}</p>
+            {% endif %}
         </div>
-      </div>
     </div>
+</div>
 
-    <div class="mt-5">
-        <form action="/workout/add" method="GET">
-            <button class="btn btn-primary">
-                Create New Workout
-            </button>
-        </form>
+<div class="my-1 w-50 mx-auto">
+    <div class="my-3 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
+        <div class="card-body">
+            <form action="/workout/add" method="GET">
+                <h5 class="card-title">Not seeing something you like?</h5>
+                <button id="create-new" class="btn btn-primary">
+                    Create New Workout
+                </button>
+            </form>
+        </div>
     </div>
+</div>
 
-    <div class="mt-5">
+{% for workout in my_workouts %}
 
-        {% for workout in my_workouts %}
-            <div class="mb-5">
-                <h4>{{workout.description}}</h4>
-                <p>by {{workout.author.username}}</p>
+<div class="my-1 w-50 mx-auto">
+    <div class="my-3 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
+        <div class="card-body">
+            <h5 class="card-title">{{ workout.description }}</h5>
+            <h6 class="crd-subtitle text-muted">by {{workout.author.username}}</h6>
 
+            <div class="my-3 mx-5">
+                <ol>
+                    {% for goal in workout.goals %}
+                    <li class="text-start">{{goal.exercise.name}}</li>
+                    <ul style="padding-left: 1em;">
+                        {% if goal.goal_reps %}
+                        <li class="text-start text-muted" style="list-style-type: none;">Reps: {{goal.goal_reps}}</li>
+                        {% endif %}
+                        {% if goal.goal_sets %}
+                        <li class="text-start text-muted" style="list-style-type: none;">Sets: {{goal.goal_sets}}</li>
+                        {% endif %}
+                        {% if goal.goal_time_sec %}
+                        <li class="text-start text-muted" style="list-style-type: none;">Time: {{goal.goal_time_sec}}</li>
+                        {% endif %}
+                        {% if goal.goal_weight_lbs %}
+                        <li class="text-start text-muted" style="list-style-type: none;">Weight: {{goal.goal_weight_lbs}}</li>
+                        {% endif %}
+                    </ul>
+                    {% endfor %}
+                </ol>
             </div>
 
-            <form action="/workout/{{workout.id}}/delete" method="POST">
+            <form action="/workout/{{workout.id}}/step" method="GET" style="display: inline;" class="mx-1">
+                <button class="btn btn-success mt-2">Start This Workout!</button>
+            </form>
+
+            <form action="/workout/{{workout.id}}/delete" method="POST" style="display: inline;" class="mx-1">
                 <button class="btn btn-danger mt-2">Delete</button>
             </form>
 
-        {% endfor %}
-        
+        </div>
     </div>
-
-    <hr>
-
-    <h2>Need inspiration? Check out these workouts!</h2>
-
-    <div class="mt-5">
-
-        {% for workout in workouts %}
-            <div class="mb-5">
-                <h4>{{workout.description}}</h4>
-                <p>by {{workout.author.username}}</p>
-
-            </div>
-        {% endfor %}
-        
-    </div>
-
 </div>
+
+{% endfor %}
+
+<hr>
+
+<div class="mx-5">
+    <h1 class="m-4">Need inspiration? Check out these workouts!</h1>
+</div>
+
+{% for workout in workouts %}
+
+<div class="my-1 w-50 mx-auto">
+    <div class="my-3 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
+        <div class="card-body">
+            <h5 class="card-title">{{ workout.description }}</h5>
+            <h6 class="crd-subtitle text-muted">by {{workout.author.username}}</h6>
+
+            <div class="my-3 mx-5">
+                <ol>
+                    {% for goal in workout.goals %}
+                    <li class="text-start">{{goal.exercise.name}}</li>
+                    <ul style="padding-left: 1em;">
+                        {% if goal.goal_reps %}
+                        <li class="text-start text-muted" style="list-style-type: none;">Reps: {{goal.goal_reps}}</li>
+                        {% endif %}
+                        {% if goal.goal_sets %}
+                        <li class="text-start text-muted" style="list-style-type: none;">Sets: {{goal.goal_sets}}</li>
+                        {% endif %}
+                        {% if goal.goal_time_sec %}
+                        <li class="text-start text-muted" style="list-style-type: none;">Time: {{goal.goal_time_sec}}</li>
+                        {% endif %}
+                        {% if goal.goal_weight_lbs %}
+                        <li class="text-start text-muted" style="list-style-type: none;">Weight: {{goal.goal_weight_lbs}}</li>
+                        {% endif %}
+                    </ul>
+                    {% endfor %}
+                </ol>
+            </div>
+
+            <form action="/workout/{{workout.id}}/copy" method="POST" style="display: inline;" class="mx-1">
+                <button class="btn btn-secondary mt-2">Copy This Workout</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endfor %}
 
 {% endblock %}
