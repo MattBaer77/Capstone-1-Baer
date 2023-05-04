@@ -27,7 +27,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgresql:///routine'))
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = False
+app.config['SQLALCHEMY_ECHO'] = True
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SECRET_KEY'] = sneakybeaky
 # toolbar = DebugToolbarExtension(app)
@@ -366,19 +366,44 @@ def add_workout():
 
 # VIEW WORKOUT
 # SHOWS WORKOUT INFO WITH 1 COPY FORM
+@app.route('/workout/<int:workout_id>')
+def view_workout(workout_id):
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    workout = Workout.query.get_or_404(workout_id)
+
+    form = WorkoutCopyForm(obj=workout)
+
+    return render_template('/workouts/view.html', workout=workout, form=form)
+
 
 
 # # COPY WORKOUT - POST ONLY
-# @app.route('/workout/<int:workout_id>/copy', methods=["GET", "POST"])
-# def copy_workout():
-#     """"""
+@app.route('/workout/<int:workout_id>/copy', methods=["POST"])
+def copy_workout(workout_id):
+    """"""
 
-#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
-#         return redirect('/')
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
 
-#     workout = Workout.query.get_or_404(workout_id)
+    workout = Workout.query.get_or_404(workout_id)
 
+    form = WorkoutCopyForm(obj=workout)
 
+    if form.validate_on_submit():
+        try:
+            copied_workout = Workout.copy(workout, g.user.id)
+
+        except IntegrityError:
+            flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+            return redirect('/')
+
+        form = WorkoutEditForm(obj=copied_workout)
+        return render_template('/workouts/edit.html', form=form, workout=copied_workout)
+
+    return redirect(f'/workouts/{workout_id}')
 
 
 # ADD GOALS

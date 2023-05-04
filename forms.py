@@ -62,6 +62,11 @@ class WorkoutEditForm(FlaskForm):
     form_title = "Edit Your Workout"
     submit_text = "Update"
 
+class WorkoutCopyForm(FlaskForm):
+    """Copies Workout"""
+
+    submit_text = "Copy Workout"
+
 class GoalAddForm(FlaskForm):
     """Form for adding goals to your workout."""
 

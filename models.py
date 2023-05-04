@@ -181,7 +181,7 @@ class Workout(db.Model):
             Copies the workout's goals.
         """
 
-        copy_workout = Workout(
+        copied_workout = Workout(
             description=workout_to_copy.description,
             owner_user_id=owner_user_id,
             author_user_id=workout_to_copy.author_user_id
@@ -189,12 +189,12 @@ class Workout(db.Model):
 
         # Copy Goals
 
-        db.session.add(copy_workout)
+        db.session.add(copied_workout)
         db.session.commit()
 
         for goal in workout_to_copy.goals:
             copy = Goal(
-                workout_id=copy_workout.id,
+                workout_id=copied_workout.id,
                 exercise_id=goal.exercise_id,
                 goal_reps=goal.goal_reps,
                 goal_sets=goal.goal_sets,
@@ -202,9 +202,10 @@ class Workout(db.Model):
                 goal_time_sec=goal.goal_time_sec
             )
 
-            copy_workout.goals.append(copy)
+            copied_workout.goals.append(copy)
 
         db.session.commit()
+        return copied_workout
 
 
 class Goal(db.Model):
