@@ -4,31 +4,23 @@
 
 {% block content %}
 
-<div align="center">
+<div class="my-4">
+    <h1 class="mb-4">{{ form.form_title }}</h1>
 
-    <div class="w-25">
-
-        <h2>{{ form.form_title }}</h2>
-
-        <form method="POST">
-
-            {{ form.hidden_tag() }}
-            {% for field in form if field.widget.input_type != 'hidden'%}
-            <div class="form-group" align="start">
-                
-                {{field.label(class_="mt-4")}}
-                {{field(class_="form-control")}}
-            
-                {% for err in field.errors %}
-                {{err}}
-                {% endfor %}
-            </div>
+    <form method="POST" class="mx-5">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.widget.input_type != 'hidden'%}
+        <div class="form-group mx-5" align="start">
+            {{field.label(class_="mt-4")}}
+            {{field(class_="form-control")}}
+        
+            {% for err in field.errors %}
+            {{err}}
             {% endfor %}
-            <button class="btn btn-primary mt-2">{{ form.submit_text }}</button>
-
-        </form>
-
-    </div>
+        </div>
+        {% endfor %}
+        <button class="btn btn-primary my-4">{{ form.submit_text }}</button>
+    </form>
 
 </div>
 

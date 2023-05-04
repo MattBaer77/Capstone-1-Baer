@@ -4,39 +4,34 @@
 
 {% block content %}
 
-<div align="center" class="m-5 card" style="box-shadow: 3px 3px 4px rgba(200, 200, 200, 1);">
+<div class="my-4">
+    <h1 class="mb-4">Join Routine and Get In The Game!</h1>
+        <form action="/login" method="GET" style="display:inline" class="mx-1">
+            <button class="btn btn-primary">
+                Log In
+            </button>
+        </form>
 
+        <form action="/signup" method="GET" style="display:inline" class="mx-1">
+            <button class="btn btn-secondary">
+                Sign Up
+            </button>
+        </form>
 
-    <div class="my-4">
-        <h1 class="mb-4">Join Routine and Get In The Game!</h1>
-            <form action="/login" method="GET" style="display:inline" class="mx-1">
-                <button class="btn btn-primary">
-                    Log In
-                </button>
-            </form>
+</div>
 
-            <form action="/signup" method="GET" style="display:inline" class="mx-1">
-                <button class="btn btn-secondary">
-                    Sign Up
-                </button>
-            </form>
+<div class="my-2 w-50 mx-auto">
 
-    </div>
-
-    <div class="my-2 w-50 mx-auto">
-
-        {% for workout in workouts %}
-            <div class="my-3 card">
-                <div class="card-body" style="box-shadow: 3px 3px 4px rgba(200, 200, 200, 1);">
-                    <h5 class="card-title">{{workout.description}}</h5>
-                    <h6 class="crd-subtitle text-muted">by {{workout.author.username}}</h6>
-                    <img class="w-25" src="{{workout.author.image_url}}" alt="{{workout.author.username}}'s user image.">
-                </div>
+    {% for workout in workouts %}
+        <div class="my-3 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
+            <div class="card-body">
+                <h5 class="card-title">{{workout.description}}</h5>
+                <h6 class="crd-subtitle text-muted">by {{workout.author.username}}</h6>
+                <img class="w-25" src="{{workout.author.image_url}}" alt="{{workout.author.username}}'s user image.">
             </div>
-        {% endfor %}
-        
-    </div>
-
+        </div>
+    {% endfor %}
+    
 </div>
 
 {% endblock %}
