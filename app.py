@@ -337,9 +337,13 @@ def view_workouts():
     search = request.args.get('q')
 
     if not search:
-        workouts = Workout.query.order_by(Workout.id.desc()).all()
+        workouts = (Workout
+            .query
+            .filter((Workout.owner_user_id != g.user.id) & (Workout.author_user_id != g.user.id))
+            .order_by(Workout.id.desc())
+            .all())
     else:
-        workouts = Workout.query.filter(Workout.description.like(f"%{search}%")).order_by(Workout.id.desc()).all()
+        workouts = Workout.query.filter((Workout.description.like(f"%{search}%")) & (Workout.owner_user_id != g.user.id) & (Workout.author_user_id != g.user.id)).order_by(Workout.id.desc()).all()
 
     return render_template('workouts/index.html', user=g.user, workouts=workouts)
 
@@ -1120,7 +1124,7 @@ def home():
         # All workouts, but filter out copied workouts and users own workouts
         workouts = (Workout
                     .query
-                    .filter((Workout.owner_user_id == Workout.author_user_id) & (Workout.owner_user_id != g.user.id))
+                    .filter((Workout.owner_user_id == Workout.author_user_id) & (Workout.owner_user_id != g.user.id) & (Workout.author_user_id != g.user.id))
                     .order_by(Workout.id.desc())
                     .limit(20)
                     .all())
