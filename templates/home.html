@@ -69,32 +69,39 @@
 <div class="my-1 w-50 mx-auto">
     <div class="my-3 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
         <div class="card-body">
-            <h5 class="card-title">{{ workout.description }}</h5>
+            <a href="/workout/{{workout.id}}/performance" class="" style="text-decoration: none;">
+                <h5 class="card-title">{{ workout.description }}</h5>
 
-            {% if workout.author %}
-            <h6 class="crd-subtitle text-muted">by {{workout.author.username}}</h6>
-            {% else %}
-            <h6 class="crd-subtitle text-muted">by {{workout.owner.username}}</h6>
-            {% endif %}
+                {% if workout.author %}
+                <h6 class="crd-subtitle text-muted">by {{workout.author.username}}</h6>
+                {% else %}
+                <h6 class="crd-subtitle text-muted">by {{workout.owner.username}}</h6>
+                {% endif %}
+            </a>
+
+            <hr>
 
             <div class="my-3 mx-5">
-                <ol>
+                <ol style="list-style-type: none;">
                     {% for goal in workout.goals %}
+                    <a class="" href="/goal/{{goal.id}}/performance" style="text-decoration: none;">
                     <li class="text-start">{{goal.exercise.name}}</li>
-                    <ul style="padding-left: 1em;">
-                        {% if goal.goal_reps %}
-                        <li class="text-start text-muted" style="list-style-type: none;">Reps: {{goal.goal_reps}}</li>
-                        {% endif %}
-                        {% if goal.goal_sets %}
-                        <li class="text-start text-muted" style="list-style-type: none;">Sets: {{goal.goal_sets}}</li>
-                        {% endif %}
-                        {% if goal.goal_time_sec %}
-                        <li class="text-start text-muted" style="list-style-type: none;">Time: {{goal.goal_time_sec}}</li>
-                        {% endif %}
-                        {% if goal.goal_weight_lbs %}
-                        <li class="text-start text-muted" style="list-style-type: none;">Weight: {{goal.goal_weight_lbs}}</li>
-                        {% endif %}
-                    </ul>
+                        <ul style="padding-left: 1em;">
+                            {% if goal.goal_reps %}
+                            <li class="text-start text-muted" style="list-style-type: none;">Reps: {{goal.goal_reps}}</li>
+                            {% endif %}
+                            {% if goal.goal_sets %}
+                            <li class="text-start text-muted" style="list-style-type: none;">Sets: {{goal.goal_sets}}</li>
+                            {% endif %}
+                            {% if goal.goal_time_sec %}
+                            <li class="text-start text-muted" style="list-style-type: none;">Time: {{goal.goal_time_sec}}</li>
+                            {% endif %}
+                            {% if goal.goal_weight_lbs %}
+                            <li class="text-start text-muted" style="list-style-type: none;">Weight: {{goal.goal_weight_lbs}}</li>
+                            {% endif %}
+                        </ul>
+                    </a>
+                    <hr>
                     {% endfor %}
                 </ol>
             </div>
@@ -136,8 +143,10 @@
             <h6 class="crd-subtitle text-muted">by {{workout.owner.username}}</h6>
             {% endif %}
 
+            <hr>
+
             <div class="my-3 mx-5">
-                <ol>
+                <ol style="list-style-type: none;">
                     {% for goal in workout.goals %}
                     <li class="text-start">{{goal.exercise.name}}</li>
                     <ul style="padding-left: 1em;">
@@ -154,6 +163,7 @@
                         <li class="text-start text-muted" style="list-style-type: none;">Weight: {{goal.goal_weight_lbs}}</li>
                         {% endif %}
                     </ul>
+                    <hr>
                     {% endfor %}
                 </ol>
             </div>
