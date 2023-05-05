@@ -283,6 +283,13 @@ def delete_user():
 
     do_logout()
 
+    workouts_authored = Workout.query.filter(Workout.author_user_id == g.user.id).all()
+
+    for workout in workouts_authored:
+        workout.author_user_id = workout.owner_user_id
+
+    db.session.commit()
+
     db.session.delete(g.user)
     db.session.commit()
 
