@@ -644,16 +644,57 @@ def view_goal_performance(goal_id):
 
     goal = Goal.query.get_or_404(goal_id)
 
+    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+        return redirect("/")
+
     performance_records = Performance.query.filter(Performance.goal_id == goal_id).order_by(Performance.id.asc()).all()
 
-    performance_serialized = [record.serialize() for record in performance_records]
+    return render_template('/performance/view-chart.html', goal=goal, performance=performance_records)
 
-    performance_json = jsonify(performance_serialized)
+##############################################################################
+# API ROUTES for GOAL and PERFORMANCE
+
+@app.route('/api/goal/<int:goal_id>')
+def api_send_goal_performance(goal_id):
+    """
+    Send JSON of all of the performance toward a single goal over time.
+    """
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    goal = Goal.query.get_or_404(goal_id)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
         return redirect("/")
 
-    return render_template('/performance/view-chart.html', goal=goal, performance=performance_records, performance_json=performance_json)
+    goal_json = goal.serialize()
+
+    return jsonify(goal_json=goal_json)
+
+@app.route('/api/goal/<int:goal_id>/performance')
+def api_send_goal_performance(goal_id):
+    """
+    Send JSON of all of the performance toward a single goal over time.
+    """
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    goal = Goal.query.get_or_404(goal_id)
+
+    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+        return redirect("/")
+
+    performance_records = Performance.query.filter(Performance.goal_id == goal_id).order_by(Performance.id.asc()).all()
+
+    performance_json = [record.serialize() for record in performance_records]
+
+    return jsonify(performance_json=performance_json)
+
+##############################################################################
+
+# ROUTES PERFORMANCE (CONTINUED)
 
 # EDIT INDIVIDUAL PERFORMANCE RECORDS
 @app.route('/performance/<int:performance_id>/edit', methods=["GET", "POST"])
