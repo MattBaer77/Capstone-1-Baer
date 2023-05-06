@@ -615,15 +615,22 @@ def view_workout_goals_performance(workout_id):
 
     workout = Workout.query.get_or_404(workout_id)
 
-    workout.goals.sort(key=lambda x: x.id, reverse=False)
+    goals = Goal.query.filter(Goal.workout_id == workout_id).order_by(Goal.id.asc()).all()
 
-    for goal in workout.goals:
-        goal.performance.sort(key=lambda x: x.id, reverse=False)
+    # workout.goals.sort(key=lambda x: x.id, reverse=False)
+
+    performance_records = {}
+
+    for goal in goals:
+        # goal.performance.sort(key=lambda x: x.id, reverse=False)
+        performance_records[goal.id] = Performance.query.filter(Performance.goal_id == goal.id).order_by(Performance.id.asc()).all()
 
     if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
         return redirect("/")
 
-    return render_template('/performance/view-all.html', workout=workout)
+    # raise
+
+    return render_template('/performance/view-all.html', workout=workout, goals=goals, performance_records=performance_records)
 
 # VIEW LIST OF PERFORMANCE RECORDS - INDIVIDUAL GOAL - CONVERT TO CALENDAR IN FUTURE?
 @app.route('/goal/<int:goal_id>/performance')
@@ -637,12 +644,14 @@ def view_goal_performance(goal_id):
 
     goal = Goal.query.get_or_404(goal_id)
 
-    goal.performance.sort(key=lambda x: x.id, reverse=False)
+    performance = Performance.query.filter(Performance.goal_id == goal_id).order_by(Performance.id.asc()).all()
+
+    # goal.performance.sort(key=lambda x: x.id, reverse=False)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
         return redirect("/")
 
-    return render_template('/performance/view.html', goal=goal)
+    return render_template('/performance/view.html', goal=goal, performance=performance)
 
 # EDIT INDIVIDUAL PERFORMANCE RECORDS
 @app.route('/performance/<int:performance_id>/edit', methods=["GET", "POST"])

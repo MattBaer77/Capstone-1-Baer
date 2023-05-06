@@ -140,24 +140,24 @@ class PerformanceStepForm(FlaskForm):
 
 # FOR MULTIPLE PERFORMANCE ENTRIES ON SINGLE PAGE
 
-class PerformanceAddSingle(Form):
-    """
-    SUBFORM. - Add a performance record for a single goal of a workout.
-    Never used by itself.
-    """
+# class PerformanceAddSingle(Form):
+#     """
+#     SUBFORM. - Add a performance record for a single goal of a workout.
+#     Never used by itself.
+#     """
 
-    performance_reps = IntegerField('Actual Reps:')
-    performance_sets = IntegerField('Actual Sets:')
-    performance_time_sec = IntegerField('Actual Time (seconds):', validators=[Optional()])
-    performance_weight_lbs = IntegerField('Actual Weight (lbs):', validators=[Optional()])
+#     performance_reps = IntegerField('Actual Reps:')
+#     performance_sets = IntegerField('Actual Sets:')
+#     performance_time_sec = IntegerField('Actual Time (seconds):', validators=[Optional()])
+#     performance_weight_lbs = IntegerField('Actual Weight (lbs):', validators=[Optional()])
 
-class PerformanceAddBulk(FlaskForm):
-    """
-    SUPERFORM. - Add instances of PerformanceAddSingle to capture all performance records for all goals of a workout.
-    """
+# class PerformanceAddBulk(FlaskForm):
+#     """
+#     SUPERFORM. - Add instances of PerformanceAddSingle to capture all performance records for all goals of a workout.
+#     """
 
-    performance_records  = FieldList(
-        FormField(PerformanceAddSingle),
-        min_entries=1,
-        max_entries=20
-    )
+#     performance_records  = FieldList(
+#         FormField(PerformanceAddSingle),
+#         min_entries=1,
+#         max_entries=20
+#     )

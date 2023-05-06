@@ -25,7 +25,7 @@
                 <th>{{goal.goal_weight_lbs}}</th>
             </tr>
 
-        {% for performance in goal.performance %}
+        {% for performance in performance_records[goal.id] %}
 
             <tr>
                 <td>{{ performance.date}}</td>

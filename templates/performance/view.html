@@ -24,14 +24,14 @@
             <th>{{goal.goal_weight_lbs}}</th>
         </tr>
 
-    {% for performance in goal.performance %}
+    {% for record in performance %}
 
         <tr>
-            <td>{{ performance.date}}</td>
-            <td>{{ performance.performance_reps }}</td>
-            <td>{{ performance.performance_sets }}</td>
-            <td>{{ performance.performance_time_sec }}</td>
-            <td>{{ performance.performance_weight_lbs }}</td>
+            <td>{{ record.date}}</td>
+            <td>{{ record.performance_reps }}</td>
+            <td>{{ record.performance_sets }}</td>
+            <td>{{ record.performance_time_sec }}</td>
+            <td>{{ record.performance_weight_lbs }}</td>
         </tr>
 
     {% endfor %}
