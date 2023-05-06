@@ -6,7 +6,7 @@ import copy
 
 from secrets import sneakybeaky
 
-from flask import Flask, render_template, request, flash, redirect, session, g
+from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
@@ -644,14 +644,16 @@ def view_goal_performance(goal_id):
 
     goal = Goal.query.get_or_404(goal_id)
 
-    performance = Performance.query.filter(Performance.goal_id == goal_id).order_by(Performance.id.asc()).all()
+    performance_records = Performance.query.filter(Performance.goal_id == goal_id).order_by(Performance.id.asc()).all()
 
-    # goal.performance.sort(key=lambda x: x.id, reverse=False)
+    performance_serialized = [record.serialize() for record in performance_records]
+
+    performance_json = jsonify(performance_serialized)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
         return redirect("/")
 
-    return render_template('/performance/view.html', goal=goal, performance=performance)
+    return render_template('/performance/view-chart.html', goal=goal, performance=performance_records, performance_json=performance_json)
 
 # EDIT INDIVIDUAL PERFORMANCE RECORDS
 @app.route('/performance/<int:performance_id>/edit', methods=["GET", "POST"])
@@ -670,7 +672,7 @@ def edit_performance_record(performance_id):
 
     form = PerformanceEditForm(obj=performance)
 
-    form.form_title = title_form("Edit", performacne.goal.workout.description, performacne.goal.exercise.name)
+    form.form_title = title_form("Edit", performance.goal.workout.description, performance.goal.exercise.name)
 
     if form.validate_on_submit():
         try:

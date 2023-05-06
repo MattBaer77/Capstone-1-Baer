@@ -1,0 +1,81 @@
+{% extends 'base-card.html' %}
+
+{% block title %}Goal {{ goal.name }} on {{ goal.workout.description }} Performance{% endblock %}
+
+{% block content %}
+
+
+
+<!-- NEW STUFF HERE -->
+
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    const ctx = document.getElementById('myChart');
+  
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+
+
+
+<div class="mt-5">
+
+    <table>
+        <tr>
+            <th></th>
+            <th>Reps</th>
+            <th>Sets</th>
+            <th>Time (seconds)</th>
+            <th>Weight (lbs.)</th>
+        </tr>
+
+        <tr>
+            <th>GOAL:</th>
+            <th>{{goal.goal_reps}}</th>
+            <th>{{goal.goal_sets}}</th>
+            <th>{{goal.goal_time_sec}}</th>
+            <th>{{goal.goal_weight_lbs}}</th>
+        </tr>
+
+    {% for record in performance %}
+
+        <tr>
+            <td>{{ record.date}}</td>
+            <td>{{ record.performance_reps }}</td>
+            <td>{{ record.performance_sets }}</td>
+            <td>{{ record.performance_time_sec }}</td>
+            <td>{{ record.performance_weight_lbs }}</td>
+        </tr>
+
+    {% endfor %}
+
+    </table>
+    
+</div>
+
+<script> const performance_json = '{{performance_json}}' </script>
+
+<script src="/static/performance.js"></script>
+
+{% endblock %}

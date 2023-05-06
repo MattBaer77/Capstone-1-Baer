@@ -311,7 +311,20 @@ class Performance(db.Model):
         nullable=True
     )
 
-    # goals = db.relationship('Goal', backref = 'performance')
+    def serialize(self):
+        """Returns a dict representation of performance record which we can turn into JSON"""
+        return {
+            'id': self.id,
+            'date': self.date,
+            'last_edited_date': self.last_edited_date,
+            'goal_id': self.goal_id,
+            'performance_reps': self.performance_reps,
+            'performance_sets': self.performance_sets,
+            'performance_time_sec': self.performance_time_sec,
+            'performance_weight_lbs': self.performance_weight_lbs
+        }
+
+
 
 ##############################################################################
 def connect_db(app):
