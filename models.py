@@ -255,17 +255,16 @@ class Goal(db.Model):
     performance = db.relationship('Performance', backref='goal', cascade='all, delete-orphan')
 
     def serialize(self):
-    """Returns a dict representation of performance record."""
-    return {
-        'id': self.id,
-        'workout_id': self.workout_id,
-        'last_edited_date': self.last_edited_date,
-        'exercise_id': self.exercise_id,
-        'goal_reps': self.goal_reps,
-        'goal_sets': self.goal_sets,
-        'goal_time_sec': self.goal_time_sec,
-        'goal_weight_lbs': self.goal_weight_lbs
-    }
+        """Returns a dict representation of goal."""
+        return {
+            'id': self.id,
+            'workout_id': self.workout_id,
+            'exercise_id': self.exercise_id,
+            'goal_reps': self.goal_reps,
+            'goal_sets': self.goal_sets,
+            'goal_time_sec': self.goal_time_sec,
+            'goal_weight_lbs': self.goal_weight_lbs
+        }
  
 
 

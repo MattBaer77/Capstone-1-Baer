@@ -655,7 +655,7 @@ def view_goal_performance(goal_id):
 # API ROUTES for GOAL and PERFORMANCE
 
 @app.route('/api/goal/<int:goal_id>')
-def api_send_goal_performance(goal_id):
+def api_send_goal(goal_id):
     """
     Send JSON of all of the performance toward a single goal over time.
     """
