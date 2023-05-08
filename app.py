@@ -436,6 +436,7 @@ def add_workout_goal(workout_id):
 
     if form.validate_on_submit():
         try:
+            workout.author_user_id = workout.owner_user_id
             goal = Goal(
                 workout_id=workout.id,
                 exercise_id= form.exercise.data,
@@ -444,6 +445,7 @@ def add_workout_goal(workout_id):
                 goal_time_sec=form.goal_time_sec.data,
                 goal_weight_lbs=form.goal_weight_lbs.data
             )
+            db.session.add(workout)
             db.session.add(goal)
             db.session.commit()
 
@@ -511,6 +513,7 @@ def edit_workout(workout_id):
     if form.validate_on_submit():
         try:
             workout.description=form.description.data,
+            workout.author_user_id=workout.owner_user_id
 
             db.session.add(workout)
             db.session.commit()
