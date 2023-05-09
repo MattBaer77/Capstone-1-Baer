@@ -102,6 +102,7 @@ class PerformanceAddForm(FlaskForm):
     performance_sets = IntegerField('Actual Sets:')
     performance_time_sec = IntegerField('Actual Time (seconds):', validators=[Optional()])
     performance_weight_lbs = IntegerField('Actual Weight (lbs):', validators=[Optional()])
+    performance_distance_miles = IntegerField('Distance (Miles):', validators=[Optional()])
 
     form_name = "Create Performance Record"
     form_title = ""
@@ -114,6 +115,8 @@ class PerformanceEditForm(FlaskForm):
     performance_sets = IntegerField('Sets:')
     performance_time_sec = IntegerField('Time (seconds):', validators=[Optional()])
     performance_weight_lbs = IntegerField('Weight (lbs):', validators=[Optional()])
+    performance_distance_miles = IntegerField('Distance (Miles):', validators=[Optional()])
+
 
     form_name = "Edit Performance Record"
     form_title = ""
@@ -130,6 +133,8 @@ class PerformanceStepForm(FlaskForm):
     performance_sets = IntegerField('Actual Sets:')
     performance_time_sec = IntegerField('Actual Time (seconds):', validators=[Optional()])
     performance_weight_lbs = IntegerField('Actual Weight (lbs):', validators=[Optional()])
+    performance_distance_miles = IntegerField('Distance (Miles):', validators=[Optional()])
+
 
     form_name = "Create Performance Record"
     form_title = None

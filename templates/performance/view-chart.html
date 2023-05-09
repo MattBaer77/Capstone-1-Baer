@@ -72,8 +72,9 @@
             <th></th>
             <th>Reps</th>
             <th>Sets</th>
-            <th>Time (seconds)</th>
+            <th>Time (sec.)</th>
             <th>Weight (lbs.)</th>
+            <th>Distance (mi.)</th>
         </tr>
 
         <tr>
@@ -93,6 +94,7 @@
                 <td>{{ record.performance_sets }}</td>
                 <td>{{ record.performance_time_sec }}</td>
                 <td>{{ record.performance_weight_lbs }}</td>
+                <td>{{ record.performance_distance_miles }}</td>
             </tr>
 
     {% endfor %}

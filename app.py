@@ -595,7 +595,7 @@ def edit_performance_record(performance_id):
 
     if form.validate_on_submit():
         try:
-            performance.last_edited_date=datetime.utcnow()
+            performance.last_edited_date=datetime.utcnow(),
             performance.performance_reps=form.performance_reps.data,
             performance.performance_sets=form.performance_sets.data,
             performance.performance_time_sec=form.performance_time_sec.data,
@@ -827,6 +827,7 @@ def step():
 
                 goal_id=goal.id,
 
+                date=datetime.utcnow(),
                 performance_reps=form.performance_reps.data,
                 performance_sets=form.performance_sets.data,
                 performance_time_sec=form.performance_time_sec.data,
@@ -911,6 +912,7 @@ def step_edit():
         try:
             record.goal_id=goal.id,
 
+            record.last_edited_date=datetime.utcnow(),
             record.performance_reps=form.performance_reps.data,
             record.performance_sets=form.performance_sets.data,
             record.performance_time_sec=form.performance_time_sec.data,
@@ -971,6 +973,8 @@ def home():
                     .filter(Workout.owner_user_id == g.user.id)
                     .order_by(Workout.id.desc())
                     .all())
+
+        # raise
 
         return render_template('home.html', user=g.user, workouts=workouts, my_workouts=my_workouts)
 

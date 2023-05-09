@@ -8,6 +8,7 @@ const chartReps = document.getElementById('goal_reps');
 const chartSets = document.getElementById('goal_sets');
 const chartWeightLbs = document.getElementById('goal_weight_lbs');
 const chartTimeSec = document.getElementById('goal_time_sec');
+const chartDistanceMiles = document.getElementById('goal_distance_miles');
 
 // Get the Goal from the API
 async function getGoal() {
@@ -47,11 +48,13 @@ async function start() {
   const goalSets = performanceDates.map(() => {return goal.goal_sets});
   const goalWeightLbs = performanceDates.map(() => {return goal.goal_weight_lbs});
   const goalTimeSec = performanceDates.map(() => {return goal.goal_time_sec});
+  const goalDistanceMiles = performanceDates.map(() => {return goal.goal_distance_miles});
 
   const performanceReps = await getPerformanceData(performance, "performance_reps");
   const performanceSets = await getPerformanceData(performance, "performance_sets");
   const performanceWeightLbs = await getPerformanceData(performance, "performance_weight_lbs");
   const performanceTimeSec = await getPerformanceData(performance, "performance_time_sec");
+  const performanceDistanceMiles = await getPerformanceData(performance, "performance_distance_miles");
 
   if (chartReps){
 
@@ -184,6 +187,40 @@ async function start() {
     });
 
   }
+
+  if (chartDistanceMiles) {
+
+    new Chart(chartDistanceMiles, {
+      type: 'line',
+      data: {
+        labels: performanceDates,
+        datasets: [
+        
+        {
+          label: 'Actual time - (Seconds)',
+          data: performanceDistanceMiles,
+          borderWidth: 1
+        },
+          
+        {
+          label: 'Goal Time - (Seconds)',
+          data: goalDistanceMiles,
+          borderWidth: 1
+        }
+
+      ]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+  }
+
 }
 
 start()
