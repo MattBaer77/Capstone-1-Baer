@@ -198,6 +198,7 @@ class Workout(db.Model):
                 goal_sets=goal.goal_sets,
                 goal_weight_lbs=goal.goal_weight_lbs,
                 goal_time_sec=goal.goal_time_sec
+                goal_distance_miles=goal.goal_distance_miles
             )
 
             copied_workout.goals.append(copy)
@@ -266,7 +267,8 @@ class Goal(db.Model):
             'goal_reps': self.goal_reps,
             'goal_sets': self.goal_sets,
             'goal_time_sec': self.goal_time_sec,
-            'goal_weight_lbs': self.goal_weight_lbs
+            'goal_weight_lbs': self.goal_weight_lbs,
+            'goal_distance_miles': self.goal_distance_miles
         }
  
 
@@ -339,7 +341,8 @@ class Performance(db.Model):
             'performance_reps': self.performance_reps,
             'performance_sets': self.performance_sets,
             'performance_time_sec': self.performance_time_sec,
-            'performance_weight_lbs': self.performance_weight_lbs
+            'performance_weight_lbs': self.performance_weight_lbs,
+            'performance_distance_miles': self.performance_distance_miles
         }
 
 
