@@ -8,9 +8,37 @@
 
 <!-- NEW STUFF HERE -->
 
+{% if goal.goal_reps %}
+
 <div>
-    <canvas id="myChart"></canvas>
+    <canvas id="goal_reps"></canvas>
 </div>
+
+{% endif %}
+
+{% if goal.goal_sets %}
+
+<div>
+    <canvas id="goal_sets"></canvas>
+</div>
+
+{% endif %}
+
+{% if goal.goal_weight_lbs %}
+
+<div>
+    <canvas id="goal_weight_lbs"></canvas>
+</div>
+
+{% endif %}
+
+{% if goal.goal_time_sec %}
+
+<div>
+    <canvas id="goal_time_sec"></canvas>
+</div>
+
+{% endif %}
 
 <div class="mt-5">
 
