@@ -305,7 +305,9 @@ def view_workouts():
 # CREATE NEW WORKOUT
 @app.route('/workout/add', methods=["GET", "POST"])
 def add_workout():
-    """"""
+    """
+    Creates a new workout
+    """
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
@@ -333,6 +335,11 @@ def add_workout():
 # SHOWS WORKOUT INFO WITH 1 COPY FORM
 @app.route('/workout/<int:workout_id>')
 def view_workout(workout_id):
+    """
+    Shows a page with information on a single workout by id
+    Displays a form allowing a user to copy the single workout
+    POST to /workout/<int:workout_id>/copy
+    """
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
@@ -347,7 +354,11 @@ def view_workout(workout_id):
 # COPY WORKOUT - POST ONLY
 @app.route('/workout/<int:workout_id>/copy', methods=["POST"])
 def copy_workout(workout_id):
-    """"""
+    """
+    Copies a workout by id
+    Runs workout copy classmethod
+    POST only route
+    """
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
@@ -372,7 +383,10 @@ def copy_workout(workout_id):
 # ADD GOALS
 @app.route('/workout/<int:workout_id>/goal-add', methods=["GET", "POST"])
 def add_workout_goal(workout_id):
-    """"""
+    """
+    Add a goal to a workout by workout_id
+    Displays and accepts a form.
+    """
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
@@ -413,7 +427,10 @@ def add_workout_goal(workout_id):
 # EDIT WORKOUT
 @app.route('/workout/<int:workout_id>/edit', methods=["GET", "POST"])
 def edit_workout(workout_id):
-    """"""
+    """
+    Edits workout by id
+    Displays and accepts a form.
+    """
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
@@ -445,7 +462,10 @@ def edit_workout(workout_id):
 # EDIT GOAL
 @app.route('/goal/<int:goal_id>/edit', methods=["GET", "POST"])
 def edit_goal(goal_id):
-    """"""
+    """
+    Edits goal by id
+    Displays and accepts a form.
+    """
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
@@ -486,7 +506,10 @@ def edit_goal(goal_id):
 # DELETE GOAL
 @app.route('/goal/<int:goal_id>/delete', methods=["POST"])
 def delete_goal(goal_id):
-    """"""
+    """
+    Deletes goal by id
+    POST only to avoid issues with prefetching
+    """
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
@@ -504,7 +527,10 @@ def delete_goal(goal_id):
 # DELETE WORKOUT
 @app.route('/workout/<int:workout_id>/delete', methods=["POST"])
 def delete_workout(workout_id):
-    """"""
+    """
+    Deletes workout by id
+    POST only to avoid issues with prefetching
+    """
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
