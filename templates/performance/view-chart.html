@@ -69,13 +69,13 @@
 
     {% for record in performance %}
 
-        <tr>
-            <td>{{ record.date}}</td>
-            <td>{{ record.performance_reps }}</td>
-            <td>{{ record.performance_sets }}</td>
-            <td>{{ record.performance_time_sec }}</td>
-            <td>{{ record.performance_weight_lbs }}</td>
-        </tr>
+            <tr>
+                <td> <a href="/performance/{{ record.id }}/edit"> {{ record.date }} </a></td>
+                <td>{{ record.performance_reps }}</td>
+                <td>{{ record.performance_sets }}</td>
+                <td>{{ record.performance_time_sec }}</td>
+                <td>{{ record.performance_weight_lbs }}</td>
+            </tr>
 
     {% endfor %}
 

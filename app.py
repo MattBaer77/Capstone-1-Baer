@@ -3,6 +3,7 @@
 import os
 import pdb
 import copy
+from datetime import datetime
 
 from secrets import sneakybeaky
 
@@ -720,6 +721,7 @@ def edit_performance_record(performance_id):
 
     if form.validate_on_submit():
         try:
+            performance.last_edited_date=datetime.utcnow()
             performance.performance_reps=form.performance_reps.data,
             performance.performance_sets=form.performance_sets.data,
             performance.performance_time_sec=form.performance_time_sec.data,
