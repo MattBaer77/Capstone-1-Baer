@@ -207,41 +207,6 @@ def logout():
     return redirect('/')
 
 
-# @app.route('/users')
-# def view_users():
-#     """
-#     Page with listing of users.
-#     Can take a 'q' param in querystring to search by that username.
-#     """
-
-#     search = request.args.get('q')
-
-#     if not search:
-#         users = User.query.all()
-#     else:
-#         users = User.query.filter(User.username.like(f"%{search}%")).all()
-
-#     return render_template('users/index.html', users=users)
-
-
-# @app.route('/user')
-# def view_user():
-#     """Show user profile."""
-
-#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
-#         return redirect('/')
-
-#     user = g.user
-
-#     workouts = (Workout
-#                 .query
-#                 .filter(Workout.owner_user_id == g.user.id)
-#                 .order_by(Workout.id.desc())
-#                 .all())
-
-#     return render_template('users/user.html', user=user, workouts=workouts)
-
-
 @app.route('/user/edit', methods=["GET", "POST"])
 def edit_user():
     """Update profile for current user."""
@@ -299,29 +264,6 @@ def delete_user():
 
 ##############################################################################
 
-# ROUTES EXERCISES
-
-# VIEW EXERCISES
-# @app.route('/exercises')
-# def view_all_exercises():
-#     """"""
-
-#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
-#         return redirect('/')
-
-#     search = request.args.get('q')
-
-#     if not search:
-#         exercises = Exercise.query.order_by(Exercise.id.asc()).all()
-
-#     else:
-#         exercises = Exercise.query.filter(Exercise.name.like(f"%{search}%")).order_by(Exercise.id.desc()).all()
-
-#     return render_template('exercises.html', exercises=exercises)
-
-
-##############################################################################
-
 # ROUTES WORKOUTS + GOALS
 
 # VIEW WORKOUTS
@@ -368,7 +310,7 @@ def add_workout():
             db.session.commit()
 
         except IntegrityError:
-            flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+            flash("Unknown Integrity Error", 'danger')
             return redirect('/workout/add')
 
         return redirect(f'/workout/{workout.id}/goal-add')
@@ -408,7 +350,7 @@ def copy_workout(workout_id):
             copied_workout = Workout.copy(workout, g.user.id)
 
         except IntegrityError:
-            flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+            flash("Unknown Integrity Error", 'danger')
             return redirect('/')
 
         return redirect(f'/workout/{copied_workout.id}/edit')
@@ -456,45 +398,6 @@ def add_workout_goal(workout_id):
 
     return render_template('goals/add.html', workout=workout, form=form)
 
-# ADD SINGLE GOAL
-# @app.route('/workout/<int:workout_id>/goal-add-single', methods=["GET", "POST"])
-# def add_workout_goal_single(workout_id):
-#     """"""
-
-#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
-#         return redirect('/')
-
-#     workout = Workout.query.get_or_404(workout_id)
-
-#     if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
-#         return redirect("/")
-
-#     form = GoalAddForm()
-
-#     exercises = [(e.id, e.name) for e in Exercise.query.order_by(Exercise.id.asc()).all()]
-
-#     form.exercise.choices=exercises
-
-#     if form.validate_on_submit():
-#         try:
-#             goal = Goal(
-#                 workout_id=workout.id,
-#                 exercise_id= form.exercise.data,
-#                 goal_reps=form.goal_reps.data,
-#                 goal_sets=form.goal_sets.data,
-#                 goal_time_sec=form.goal_time_sec.data,
-#                 goal_weight_lbs=form.goal_weight_lbs.data
-#             )
-#             db.session.add(goal)
-#             db.session.commit()
-
-#             return redirect(f'/workout/{workout_id}/edit')
-
-#         except IntegrityError:
-#             flash("Unknown Integrity Error - /workout/<int:workout_id>/goal-add - POST", 'danger')
-#             return redirect('/workout/add')
-
-#     return render_template('goals/add-single.html', workout=workout, form=form)
 
 # EDIT WORKOUT
 @app.route('/workout/<int:workout_id>/edit', methods=["GET", "POST"])
@@ -520,7 +423,7 @@ def edit_workout(workout_id):
             db.session.commit()
 
         except IntegrityError:
-            flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+            flash("Unknown Integrity Error", 'danger')
             return redirect('/workout/add')
 
         return redirect('/')
@@ -606,35 +509,6 @@ def delete_workout(workout_id):
 ##############################################################################
 
 # ROUTES PERFORMANCE
-
-# VIEW LIST OF PERFORMANCE RECORDS - ALL GOALS in WORKOUT - CONVERT TO CALENDAR IN FUTURE?
-# @app.route('/workout/<int:workout_id>/performance')
-# def view_workout_goals_performance(workout_id):
-#     """
-#     View all of the performance toward all the goals in a workout over time.
-#     """
-
-#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
-#         return redirect('/')
-
-#     workout = Workout.query.get_or_404(workout_id)
-
-#     goals = Goal.query.filter(Goal.workout_id == workout_id).order_by(Goal.id.asc()).all()
-
-#     # workout.goals.sort(key=lambda x: x.id, reverse=False)
-
-#     performance_records = {}
-
-#     for goal in goals:
-#         # goal.performance.sort(key=lambda x: x.id, reverse=False)
-#         performance_records[goal.id] = Performance.query.filter(Performance.goal_id == goal.id).order_by(Performance.id.asc()).all()
-
-#     if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
-#         return redirect("/")
-
-#     # raise
-
-#     return render_template('/performance/view-all.html', workout=workout, goals=goals, performance_records=performance_records)
 
 # VIEW LIST OF PERFORMANCE RECORDS - INDIVIDUAL GOAL - CONVERT TO CALENDAR IN FUTURE?
 @app.route('/goal/<int:goal_id>/performance')
@@ -731,7 +605,7 @@ def edit_performance_record(performance_id):
             db.session.commit()
 
         except IntegrityError:
-            flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+            flash("Unknown Integrity Error", 'danger')
             return redirect(f'/workout/{performance.goal.workout.id}/performance')
 
         return redirect(f'/goal/{performance.goal.id}/performance')
@@ -741,93 +615,24 @@ def edit_performance_record(performance_id):
 
 
 ##############################################################################
-
-# ROUTES USED WHEN PERFORMING A WORKOUT
-
-# CONSIDER DELETEME IF NOT USED
-# PERFORMING A WORKOUT - SINGLE GOAL ROUTE
-# @app.route('/goal/<int:goal_id>/performance-add', methods=["GET", "POST"])
-# def create__performance_record(goal_id):
-#     """
-#     Displays & handles a form to create a performance record for a single goal in a workout.
-#     """
-
-#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
-#         return redirect('/')
-
-#     # performance = Performance.query.get(performance_id)
-#     goal = Goal.query.get_or_404(goal_id)
-
-#     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
-#         return redirect("/")
-
-#     temp = Performance(
-#         goal_id = goal.id,
-#         performance_reps = goal.goal_reps,
-#         performance_sets = goal.goal_sets,
-#         performance_time_sec = goal.goal_time_sec,
-#         performance_weight_lbs = goal.goal_weight_lbs
-#     )
-
-#     form = PerformanceAddForm(obj=temp)
-
-#     form.form_title = title_form("Create", goal.workout.description, goal.exercise.name)
-
-#     if form.validate_on_submit():
-#         try:
-#             performance = Performance(
-
-#                 goal_id=goal.id,
-
-#                 performance_reps=form.performance_reps.data,
-#                 performance_sets=form.performance_sets.data,
-#                 performance_time_sec=form.performance_time_sec.data,
-#                 performance_weight_lbs=form.performance_weight_lbs.data
-
-#             )
-
-#             db.session.add(performance)
-#             db.session.commit()
-
-#         except IntegrityError:
-#             flash("Unknown Integrity Error - /workout/add - POST", 'danger')
-#             return redirect(f'/workout/{performance.goal.workout.id}/performance')
-
-#         return redirect(f'/')
-
-#     return render_template('performance/add-single.html', form=form, goal=goal)
-
-
 ##############################################################################
 
-# STEP-THROUGH PERFORMANCE ROUTES
-
-# UTILITY - CLEAR ALL STEP DATA IN SESSION - DELETEME BEFORE FINISHING
-# @app.route('/clear')
-# def clear():
-
-#     if PERFORMANCE_RECORDS_CAPTURED_IDS in session:
-#         del session[PERFORMANCE_RECORDS_CAPTURED_IDS]
-    
-#     if GOAL_ID_PREVIOUS in session:
-#         del session[GOAL_ID_PREVIOUS]
-
-#     if GOAL_ID_CURRENT in session:
-#         del session[GOAL_ID_CURRENT]
-
-#     return redirect('/')
-
+# ROUTES USED WHEN PERFORMING A WORKOUT
 
 # INITIATING A STEP-THROUGH
 @app.route('/workout/<int:workout_id>/step')
 def begin_step(workout_id):
     """
-    Redirects to start a step-through.
+    Adds the ID for the first workout goal of the selected workout to session
+    Creates a list in session to capture the performance records generated as part of this step-through
+    Redirects to start a step-through
     """
 
+    # CHECK IF NOT USER
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
+    # CHECK IF WORKOUT STARTED
     if GOAL_ID_CURRENT in session:
         return redirect('/step')
 
@@ -844,13 +649,14 @@ def begin_step(workout_id):
 
     return redirect(f"/step")
 
+
 # FINISHING A STEP-THROUGH
 @app.route('/finish')
 def finish_step():
     """
-    Clearout STEP-THROUGH data from session.
-    Shows stats / graphs of the workout that has been completed.
-    Present user with navigation to get to their home page.
+    Clearout STEP-THROUGH data from session
+    Link to stats / graphs of the workout that has been completed
+    Present user with navigation to get to their home page
     """
 
     # CHECK IF NOT USER
@@ -866,19 +672,20 @@ def finish_step():
 
     return render_template('/performance/step-finish.html')
 
+
 # STEPPING TO PREVIOUS IN STEP-THROUGH
 @app.route('/previous')
 def previous_step():
     """
-    Increments GOAL_ID_CURRENT backwards.
-    Increments GOAL_ID_PREVIOUS backwards.
+    Increments GOAL_ID_CURRENT backwards
+    Increments GOAL_ID_PREVIOUS backwards
     """
 
-    # CHECK IF NOT USER
+    # IS A USER NOT LOGGED IN?
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    # CHECK IF WORKOUT NOT STARTED
+    # IS A WORKOUT NOT STARTED?
     if GOAL_ID_CURRENT not in session:
         flash("You have not started a workout", "danger")
         return redirect("/")
@@ -889,6 +696,10 @@ def previous_step():
 
     goal = Goal.query.get_or_404(session[GOAL_ID_CURRENT])
     goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
+
+    # DOES THIS GOAL BELONG TO THIS USER?
+    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+        return redirect("/")
 
     previous_step_goal_id = goals[(goals.index(goal) - 1)].id
     next_previous_step_goal_id = goals[(goals.index(goal) - 2)].id
@@ -908,16 +719,16 @@ def previous_step():
 def step():
     """
     Primary route for a STEP-THROUGH
-    Displays & handles a form to create a performance record for a single goal in a workout.
-    Passes data to session in order to maintain location / state.
+    Displays & handles a form to create a performance record for a single goal in a workout
+    Passes data to session in order to maintain location / state
     """
-    # raise
+
 
     # IS A USER NOT LOGGED IN?
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    # CHECK IF WORKOUT NOT STARTED
+    # IS A WORKOUT NOT STARTED?
     if GOAL_ID_CURRENT not in session:
         flash("You have not started a workout", "danger")
         return redirect("/")
@@ -978,14 +789,13 @@ def step():
             db.session.commit()
 
         except IntegrityError:
-            flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+            flash("Unknown Integrity Error", 'danger')
             return redirect(f'/workout/{performance.goal.workout.id}/performance')
 
         # IF THERE IS A NEXT STEP - INCREMENT APPROPRIATE VALUES UP - MOVE TO NEXT STEP
         if next_step_goal_id:
             increment_step(goal.id, next_step_goal_id, performance.id)
             return redirect('/step')
-
 
         # IF THERE IS NOT A NEXT STEP - FINISH THIS WORKOUT STEP-THROUGH
         else:
@@ -999,16 +809,16 @@ def step():
 def step_edit():
     """
     Edit route for a STEP-THROUGH
-    Displays & handles a form to create a performance record for a single goal in a workout.
-    Passes data to session in order to maintain location / state.
+    Displays & handles a form to create a performance record for a single goal in a workout
+    Passes data to session in order to maintain location / state
     """
-    # raise
+
 
     # IS A USER NOT LOGGED IN?
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    # CHECK IF WORKOUT NOT STARTED
+    # IS A WORKOUT NOT STARTED?
     if GOAL_ID_CURRENT not in session:
         flash("You have not started a workout", "danger")
         return redirect("/")
@@ -1060,14 +870,13 @@ def step_edit():
             db.session.commit()
 
         except IntegrityError:
-            flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+            flash("Unknown Integrity Error", 'danger')
             return redirect(f'/workout/{performance.goal.workout.id}/performance')
 
         # IF THERE IS A NEXT STEP - INCREMENT APPROPRIATE VALUES UP - MOVE TO NEXT STEP
         if next_step_goal_id:
             increment_step(goal.id, next_step_goal_id, record.id)
             return redirect('/step')
-
 
         # IF THERE IS NOT A NEXT STEP - FINISH THIS WORKOUT STEP-THROUGH
         else:
@@ -1078,25 +887,253 @@ def step_edit():
 
 ##############################################################################
 
-# VIEW GRAPHICS SHOWING PERFORMANCE RECORD GRAPHS PER WORKOUT
-# PERFORMANCE UP TO INDIVIDUAL PERFORMANCE RECORD FROM CALENDAR
-# PEFRORMANCE UP TO TODAY
+# ROOT ROUTES / HOME
+
+@app.route('/')
+def home():
+    """
+    Check for a logged-in user.
+
+    If a user is logged in:
+    Get 20 workouts that are original to their respective owners (not copies) to avoid duplicates, and that are not owned by the logged-in user
+    Get all workouts owned by logged-in user
+    Return home.html with this informtion
+
+    If a user is not logged in
+    Get 20 workouts that are original to their respective owners (not copies) to avoid duplicates
+    Return home-anon.html with this information
+    """
+
+
+    if check_for_user():
+
+        # All workouts, but filter out copied workouts and users own workouts
+        workouts = (Workout
+                    .query
+                    .filter((Workout.owner_user_id == Workout.author_user_id) & (Workout.owner_user_id != g.user.id) & (Workout.author_user_id != g.user.id))
+                    .order_by(Workout.id.desc())
+                    .limit(20)
+                    .all())
+
+        my_workouts = (Workout
+                    .query
+                    .filter(Workout.owner_user_id == g.user.id)
+                    .order_by(Workout.id.desc())
+                    .all())
+
+        return render_template('home.html', user=g.user, workouts=workouts, my_workouts=my_workouts)
+
+    else:
+
+        # All workouts, but filter out copied workouts
+        workouts = (Workout
+                    .query.
+                    filter(Workout.owner_user_id == Workout.author_user_id)
+                    .order_by(Workout.id.desc())
+                    .limit(20)
+                    .all())
+
+        return render_template('home-anon.html', workouts=workouts)
 
 
 ##############################################################################
 
+# UNUSED ROUTES - REFERENCE
 
-##############################################################################
-##############################################################################
-##############################################################################
+# @app.route('/users')
+# def view_users():
+#     """
+#     Page with listing of users.
+#     Can take a 'q' param in querystring to search by that username.
+#     """
 
-# HELP! - THIS WOULD BE GREAT FUNCTIONALITY FOR EDITING PERFORMANCE RECORDS FOR A WORKOUT (ALTHOUGH RIGHT NOW IT IS SET UP AS A RECORD-ADDER)
-# INITIALLY IMPLEMENTED TO CREATE A FORM TO USE BOOTSTRAP STEPPER - DIFFICULTY WORKING WITH IT
-# USING WTF INTENTED TECHNIQUES -
+#     search = request.args.get('q')
 
-# ISSUES -
-    # DIFFICULTY WITH FORMATTING - CREATES TABLES OF FORMS - DOES NOT RESPOND WELL TO BOOTSTRAP FORMATTING
-    # DIFFICULTY WITH FORMATTING - AUTO-GENERATES TITLE CONSISTING OF INDEX OF "PERFORMANCE RECORDS"
+#     if not search:
+#         users = User.query.all()
+#     else:
+#         users = User.query.filter(User.username.like(f"%{search}%")).all()
+
+#     return render_template('users/index.html', users=users)
+
+
+# @app.route('/user')
+# def view_user():
+#     """Show user profile."""
+
+#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
+#         return redirect('/')
+
+#     user = g.user
+
+#     workouts = (Workout
+#                 .query
+#                 .filter(Workout.owner_user_id == g.user.id)
+#                 .order_by(Workout.id.desc())
+#                 .all())
+
+#     return render_template('users/user.html', user=user, workouts=workouts)
+
+
+# VIEW EXERCISES
+# @app.route('/exercises')
+# def view_all_exercises():
+#     """"""
+
+#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
+#         return redirect('/')
+
+#     search = request.args.get('q')
+
+#     if not search:
+#         exercises = Exercise.query.order_by(Exercise.id.asc()).all()
+
+#     else:
+#         exercises = Exercise.query.filter(Exercise.name.like(f"%{search}%")).order_by(Exercise.id.desc()).all()
+
+#     return render_template('exercises.html', exercises=exercises)
+
+
+# ADD SINGLE GOAL
+# @app.route('/workout/<int:workout_id>/goal-add-single', methods=["GET", "POST"])
+# def add_workout_goal_single(workout_id):
+#     """"""
+
+#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
+#         return redirect('/')
+
+#     workout = Workout.query.get_or_404(workout_id)
+
+#     if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
+#         return redirect("/")
+
+#     form = GoalAddForm()
+
+#     exercises = [(e.id, e.name) for e in Exercise.query.order_by(Exercise.id.asc()).all()]
+
+#     form.exercise.choices=exercises
+
+#     if form.validate_on_submit():
+#         try:
+#             goal = Goal(
+#                 workout_id=workout.id,
+#                 exercise_id= form.exercise.data,
+#                 goal_reps=form.goal_reps.data,
+#                 goal_sets=form.goal_sets.data,
+#                 goal_time_sec=form.goal_time_sec.data,
+#                 goal_weight_lbs=form.goal_weight_lbs.data
+#             )
+#             db.session.add(goal)
+#             db.session.commit()
+
+#             return redirect(f'/workout/{workout_id}/edit')
+
+#         except IntegrityError:
+#             flash("Unknown Integrity Error - /workout/<int:workout_id>/goal-add - POST", 'danger')
+#             return redirect('/workout/add')
+
+#     return render_template('goals/add-single.html', workout=workout, form=form)
+
+
+# VIEW LIST OF PERFORMANCE RECORDS - ALL GOALS in WORKOUT - CONVERT TO CALENDAR IN FUTURE?
+# @app.route('/workout/<int:workout_id>/performance')
+# def view_workout_goals_performance(workout_id):
+#     """
+#     View all of the performance toward all the goals in a workout over time.
+#     """
+
+#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
+#         return redirect('/')
+
+#     workout = Workout.query.get_or_404(workout_id)
+
+#     goals = Goal.query.filter(Goal.workout_id == workout_id).order_by(Goal.id.asc()).all()
+
+#     # workout.goals.sort(key=lambda x: x.id, reverse=False)
+
+#     performance_records = {}
+
+#     for goal in goals:
+#         # goal.performance.sort(key=lambda x: x.id, reverse=False)
+#         performance_records[goal.id] = Performance.query.filter(Performance.goal_id == goal.id).order_by(Performance.id.asc()).all()
+
+#     if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
+#         return redirect("/")
+
+#     # raise
+
+#     return render_template('/performance/view-all.html', workout=workout, goals=goals, performance_records=performance_records)
+
+
+# CONSIDER DELETEME IF NOT USED
+# PERFORMING A WORKOUT - SINGLE GOAL ROUTE
+# @app.route('/goal/<int:goal_id>/performance-add', methods=["GET", "POST"])
+# def create__performance_record(goal_id):
+#     """
+#     Displays & handles a form to create a performance record for a single goal in a workout.
+#     """
+
+#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
+#         return redirect('/')
+
+#     # performance = Performance.query.get(performance_id)
+#     goal = Goal.query.get_or_404(goal_id)
+
+#     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+#         return redirect("/")
+
+#     temp = Performance(
+#         goal_id = goal.id,
+#         performance_reps = goal.goal_reps,
+#         performance_sets = goal.goal_sets,
+#         performance_time_sec = goal.goal_time_sec,
+#         performance_weight_lbs = goal.goal_weight_lbs
+#     )
+
+#     form = PerformanceAddForm(obj=temp)
+
+#     form.form_title = title_form("Create", goal.workout.description, goal.exercise.name)
+
+#     if form.validate_on_submit():
+#         try:
+#             performance = Performance(
+
+#                 goal_id=goal.id,
+
+#                 performance_reps=form.performance_reps.data,
+#                 performance_sets=form.performance_sets.data,
+#                 performance_time_sec=form.performance_time_sec.data,
+#                 performance_weight_lbs=form.performance_weight_lbs.data
+
+#             )
+
+#             db.session.add(performance)
+#             db.session.commit()
+
+#         except IntegrityError:
+#             flash("Unknown Integrity Error", 'danger')
+#             return redirect(f'/workout/{performance.goal.workout.id}/performance')
+
+#         return redirect(f'/')
+
+#     return render_template('performance/add-single.html', form=form, goal=goal)
+
+
+# UTILITY - CLEAR ALL STEP DATA IN SESSION - DELETEME BEFORE FINISHING
+# @app.route('/clear')
+# def clear():
+
+#     if PERFORMANCE_RECORDS_CAPTURED_IDS in session:
+#         del session[PERFORMANCE_RECORDS_CAPTURED_IDS]
+    
+#     if GOAL_ID_PREVIOUS in session:
+#         del session[GOAL_ID_PREVIOUS]
+
+#     if GOAL_ID_CURRENT in session:
+#         del session[GOAL_ID_CURRENT]
+
+#     return redirect('/')
+
 
 # PERFORMING A WORKOUT - ALL IN ONE ROUTE
 # @app.route('/workout/<int:workout_id>/performance-add', methods=["GET", "POST"])
@@ -1148,60 +1185,9 @@ def step_edit():
 #                 db.session.commit()
 
 #             except IntegrityError:
-#                 flash("Unknown Integrity Error - /workout/add - POST", 'danger')
+#                 flash("Unknown Integrity Error", 'danger')
 #                 return redirect(f'/workout/{performance.goal.workout.id}/performance')
 
 #         return redirect(f'/')
 
 #     return render_template('performance/add.html', form=form, workout=workout)
-
-
-##############################################################################
-##############################################################################
-##############################################################################
-
-
-##############################################################################
-
-# ROOT ROUTES / HOME
-
-@app.route('/')
-def home():
-    """
-    Show a page with
-    user info
-    user workouts
-    """
-    # raise
-
-
-
-    if check_for_user():
-
-        # All workouts, but filter out copied workouts and users own workouts
-        workouts = (Workout
-                    .query
-                    .filter((Workout.owner_user_id == Workout.author_user_id) & (Workout.owner_user_id != g.user.id) & (Workout.author_user_id != g.user.id))
-                    .order_by(Workout.id.desc())
-                    .limit(20)
-                    .all())
-
-        my_workouts = (Workout
-                    .query
-                    .filter(Workout.owner_user_id == g.user.id)
-                    .order_by(Workout.id.desc())
-                    .all())
-
-        return render_template('home.html', user=g.user, workouts=workouts, my_workouts=my_workouts)
-
-    else:
-
-        # All workouts, but filter out copied workouts
-        workouts = (Workout
-                    .query.
-                    filter(Workout.owner_user_id == Workout.author_user_id)
-                    .order_by(Workout.id.desc())
-                    .limit(20)
-                    .all())
-
-        return render_template('home-anon.html', workouts=workouts)
