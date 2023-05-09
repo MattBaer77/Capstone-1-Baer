@@ -327,7 +327,7 @@ class Performance(db.Model):
     )
 
     performance_distance_miles = db.Column(
-        db.Integer,
+        db.Float,
         nullable=True
     )
 

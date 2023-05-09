@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm, Form
-from wtforms import StringField, PasswordField, TextAreaField, SelectField, IntegerField, FieldList, FormField
+from wtforms import StringField, PasswordField, TextAreaField, SelectField, IntegerField, FieldList, FormField, FloatField
 from wtforms.validators import DataRequired, Email, Length, InputRequired, Optional
 
 class UserAddForm(FlaskForm):
@@ -75,7 +75,7 @@ class GoalAddForm(FlaskForm):
     goal_sets = IntegerField('Sets:', validators=[InputRequired(message='Must have at least 1 "set."')])
     goal_time_sec = IntegerField('Time (Seconds):', validators=[Optional()])
     goal_weight_lbs = IntegerField('Weight (lbs.):', validators=[Optional()])
-    goal_distance_miles = IntegerField('Distance (Miles):', validators=[Optional()])
+    goal_distance_miles = FloatField('Distance (Miles):', validators=[Optional()])
 
     form_name = "Add Exercise Goal"
     form_title = "Add an Exercise Goal To Your Workout!"
@@ -89,7 +89,7 @@ class GoalEditForm(FlaskForm):
     goal_sets = IntegerField('Sets:', validators=[InputRequired(message='Must have at least 1 "set."')])
     goal_time_sec = IntegerField('Time (Seconds):', validators=[Optional()])
     goal_weight_lbs = IntegerField('Weight (lbs.):', validators=[Optional()])
-    goal_distance_miles = IntegerField('Distance (Miles):', validators=[Optional()])
+    goal_distance_miles = FloatField('Distance (Miles):', validators=[Optional()])
 
     form_name = "Edit Exercise Goal"
     form_title = "Edit Your Exercise Goal"
@@ -102,7 +102,7 @@ class PerformanceAddForm(FlaskForm):
     performance_sets = IntegerField('Actual Sets:')
     performance_time_sec = IntegerField('Actual Time (seconds):', validators=[Optional()])
     performance_weight_lbs = IntegerField('Actual Weight (lbs):', validators=[Optional()])
-    performance_distance_miles = IntegerField('Distance (Miles):', validators=[Optional()])
+    performance_distance_miles = FloatField('Distance (Miles):', validators=[Optional()])
 
     form_name = "Create Performance Record"
     form_title = ""
@@ -115,7 +115,7 @@ class PerformanceEditForm(FlaskForm):
     performance_sets = IntegerField('Sets:')
     performance_time_sec = IntegerField('Time (seconds):', validators=[Optional()])
     performance_weight_lbs = IntegerField('Weight (lbs):', validators=[Optional()])
-    performance_distance_miles = IntegerField('Distance (Miles):', validators=[Optional()])
+    performance_distance_miles = FloatField('Distance (Miles):', validators=[Optional()])
 
 
     form_name = "Edit Performance Record"
@@ -133,7 +133,7 @@ class PerformanceStepForm(FlaskForm):
     performance_sets = IntegerField('Actual Sets:')
     performance_time_sec = IntegerField('Actual Time (seconds):', validators=[Optional()])
     performance_weight_lbs = IntegerField('Actual Weight (lbs):', validators=[Optional()])
-    performance_distance_miles = IntegerField('Distance (Miles):', validators=[Optional()])
+    performance_distance_miles = FloatField('Distance (Miles):', validators=[Optional()])
 
 
     form_name = "Create Performance Record"
