@@ -344,7 +344,7 @@ def view_workout(workout_id):
     return render_template('/workouts/view.html', workout=workout, form=form)
 
 
-# # COPY WORKOUT - POST ONLY
+# COPY WORKOUT - POST ONLY
 @app.route('/workout/<int:workout_id>/copy', methods=["POST"])
 def copy_workout(workout_id):
     """"""
@@ -545,56 +545,12 @@ def view_goal_performance(goal_id):
 
     return render_template('/performance/view-chart.html', goal=goal, performance=performance_records, previous_step=previous_step_goal_id, next_step=next_step_goal_id)
 
-##############################################################################
-# API ROUTES for GOAL and PERFORMANCE
-
-@app.route('/api/goal/<int:goal_id>')
-def api_send_goal(goal_id):
-    """
-    Send JSON of all of the performance toward a single goal over time.
-    """
-
-    if check_for_not_user_with_message("Access unauthorized.", "danger"):
-        return redirect('/')
-
-    goal = Goal.query.get_or_404(goal_id)
-
-    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
-        return redirect("/")
-
-    goal_json = goal.serialize()
-
-    return jsonify(goal_json=goal_json)
-
-@app.route('/api/goal/<int:goal_id>/performance')
-def api_send_goal_performance(goal_id):
-    """
-    Send JSON of all of the performance toward a single goal over time.
-    """
-
-    if check_for_not_user_with_message("Access unauthorized.", "danger"):
-        return redirect('/')
-
-    goal = Goal.query.get_or_404(goal_id)
-
-    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
-        return redirect("/")
-
-    performance_records = Performance.query.filter(Performance.goal_id == goal_id).order_by(Performance.id.asc()).all()
-
-    performance_json = [record.serialize() for record in performance_records]
-
-    return jsonify(performance_json=performance_json)
-
-##############################################################################
-
-# ROUTES PERFORMANCE (CONTINUED)
 
 # EDIT INDIVIDUAL PERFORMANCE RECORDS
 @app.route('/performance/<int:performance_id>/edit', methods=["GET", "POST"])
 def edit_performance_record(performance_id):
     """
-    Edit an individual performance record.
+    Edit an individual performance record
     """
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
@@ -631,6 +587,47 @@ def edit_performance_record(performance_id):
 
 
 ##############################################################################
+# API ROUTES for GOAL and PERFORMANCE
+
+@app.route('/api/goal/<int:goal_id>')
+def api_send_goal(goal_id):
+    """
+    Send JSON of all of the performance toward a single goal over time
+    """
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    goal = Goal.query.get_or_404(goal_id)
+
+    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+        return redirect("/")
+
+    goal_json = goal.serialize()
+
+    return jsonify(goal_json=goal_json)
+
+@app.route('/api/goal/<int:goal_id>/performance')
+def api_send_goal_performance(goal_id):
+    """
+    Send JSON of all of the performance toward a single goal over time
+    """
+
+    if check_for_not_user_with_message("Access unauthorized.", "danger"):
+        return redirect('/')
+
+    goal = Goal.query.get_or_404(goal_id)
+
+    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+        return redirect("/")
+
+    performance_records = Performance.query.filter(Performance.goal_id == goal_id).order_by(Performance.id.asc()).all()
+
+    performance_json = [record.serialize() for record in performance_records]
+
+    return jsonify(performance_json=performance_json)
+
+
 ##############################################################################
 
 # ROUTES USED WHEN PERFORMING A WORKOUT
