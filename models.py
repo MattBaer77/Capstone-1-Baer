@@ -197,7 +197,7 @@ class Workout(db.Model):
                 goal_reps=goal.goal_reps,
                 goal_sets=goal.goal_sets,
                 goal_weight_lbs=goal.goal_weight_lbs,
-                goal_time_sec=goal.goal_time_sec
+                goal_time_sec=goal.goal_time_sec,
                 goal_distance_miles=goal.goal_distance_miles
             )
 

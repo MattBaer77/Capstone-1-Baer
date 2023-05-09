@@ -54,6 +54,17 @@
 
 {% endif %}
 
+{% if goal.goal_distance_miles %}
+
+<div class="m-4">
+    <h2>Goal Distance - (MILES.)</h2>
+    <canvas id="goal_distance_miles"></canvas>
+</div>
+
+<hr>
+
+{% endif %}
+
 <div class="mt-5">
 
     <table>
@@ -71,6 +82,7 @@
             <th>{{goal.goal_sets}}</th>
             <th>{{goal.goal_time_sec}}</th>
             <th>{{goal.goal_weight_lbs}}</th>
+            <th>{{goal.goal_distance_miles}}</th>
         </tr>
 
     {% for record in performance %}

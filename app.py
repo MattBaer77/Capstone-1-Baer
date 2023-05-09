@@ -411,7 +411,8 @@ def add_workout_goal(workout_id):
                 goal_reps=form.goal_reps.data,
                 goal_sets=form.goal_sets.data,
                 goal_time_sec=form.goal_time_sec.data,
-                goal_weight_lbs=form.goal_weight_lbs.data
+                goal_weight_lbs=form.goal_weight_lbs.data,
+                goal_distance_miles=form.goal_distance_miles.data
             )
             db.session.add(workout)
             db.session.add(goal)
@@ -490,7 +491,8 @@ def edit_goal(goal_id):
             goal.goal_reps=form.goal_reps.data,
             goal.goal_sets=form.goal_sets.data,
             goal.goal_time_sec=form.goal_time_sec.data,
-            goal.goal_weight_lbs=form.goal_weight_lbs.data
+            goal.goal_weight_lbs=form.goal_weight_lbs.data,
+            goal.goal_distance_miles=form.goal_distance_miles.data
             db.session.add(goal)
             db.session.commit()
 
@@ -597,7 +599,8 @@ def edit_performance_record(performance_id):
             performance.performance_reps=form.performance_reps.data,
             performance.performance_sets=form.performance_sets.data,
             performance.performance_time_sec=form.performance_time_sec.data,
-            performance.performance_weight_lbs=form.performance_weight_lbs.data
+            performance.performance_weight_lbs=form.performance_weight_lbs.data,
+            performance.performance_distance_miles=form.performance_distance_miles.data
 
             db.session.add(performance)
             db.session.commit()
@@ -827,7 +830,8 @@ def step():
                 performance_reps=form.performance_reps.data,
                 performance_sets=form.performance_sets.data,
                 performance_time_sec=form.performance_time_sec.data,
-                performance_weight_lbs=form.performance_weight_lbs.data
+                performance_weight_lbs=form.performance_weight_lbs.data,
+                performance_distance_miles=form.performance_distance_miles.data
 
             )
 
@@ -910,7 +914,8 @@ def step_edit():
             record.performance_reps=form.performance_reps.data,
             record.performance_sets=form.performance_sets.data,
             record.performance_time_sec=form.performance_time_sec.data,
-            record.performance_weight_lbs=form.performance_weight_lbs.data
+            record.performance_weight_lbs=form.performance_weight_lbs.data,
+            record.performance_distance_miles=form.performance_distance_miles.data
 
             db.session.add(record)
             db.session.commit()

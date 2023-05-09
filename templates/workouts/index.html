@@ -47,6 +47,9 @@
                         {% if goal.goal_weight_lbs %}
                         <li class="text-start text-muted" style="list-style-type: none;">Weight: {{goal.goal_weight_lbs}}</li>
                         {% endif %}
+                        {% if goal.goal_distance_miles %}
+                        <li class="text-start text-muted" style="list-style-type: none;">Weight: {{goal.goal_distance_miles}}</li>
+                        {% endif %}
                     </ul>
                     <hr>
                     {% endfor %}

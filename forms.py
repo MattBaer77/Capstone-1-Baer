@@ -73,8 +73,9 @@ class GoalAddForm(FlaskForm):
     exercise = SelectField('Exercise Goal:', coerce=int)
     goal_reps = IntegerField('Reps:', validators=[InputRequired(message='Must have at least 1 "rep."')])
     goal_sets = IntegerField('Sets:', validators=[InputRequired(message='Must have at least 1 "set."')])
-    goal_time_sec = IntegerField('Time (seconds):', validators=[Optional()])
-    goal_weight_lbs = IntegerField('Weight (lbs):', validators=[Optional()])
+    goal_time_sec = IntegerField('Time (Seconds):', validators=[Optional()])
+    goal_weight_lbs = IntegerField('Weight (lbs.):', validators=[Optional()])
+    goal_distance_miles = IntegerField('Distance (Miles):', validators=[Optional()])
 
     form_name = "Add Exercise Goal"
     form_title = "Add an Exercise Goal To Your Workout!"
@@ -86,8 +87,9 @@ class GoalEditForm(FlaskForm):
     exercise = SelectField('Exercise Goal:', coerce=int)
     goal_reps = IntegerField('Reps:', validators=[InputRequired(message='Must have at least 1 "rep."')])
     goal_sets = IntegerField('Sets:', validators=[InputRequired(message='Must have at least 1 "set."')])
-    goal_time_sec = IntegerField('Time (seconds):', validators=[Optional()])
-    goal_weight_lbs = IntegerField('Weight (lbs):', validators=[Optional()])
+    goal_time_sec = IntegerField('Time (Seconds):', validators=[Optional()])
+    goal_weight_lbs = IntegerField('Weight (lbs.):', validators=[Optional()])
+    goal_distance_miles = IntegerField('Distance (Miles):', validators=[Optional()])
 
     form_name = "Edit Exercise Goal"
     form_title = "Edit Your Exercise Goal"

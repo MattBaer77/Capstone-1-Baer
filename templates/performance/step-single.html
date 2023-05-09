@@ -51,6 +51,16 @@
         </div>
         {% endif %}
 
+        {% if goal.goal_distance_miles %}
+        <div class="form-group mx-5" align="start">
+
+            {{form.performance_distance_miles.label(class_="mt-4")}}
+            {{form.performance_distance_miles(class_="form-control")}}
+            <label for="performance_distance_miles" class="text-secondary">Goal Weight: {{goal.goal_distance_miles}}</label>
+            
+        </div>
+        {% endif %}
+
     </form>
 
         {% if form.previous_text %}
