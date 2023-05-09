@@ -1,13 +1,7 @@
 const BASE_URL = "http://127.0.0.1:5000/api";
 
-
-
+// Parse Integer of Goal ID
 const goalId = parseInt(goal_id)
-
-
-// Test Chart
-const ctx = document.getElementById('myChart');
-
 
 // Performance Record Charts
 const chartReps = document.getElementById('goal_reps');
@@ -15,62 +9,50 @@ const chartSets = document.getElementById('goal_sets');
 const chartWeightLbs = document.getElementById('goal_weight_lbs');
 const chartTimeSec = document.getElementById('goal_time_sec');
 
-// Variables
-
-let goal;
-let performance;
-let performanceDates = [];
-
 // Get the Goal from the API
 async function getGoal() {
-    const resp = await axios.get(`${BASE_URL}/goal/${goalId}`);
-    return resp.data.goal_json
+
+  const resp = await axios.get(`${BASE_URL}/goal/${goalId}`);
+  return resp.data.goal_json
+
 }
 
 // Get the Performance Records from the API
 async function getPerformance() {
-    const resp = await axios.get(`${BASE_URL}/goal/${goalId}/performance`);
-    return resp.data.performance_json
-}
 
-async function performanceDatesFill(performance) {
-
-  for (let p of performance) {
-    performanceDates.push(p.date)
-    console.log(p.date)
-  }
+  const resp = await axios.get(`${BASE_URL}/goal/${goalId}/performance`);
+  return resp.data.performance_json
 
 }
 
 async function getPerformanceData(performance, variableToGet) {
 
-  let results = [];
+  let result = [];
 
   for (let record of performance) {
-    results.push(record[`${variableToGet}`])
-    console.log(results)
+    result.push(record[`${variableToGet}`])
+    console.log(result)
   }
 
-  return results;
+  return result;
 
 }
 
-
 async function start() {
 
-  goal = await getGoal()
-  performance = await getPerformance()
-  performanceDatesFill(performance)
+  const goal = await getGoal()
+  const performance = await getPerformance()
+  const performanceDates = await getPerformanceData(performance, "date")
 
-  goalReps = performanceDates.map(() => {return goal.goal_reps})
-  goalSets = performanceDates.map(() => {return goal.goal_sets})
-  goalWeightLbs = performanceDates.map(() => {return goal.goal_weight_lbs})
-  goalTimeSec = performanceDates.map(() => {return goal.goal_time_sec})
+  const goalReps = performanceDates.map(() => {return goal.goal_reps})
+  const goalSets = performanceDates.map(() => {return goal.goal_sets})
+  const goalWeightLbs = performanceDates.map(() => {return goal.goal_weight_lbs})
+  const goalTimeSec = performanceDates.map(() => {return goal.goal_time_sec})
 
-  performanceReps = await getPerformanceData(performance, "performance_reps")
-  performanceSets = await getPerformanceData(performance, "performance_sets")
-  performanceWeightLbs = await getPerformanceData(performance, "performance_weight_lbs")
-  performanceTimeSec = await getPerformanceData(performance, "performance_time_sec")
+  const performanceReps = await getPerformanceData(performance, "performance_reps")
+  const performanceSets = await getPerformanceData(performance, "performance_sets")
+  const performanceWeightLbs = await getPerformanceData(performance, "performance_weight_lbs")
+  const performanceTimeSec = await getPerformanceData(performance, "performance_time_sec")
 
   if (chartReps){
 

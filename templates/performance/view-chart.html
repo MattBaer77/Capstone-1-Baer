@@ -4,39 +4,47 @@
 
 {% block content %}
 
-
-
-<!-- NEW STUFF HERE -->
-
 {% if goal.goal_reps %}
 
-<div>
+<div class="m-4">
+    <h2>Goal Reps</h2>
     <canvas id="goal_reps"></canvas>
 </div>
+
+<hr>
 
 {% endif %}
 
 {% if goal.goal_sets %}
 
-<div>
+<div class="m-4">
+    <h2>Goal Sets</h2>
     <canvas id="goal_sets"></canvas>
 </div>
+
+<hr>
 
 {% endif %}
 
 {% if goal.goal_weight_lbs %}
 
-<div>
+<div class="m-4">
+    <h2>Goal Weight - (LBS.)</h2>
     <canvas id="goal_weight_lbs"></canvas>
 </div>
+
+<hr>
 
 {% endif %}
 
 {% if goal.goal_time_sec %}
 
-<div>
+<div class="m-4">
+    <h2>Goal Time - (SEC.)</h2>
     <canvas id="goal_time_sec"></canvas>
 </div>
+
+<hr>
 
 {% endif %}
 
