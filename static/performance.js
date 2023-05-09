@@ -31,7 +31,6 @@ async function getPerformanceData(performance, variableToGet) {
 
   for (let record of performance) {
     result.push(record[`${variableToGet}`])
-    console.log(result)
   }
 
   return result;
