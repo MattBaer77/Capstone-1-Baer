@@ -3,7 +3,7 @@
 **Goal:**
 
 _The goal of this site is to help users:_
-- Plan workout activities mapped to workout days
+- Plan exercises activities mapped to workouts
 - Easily and unobtrusively manipulate pertinent data to record their performance
 - View their performance over the course of multiple workouts to visualize their progress over time
 <br>
@@ -11,7 +11,7 @@ _The goal of this site is to help users:_
 
 **Demographic:**
 
-- The site should provide the benefits of exercise planning and progress tracking to novice to moderate hobbyist weight lifters and individuals interested in maintaining or growing their strength and muscular endurance.
+- The site should provide the benefits of workout planning and progress tracking to novice to moderate hobbyist weight lifters and individuals interested in maintaining or growing their strength and muscular endurance.
 <br>
 <br>
 
@@ -28,6 +28,9 @@ _The goal of this site is to help users:_
         - User identification info:
             - Username
             - Password
+            - Email
+            - Image URL (Optional)
+            - Bio (Optional)
     - User supplied data for performance (when applicable):
         - Weight (lifted during workout)
         - Sets completed
@@ -59,7 +62,7 @@ _The goal of this site is to help users:_
 - Functionality:
     - Represent basic workout information from API in legible format
     - Have a “guided” editor mode for use during a workout so that users can add data without being burdened by excessive navigation.
-        - Example: “How many reps in this set?”
+        - Example: “How many reps completed?”
         - Form Text Input: “15”
     - Have a “progress overview” for each workout that visually compares previous performance to most current performance.
 <br>
@@ -68,7 +71,7 @@ _The goal of this site is to help users:_
 - User Flow:
     - _See diagram B._ (forthcoming)
     - User:
-        - Creates workout day plans > participates in workout sessions following plan > records performance metrics for each workout in plan per session > views comparisions of past sessions for that workout.
+        - Creates workouts > participates in workouts following plan > records performance metrics for each workout > views comparisions of past performance records for that workout.
 <br>
 <br>
 
