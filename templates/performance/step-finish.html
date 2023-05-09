@@ -4,15 +4,14 @@
 
 {% block content %}
 
-<div align="center">
+<div class="my-4">
+    <h1 class="mx-4 mb-4">Great Job! Your workout: {{goal.workout.description}} has been recorded.</h1>
 
-    <div class="w-25">
+    <form action="/goal/{{goals[1].id}}/performance"><button class="btn btn-primary mt-2">View Results</button></form>
 
-        <h2>Great Job! Your workout had been recorded.</h2>
+    <hr>
 
-        <a href="/"><button type="button" class="btn btn-primary mt-2">Home</button></a>
-
-    </div>
+    <form action="/"><button class="btn btn-secondary mt-2">Home</button></form>
 
 </div>
 

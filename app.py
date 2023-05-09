@@ -129,6 +129,17 @@ def determine_next_step(goals, goal):
         return None
 
 
+def determine_previous_step(goals, goal):
+    try:
+        if ((goals.index(goal) - 1)) > -1:
+            return (goals[(goals.index(goal) - 1)].id)
+        else:
+            return None
+
+    except IndexError:
+        return None
+
+
 def increment_step(goal_id, next_step_goal_id, performance_record_id):
     session[GOAL_ID_PREVIOUS] = goal_id
     session[GOAL_ID_CURRENT] = next_step_goal_id
@@ -527,7 +538,12 @@ def view_goal_performance(goal_id):
 
     performance_records = Performance.query.filter(Performance.goal_id == goal_id).order_by(Performance.id.asc()).all()
 
-    return render_template('/performance/view-chart.html', goal=goal, performance=performance_records)
+    goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
+
+    next_step_goal_id = determine_next_step(goals,goal)
+    previous_step_goal_id = determine_previous_step(goals,goal)
+
+    return render_template('/performance/view-chart.html', goal=goal, performance=performance_records, previous_step=previous_step_goal_id, next_step=next_step_goal_id)
 
 ##############################################################################
 # API ROUTES for GOAL and PERFORMANCE
@@ -668,9 +684,16 @@ def finish_step():
         flash("You have not started a workout", "danger")
         return redirect("/")
 
+    goal = Goal.query.get_or_404(session[GOAL_ID_CURRENT])
+    goals = Goal.query.filter(Goal.workout_id == goal.workout.id).order_by(Goal.id.asc()).all()
+
+    # DOES THIS GOAL BELONG TO THIS USER?
+    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+        return redirect("/")
+
     session_step_data_clearout()
 
-    return render_template('/performance/step-finish.html')
+    return render_template('/performance/step-finish.html', goal=goal, goals=goals)
 
 
 # STEPPING TO PREVIOUS IN STEP-THROUGH

@@ -7,6 +7,12 @@
 {% if goal.goal_reps %}
 
 <div class="m-4">
+    <h1>{{goal.exercise.name}}</h1>
+</div>
+
+<hr>
+
+<div class="m-4">
     <h2>Goal Reps</h2>
     <canvas id="goal_reps"></canvas>
 </div>
@@ -89,5 +95,24 @@
 integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/static/performance.js"></script>
+
+<hr>
+
+<div class="my-2">
+    {% if previous_step %}
+    <form action="/goal/{{previous_step}}/performance" method="GET" style="display:inline"><button class="btn btn-primary" style="display:inline;" type="sumbit">Previous</button></form>
+    {% endif %}
+    
+    {% if next_step %}
+    <form action="/goal/{{next_step}}/performance" method="GET" style="display:inline"><button class="btn btn-primary" style="display:inline;" type="sumbit">Next</button></form>
+    {% endif %}
+</div>
+
+<hr>
+
+<div class="mb-4">
+    <form action="/"><button class="btn btn-secondary mt-2">Home</button></form>
+</div>
+
 
 {% endblock %}
