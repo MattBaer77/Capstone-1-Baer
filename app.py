@@ -607,33 +607,33 @@ def delete_workout(workout_id):
 # ROUTES PERFORMANCE
 
 # VIEW LIST OF PERFORMANCE RECORDS - ALL GOALS in WORKOUT - CONVERT TO CALENDAR IN FUTURE?
-@app.route('/workout/<int:workout_id>/performance')
-def view_workout_goals_performance(workout_id):
-    """
-    View all of the performance toward all the goals in a workout over time.
-    """
+# @app.route('/workout/<int:workout_id>/performance')
+# def view_workout_goals_performance(workout_id):
+#     """
+#     View all of the performance toward all the goals in a workout over time.
+#     """
 
-    if check_for_not_user_with_message("Access unauthorized.", "danger"):
-        return redirect('/')
+#     if check_for_not_user_with_message("Access unauthorized.", "danger"):
+#         return redirect('/')
 
-    workout = Workout.query.get_or_404(workout_id)
+#     workout = Workout.query.get_or_404(workout_id)
 
-    goals = Goal.query.filter(Goal.workout_id == workout_id).order_by(Goal.id.asc()).all()
+#     goals = Goal.query.filter(Goal.workout_id == workout_id).order_by(Goal.id.asc()).all()
 
-    # workout.goals.sort(key=lambda x: x.id, reverse=False)
+#     # workout.goals.sort(key=lambda x: x.id, reverse=False)
 
-    performance_records = {}
+#     performance_records = {}
 
-    for goal in goals:
-        # goal.performance.sort(key=lambda x: x.id, reverse=False)
-        performance_records[goal.id] = Performance.query.filter(Performance.goal_id == goal.id).order_by(Performance.id.asc()).all()
+#     for goal in goals:
+#         # goal.performance.sort(key=lambda x: x.id, reverse=False)
+#         performance_records[goal.id] = Performance.query.filter(Performance.goal_id == goal.id).order_by(Performance.id.asc()).all()
 
-    if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
-        return redirect("/")
+#     if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
+#         return redirect("/")
 
-    # raise
+#     # raise
 
-    return render_template('/performance/view-all.html', workout=workout, goals=goals, performance_records=performance_records)
+#     return render_template('/performance/view-all.html', workout=workout, goals=goals, performance_records=performance_records)
 
 # VIEW LIST OF PERFORMANCE RECORDS - INDIVIDUAL GOAL - CONVERT TO CALENDAR IN FUTURE?
 @app.route('/goal/<int:goal_id>/performance')

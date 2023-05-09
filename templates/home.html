@@ -69,15 +69,13 @@
 <div class="my-1 w-50 mx-auto">
     <div class="my-3 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
         <div class="card-body">
-            <a href="/workout/{{workout.id}}/performance" class="" style="text-decoration: none;">
-                <h5 class="card-title">{{ workout.description }}</h5>
+            <h5 class="card-title">{{ workout.description }}</h5>
 
-                {% if workout.author %}
-                <h6 class="crd-subtitle text-muted">by {{workout.author.username}}</h6>
-                {% else %}
-                <h6 class="crd-subtitle text-muted">by {{workout.owner.username}}</h6>
-                {% endif %}
-            </a>
+            {% if workout.author %}
+            <h6 class="crd-subtitle text-muted">by {{workout.author.username}}</h6>
+            {% else %}
+            <h6 class="crd-subtitle text-muted">by {{workout.owner.username}}</h6>
+            {% endif %}
 
             <hr>
 
