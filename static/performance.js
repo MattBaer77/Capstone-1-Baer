@@ -1,7 +1,7 @@
 const BASE_URL = "http://127.0.0.1:5000/api";
 
 // Parse Integer of Goal ID
-const goalId = parseInt(goal_id)
+const goalId = parseInt(goal_id);
 
 // Performance Record Charts
 const chartReps = document.getElementById('goal_reps');
@@ -13,7 +13,7 @@ const chartTimeSec = document.getElementById('goal_time_sec');
 async function getGoal() {
 
   const resp = await axios.get(`${BASE_URL}/goal/${goalId}`);
-  return resp.data.goal_json
+  return resp.data.goal_json;
 
 }
 
@@ -21,7 +21,7 @@ async function getGoal() {
 async function getPerformance() {
 
   const resp = await axios.get(`${BASE_URL}/goal/${goalId}/performance`);
-  return resp.data.performance_json
+  return resp.data.performance_json;
 
 }
 
@@ -39,19 +39,19 @@ async function getPerformanceData(performance, variableToGet) {
 
 async function start() {
 
-  const goal = await getGoal()
-  const performance = await getPerformance()
-  const performanceDates = await getPerformanceData(performance, "date")
+  const goal = await getGoal();
+  const performance = await getPerformance();
+  const performanceDates = await getPerformanceData(performance, "date");
 
-  const goalReps = performanceDates.map(() => {return goal.goal_reps})
-  const goalSets = performanceDates.map(() => {return goal.goal_sets})
-  const goalWeightLbs = performanceDates.map(() => {return goal.goal_weight_lbs})
-  const goalTimeSec = performanceDates.map(() => {return goal.goal_time_sec})
+  const goalReps = performanceDates.map(() => {return goal.goal_reps});
+  const goalSets = performanceDates.map(() => {return goal.goal_sets});
+  const goalWeightLbs = performanceDates.map(() => {return goal.goal_weight_lbs});
+  const goalTimeSec = performanceDates.map(() => {return goal.goal_time_sec});
 
-  const performanceReps = await getPerformanceData(performance, "performance_reps")
-  const performanceSets = await getPerformanceData(performance, "performance_sets")
-  const performanceWeightLbs = await getPerformanceData(performance, "performance_weight_lbs")
-  const performanceTimeSec = await getPerformanceData(performance, "performance_time_sec")
+  const performanceReps = await getPerformanceData(performance, "performance_reps");
+  const performanceSets = await getPerformanceData(performance, "performance_sets");
+  const performanceWeightLbs = await getPerformanceData(performance, "performance_weight_lbs");
+  const performanceTimeSec = await getPerformanceData(performance, "performance_time_sec");
 
   if (chartReps){
 
@@ -60,17 +60,19 @@ async function start() {
       data: {
         labels: performanceDates,
         datasets: [
+
+        {
+          label: 'Actual Reps',
+          data: performanceReps,
+          borderWidth: 1
+        },
           
         {
           label: 'Goal Reps',
           data: goalReps,
           borderWidth: 1
-        },
-        {
-          label: 'Actual Reps',
-          data: performanceReps,
-          borderWidth: 1
         }
+
       ]
       },
       options: {
@@ -91,17 +93,19 @@ async function start() {
       data: {
         labels: performanceDates,
         datasets: [
+
+        {
+          label: 'Actual Sets',
+          data: performanceSets,
+          borderWidth: 1
+        },
           
         {
           label: 'Goal Sets',
           data: goalSets,
           borderWidth: 1
-        },
-        {
-          label: 'Actual Sets',
-          data: performanceSets,
-          borderWidth: 1
         }
+
       ]
       },
       options: {
@@ -122,17 +126,19 @@ async function start() {
       data: {
         labels: performanceDates,
         datasets: [
+
+        {
+          label: 'Actual Weight - (LBS.)',
+          data: performanceWeightLbs,
+          borderWidth: 1
+        },
           
         {
           label: 'Goal Weight - (LBS.)',
           data: goalWeightLbs,
           borderWidth: 1
-        },
-        {
-          label: 'Actual Weight - (LBS.)',
-          data: performanceWeightLbs,
-          borderWidth: 1
         }
+
       ]
       },
       options: {
@@ -153,17 +159,19 @@ async function start() {
       data: {
         labels: performanceDates,
         datasets: [
+        
+        {
+          label: 'Actual time - (Seconds)',
+          data: performanceTimeSec,
+          borderWidth: 1
+        },
           
         {
           label: 'Goal Time - (Seconds)',
           data: goalTimeSec,
           borderWidth: 1
-        },
-        {
-          label: 'Actual time - (Seconds)',
-          data: performanceTimeSec,
-          borderWidth: 1
         }
+
       ]
       },
       options: {
