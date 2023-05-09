@@ -249,6 +249,11 @@ class Goal(db.Model):
         nullable=True
     )
 
+    goal_distance_miles = db.Column(
+        db.Integer,
+        nullable=True
+    )
+
     exercise = db.relationship('Exercise')
     performance = db.relationship('Performance', backref='goal', cascade='all, delete-orphan')
 
@@ -315,6 +320,11 @@ class Performance(db.Model):
     )
 
     performance_weight_lbs = db.Column(
+        db.Integer,
+        nullable=True
+    )
+
+    performance_distance_miles = db.Column(
         db.Integer,
         nullable=True
     )
