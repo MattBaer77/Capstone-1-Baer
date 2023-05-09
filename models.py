@@ -12,6 +12,8 @@ db = SQLAlchemy()
 
 ##############################################################################
 
+
+
 ###
 
 # Level 1 - General Exercise Info
@@ -42,12 +44,10 @@ class Exercise(db.Model):
 
 ###
 
-
-
 # Level 2 - User & Exercise Planning
 
 class User(db.Model):
-    """User in the system."""
+    """User in the system"""
 
     __tablename__ = 'users'
 
@@ -88,8 +88,8 @@ class User(db.Model):
     
     @classmethod
     def signup(cls, username, email, password):
-        """Sign up user.
-        Hashes password and adds user to db session.
+        """Sign up user
+        Hashes password and adds user to db session
         """
 
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
@@ -105,12 +105,12 @@ class User(db.Model):
 
     @classmethod
     def authenticate(cls, username, password):
-        """Find user with `username` and `password`.
+        """Find user with `username` and `password`
 
         Search for a user whose password hash matches this password
-        and, if it finds such a user, returns that user object.
+        and, if it finds such a user, returns that user object
 
-        If can't find matching user (or if password is wrong), returns False.
+        If can't find matching user (or if password is wrong), returns False
         """
 
         user = cls.query.filter_by(username=username).first()
@@ -160,8 +160,8 @@ class Workout(db.Model):
     @classmethod
     def create(cls, description, owner_user_id):
         """
-            Creates a new workout.
-            Sets author_user_id to creator.
+            Creates a new workout
+            Sets author_user_id to creator
         """
 
         workout = Workout(
@@ -176,9 +176,9 @@ class Workout(db.Model):
     @classmethod
     def copy(cls, workout_to_copy, owner_user_id):
         """
-            Creates a copied workout.
-            Sets author_user_id to original author.
-            Copies the workout's goals.
+            Creates a copied workout
+            Sets author_user_id to original author
+            Copies the workout's goals
         """
 
         copied_workout = Workout(
@@ -186,8 +186,6 @@ class Workout(db.Model):
             owner_user_id=owner_user_id,
             author_user_id=workout_to_copy.author_user_id
         )
-
-        # Copy Goals
 
         db.session.add(copied_workout)
         db.session.commit()
@@ -255,7 +253,7 @@ class Goal(db.Model):
     performance = db.relationship('Performance', backref='goal', cascade='all, delete-orphan')
 
     def serialize(self):
-        """Returns a dict representation of goal."""
+        """Returns a dict representation of goal"""
         return {
             'id': self.id,
             'workout_id': self.workout_id,
@@ -269,8 +267,6 @@ class Goal(db.Model):
 
 
 ###
-
-
 
 # Level 3 - User Performs Exercise and records Performance
 
@@ -337,12 +333,9 @@ class Performance(db.Model):
         }
 
 
-
 ##############################################################################
 def connect_db(app):
-    """Connect this database to provided Flask app.
-
-    You should call this in your Flask app.
+    """Connect this database to provided Flask app
     """
 
     db.app = app
