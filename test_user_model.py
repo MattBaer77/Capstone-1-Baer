@@ -15,6 +15,7 @@ os.environ['DATABASE_URL'] = "postgresql:///routine_test"
 
 from app import app
 
+db.drop_all()
 db.create_all()
 
 class UserModelTestCase(TestCase):
