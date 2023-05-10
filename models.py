@@ -225,7 +225,8 @@ class Goal(db.Model):
 
     exercise_id = db.Column(
         db.Integer,
-        db.ForeignKey('exercises.id', ondelete="CASCADE")
+        db.ForeignKey('exercises.id', ondelete="CASCADE"),
+        nullable=False
     )
 
     goal_reps = db.Column(

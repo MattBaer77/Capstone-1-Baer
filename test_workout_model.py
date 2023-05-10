@@ -208,7 +208,7 @@ class WorkoutModelTestCase(TestCase):
         # Workout 3 should be the 5th workout
         self.assertEqual(workouts.index(workout_3), 4)
         
-        # Did workout index increment?
+        # Did workout id increment?
         self.assertEqual(workout_3.id, (workouts[3].id + 1))
 
     def test_workout_backref(self):
