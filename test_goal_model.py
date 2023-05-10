@@ -159,7 +159,7 @@ class GoalModelTestCase(TestCase):
         )
 
         db.session.add(performance_1)
-        db.session.commit
+        db.session.commit()
 
         self.user1_testID = user1.id
         self.user1 = user1
