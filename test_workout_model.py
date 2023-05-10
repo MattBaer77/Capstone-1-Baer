@@ -211,7 +211,7 @@ class WorkoutModelTestCase(TestCase):
         # Did workout id increment?
         self.assertEqual(workout_3.id, (workouts[3].id + 1))
 
-    def test_workout_backref(self):
+    def test_owner_and_author_backref(self):
 
         user1 = User.query.get(1)
         user2 = User.query.get(2)

@@ -2,7 +2,7 @@
 User model tests.
 
 Run with:
-python -m unittest test_workout_model.py
+python -m unittest test_goal_model.py
 """
 
 import os
@@ -148,6 +148,19 @@ class GoalModelTestCase(TestCase):
         db.session.add_all([goal_1, goal_2, goal_3, goal_4, goal_5, goal_6])
         db.session.commit()
 
+        performance_1 = Performance(
+
+            goal_id = goal_1.id,
+            performance_reps = 1,
+            performance_sets = 2,
+            performance_weight_lbs = 3,
+            performance_time_sec = 4,
+            performance_distance_miles = 5.1
+        )
+
+        db.session.add(performance_1)
+        db.session.commit
+
         self.user1_testID = user1.id
         self.user1 = user1
         self.user2 = user2
@@ -184,10 +197,20 @@ class GoalModelTestCase(TestCase):
 
         self.assertEqual(goal_7.id, 7)
         self.assertEqual(goal_7.exercise_id, 1)
+        self.assertEqual(goal_7.goal_reps, 1)
         self.assertEqual(goal_7.goal_sets, 2)
         self.assertEqual(goal_7.goal_time_sec, 3)
         self.assertEqual(goal_7.goal_weight_lbs, 4)
         self.assertEqual(goal_7.goal_distance_miles, 5.1)
+
+        # Ensure appropriate defaults are set on unspecified values
+        self.assertEqual(goals[5].id, 6)
+        self.assertEqual(goals[5].exercise_id, 1)
+        self.assertEqual(goals[5].goal_sets, 1)
+        self.assertEqual(goals[5].goal_reps, 1)
+        self.assertEqual(goals[5].goal_time_sec, None)
+        self.assertEqual(goals[5].goal_weight_lbs, None)
+        self.assertEqual(goals[5].goal_distance_miles, None)
 
         # Goal 7 should be in goals
         self.assertIn(goal_7, goals)
@@ -198,127 +221,92 @@ class GoalModelTestCase(TestCase):
         # Did goal id increment?
         self.assertEqual(goal_7.id, (goals[5].id + 1))
 
+    def test_workout_backref(self):
+        """"""
 
+        goals = Goal.query.order_by(Goal.id.asc()).all()
+        workout = Workout.query.get(1)
 
+        self.assertEqual(goals[0].workout.id, 1)
+        self.assertEqual(goals[0].workout, workout)
 
+    def test_exercise_relationship(self):
+        """"""
 
-    # def test_workout_model(self):
-    #     """Set up a fifth workout - Does basic model work? - Do all attributes and defaults work?"""
+        goals = Goal.query.order_by(Goal.id.asc()).all()
+        exercise = Exercise.query.get(1)
 
-    #     workout_3 = Workout(
+        self.assertEqual(goals[0].exercise.id, 1)
+        self.assertEqual(goals[0].exercise, exercise)
 
-    #         description="Workout 3",
-    #         owner_user_id="1",
-    #         author_user_id="1"
+    def test_performance_relationship(self):
+        """"""
 
-    #     )
+        goal = Goal.query.get(1)
+        performance = Performance.query.get(1)
 
-    #     db.session.add(workout_3)
-    #     db.session.commit()
+        self.assertEqual(len(goal.performance), 1)
+        self.assertEqual(goal.performance, [performance])
+        self.assertEqual(goal.performance[0].id, performance.id)
 
-    #     workouts = Workout.query.order_by(Workout.id.asc()).all()
+    def test_serialize(self):
+        """"""
 
-    #     self.assertEqual(workout_3.id, 5)
-    #     self.assertEqual(workout_3.owner_user_id, 1)
-    #     self.assertEqual(workout_3.author_user_id, 1)
+        goal_1 = Goal.query.get(1)
+        goal_6 = Goal.query.get(6)
 
-    #     # Workout 3 should be in workouts
-    #     self.assertIn(workout_3, workouts)
+        self.assertEqual(goal_1.serialize(),
+                {
+                    'id': goal_1.id,
+                    'workout_id': goal_1.workout_id,
+                    'exercise_id': goal_1.exercise_id,
+                    'goal_reps': goal_1.goal_reps,
+                    'goal_sets': goal_1.goal_sets,
+                    'goal_time_sec': goal_1.goal_time_sec,
+                    'goal_weight_lbs': goal_1.goal_weight_lbs,
+                    'goal_distance_miles': goal_1.goal_distance_miles
+                }
+            
+            )
 
-    #     # Workout 3 should be the 5th workout
-    #     self.assertEqual(workouts.index(workout_3), 4)
-        
-    #     # Did workout index increment?
-    #     self.assertEqual(workout_3.id, (workouts[3].id + 1))
+        self.assertEqual(goal_6.serialize(),
+                {
+                    'id': goal_6.id,
+                    'workout_id': goal_6.workout_id,
+                    'exercise_id': goal_6.exercise_id,
+                    'goal_reps': goal_6.goal_reps,
+                    'goal_sets': goal_6.goal_sets,
+                    'goal_time_sec': goal_6.goal_time_sec,
+                    'goal_weight_lbs': goal_6.goal_weight_lbs,
+                    'goal_distance_miles': goal_6.goal_distance_miles
+                }
+            
+            )
 
-    # def test_workout_get_author(self):
+        self.assertEqual(goal_1.serialize(),
+                {
+                    'id': 1,
+                    'workout_id': 1,
+                    'exercise_id': 1,
+                    'goal_reps': 1,
+                    'goal_sets': 2,
+                    'goal_time_sec': 3,
+                    'goal_weight_lbs': 4,
+                    'goal_distance_miles': 5.1
+                }
+            
+            )
 
-    #     user1 = User.query.get(1)
-    #     user2 = User.query.get(2)
-    #     workout_1 = Workout.query.get(1)
-    #     workout_2_1 = Workout.query.get(3)
-
-    #     self.assertEqual(workout_1.get_author(), user1)
-    #     self.assertEqual(workout_2_1.get_author(), user1)
-
-    # def test_workout_create(self):
-    #     """Create a fifth workout - Does basic model work? - Do all attributes and defaults work?"""
-
-    #     workout_3 = Workout.create(
-
-    #         description="Workout 3",
-    #         owner_user_id="1",
-
-    #     )
-
-    #     db.session.add(workout_3)
-    #     db.session.commit()
-
-    #     workouts = Workout.query.order_by(Workout.id.asc()).all()
-
-    #     self.assertEqual(workout_3.id, 5)
-    #     self.assertEqual(workout_3.owner_user_id, 1)
-    #     self.assertEqual(workout_3.author_user_id, 1)
-
-    #     # Workout 3 should be in workouts
-    #     self.assertIn(workout_3, workouts)
-
-    #     # Workout 3 should be the 5th workout
-    #     self.assertEqual(workouts.index(workout_3), 4)
-        
-    #     # Did workout index increment?
-    #     self.assertEqual(workout_3.id, (workouts[3].id + 1))
-
-    # def test_workout_copy(self):
-    #     """Create a fifth workout - Does basic model work? - Do all attributes and defaults work?"""
-
-    #     workout_1 = Workout.query.get(1)
-
-    #     workout_3 = Workout.copy(
-
-    #         workout_1,
-    #         2
-
-    #     )
-
-    #     db.session.add(workout_3)
-    #     db.session.commit()
-
-    #     workouts = Workout.query.order_by(Workout.id.asc()).all()
-
-    #     self.assertEqual(workout_3.id, 5)
-    #     self.assertEqual(workout_3.owner_user_id, 2)
-    #     self.assertEqual(workout_3.author_user_id, 1)
-
-    #     # Workout 3 should be in workouts
-    #     self.assertIn(workout_3, workouts)
-
-    #     # Workout 3 should be the 5th workout
-    #     self.assertEqual(workouts.index(workout_3), 4)
-        
-    #     # Did workout index increment?
-    #     self.assertEqual(workout_3.id, (workouts[3].id + 1))
-
-    # def test_workout_backref(self):
-
-    #     user1 = User.query.get(1)
-    #     user2 = User.query.get(2)
-    #     workout_1 = Workout.query.get(1)
-    #     workout_2_1 = Workout.query.get(3)
-
-    #     self.assertEqual(workout_1.owner, user1)
-    #     self.assertEqual(workout_1.author, user1)
-
-    #     self.assertEqual(workout_2_1.owner, user2)
-    #     self.assertEqual(workout_2_1.author, user1)
-
-    # def test_goal_relationship(self):
-
-    #     workout_1 = Workout.query.get(1)
-    #     workout_2 = Workout.query.get(2)
-
-    #     goal = Goal.query.get(1)
-
-    #     self.assertEqual(workout_1.goals, [goal])
-    #     self.assertEqual(workout_1.goals[0], goal)
-    #     self.assertEqual(workout_2.goals, [])
+        self.assertEqual(goal_6.serialize(),
+                {
+                    'id': 6,
+                    'workout_id': 1,
+                    'exercise_id': 1,
+                    'goal_reps': 1,
+                    'goal_sets': 1,
+                    'goal_time_sec': None,
+                    'goal_weight_lbs': None,
+                    'goal_distance_miles': None
+                }
+            
+            )
