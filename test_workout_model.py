@@ -1,5 +1,5 @@
 """
-User model tests.
+Workout model tests.
 
 Run with:
 python -m unittest test_workout_model.py

@@ -1,5 +1,5 @@
 """
-User model tests.
+Goal model tests.
 
 Run with:
 python -m unittest test_goal_model.py

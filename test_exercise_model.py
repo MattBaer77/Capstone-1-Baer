@@ -1,8 +1,8 @@
 """
-User model tests.
+Exercise model tests.
 
 Run with:
-python -m unittest test_workout_model.py
+python -m unittest test_exercise_model.py
 """
 
 import os

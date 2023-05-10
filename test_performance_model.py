@@ -1,5 +1,5 @@
 """
-User model tests.
+Performance model tests.
 
 Run with:
 python -m unittest test_performance_model.py
