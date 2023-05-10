@@ -252,7 +252,7 @@ class Goal(db.Model):
     )
 
     goal_distance_miles = db.Column(
-        db.Integer,
+        db.Float,
         nullable=True
     )
 
