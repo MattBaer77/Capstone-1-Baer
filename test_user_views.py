@@ -1,5 +1,5 @@
 """
-User model tests.
+User views tests.
 
 Run with:
 python -m unittest test_user_views.py
@@ -53,54 +53,12 @@ class UserViewsTestCase(TestCase):
 
         )
 
-        exercise_1 = Exercise(
-            name="Exercise 1",
-            description="The First Exercise"
-        )
-
-        workout_1 = Workout(
-
-            description="Workout Number One",
-            owner_user_id=1,
-            author_user_id=1
-
-        )
-
-        workout_2 = Workout(
-
-            description="Workout Number Two",
-            owner_user_id=2,
-            author_user_id=2
-
-        )
-
-        workout_2_1 = Workout(
-
-            description="Workout Number 2-1",
-            owner_user_id=2,
-            author_user_id=1
-
-        )
-
-        workout_1_2 = Workout(
-
-            description="Workout Number 1-2",
-            owner_user_id=1,
-            author_user_id=2
-
-        )
-
-        db.session.add_all([user1, user2, exercise_1, workout_1, workout_2, workout_2_1, workout_1_2])
+        db.session.add_all([user1, user2])
         db.session.commit()
 
         self.user1_testID = user1.id
         self.user1 = user1
         self.user2 = user2
-        self.exercise_1 = exercise_1
-        self.workout_1 = workout_1
-        self.workout_2 = workout_2
-        self.workout_2_1 = workout_2_1
-        self.workout_1_2 = workout_1_2
 
     def tearDown(self):
         """Clean up any fouled transaction. Remove data from database after test completed."""
