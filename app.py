@@ -755,6 +755,10 @@ def begin_step(workout_id):
 
     goals = Goal.query.filter(Goal.workout_id == workout_id).order_by(Goal.id.asc()).all()
 
+    if len(goals) <= 0:
+        flash("You must add goals to a workout prior to starting.", "danger")
+        return redirect('/')
+
     session[GOAL_ID_CURRENT] = goals[0].id
 
     session[PERFORMANCE_RECORDS_CAPTURED_IDS] = []
