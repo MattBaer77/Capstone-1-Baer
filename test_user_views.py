@@ -16,7 +16,7 @@ from models import db, User, Exercise, Workout, Goal, Performance
 
 os.environ['DATABASE_URL'] = "postgresql:///routine_test"
 
-from app import app
+from app import app, CURR_USER_KEY
 
 db.drop_all()
 db.create_all()
@@ -110,47 +110,112 @@ class UserViewsTestCase(TestCase):
         db.create_all()
 
     def test_user_signup_get(self):
-        """"""
-    def test_user_signup_post_success(self):
-        """"""
-    def test_user_signup_post_success_redirect(self):
-        """"""
-    def test_user_signup_post_already_logged_in_redirect(self):
-        """"""
-    def test_user_signup_post_duplicate_username(self):
-        """"""
-    def test_user_signup_post_duplicate_email(self):
-        """"""
+        """Can a user view sign up page"""
 
+        with self.client as c:
+
+            resp = c.get("/signup")
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn('<button class="btn btn-primary my-4">Signup</button>', html)
+
+
+    def test_user_signup_post_success(self):
+        """Can a user sign up"""
+
+        with self.client as c:
+
+            resp = c.post("/signup", data={"username" : "test3user", "email" : "test3@test.com", "password" : "testuser3"})
+
+            self.assertEqual(resp.status_code, 302)
+            html = resp.get_data(as_text=True)
+            self.assertIn('<a href="/">/</a>', html)
+    
+
+    def test_user_signup_post_success_redirect(self):
+        """Is a user appropriately redirected if successful signup"""
+
+        with self.client as c:
+
+            resp = c.post("/signup", data={"username" : "test3user", "email" : "test3@test.com", "password" : "testuser3"}, follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Let's do this test3user!", html)
+
+    def test_user_signup_post_already_logged_in_redirect(self):
+        """User redirected away from login page if logged in"""
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user1.id
+            
+            resp = c.get("/login", follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn('You are already logged in!', html)
+
+    def test_user_signup_post_duplicate_username(self):
+        """Is a user appropriately redirected if using duplicate username"""
+
+        with self.client as c:
+
+            resp = c.post("/signup", data={"username" : "test2user", "email" : "test3@test.com", "password" : "testuser3"}, follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn('Username or email already taken', html)
+
+    def test_user_signup_post_duplicate_email(self):
+        """Is a user appropriately redirected if using duplicate email"""
+
+        with self.client as c:
+
+            resp = c.post("/signup", data={"username" : "test3user", "email" : "test2@test.com", "password" : "testuser3"}, follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn('Username or email already taken', html)
 
     def test_user_login_get_success(self):
-        """"""
-    def test_user_already_logged_in_get(self):
-        """"""
+        """Can a user view sign up page"""
 
-    def test_user_login_post_success(self):
-        """"""
-    def test_user_login_post_success_redirect(self):
-        """"""
-    def test_user_login_post_wrong_username(self):
-        """"""
-    def test_user_login_post_wrong_password(self):
-        """"""
-    def test_user_logout(self):
-        """"""
+        with self.client as c:
 
-    def test_user_edit_get_success(self):
-        """"""
-    def test_user_edit_get_not_user(self):
-        """"""
+            resp = c.get("/login")
 
-    def test_user_edit_post(self):
-        """"""
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn('<button class="btn btn-primary my-4">Login</button>', html)
+    
+    # def test_user_already_logged_in_get(self):
+    #     """"""
 
-    def test_user_delete_post(self):
-        """"""
+    # def test_user_login_post_success(self):
+    #     """"""
+    # def test_user_login_post_success_redirect(self):
+    #     """"""
+    # def test_user_login_post_wrong_username(self):
+    #     """"""
+    # def test_user_login_post_wrong_password(self):
+    #     """"""
+    # def test_user_logout(self):
+    #     """"""
 
-    def test_user_logged_out_root(self):
-        """"""
-    def test_user_logged_in_root(self):
-        """"""
+    # def test_user_edit_get_success(self):
+    #     """"""
+    # def test_user_edit_get_not_user(self):
+    #     """"""
+
+    # def test_user_edit_post(self):
+    #     """"""
+
+    # def test_user_delete_post(self):
+    #     """"""
+
+    # def test_user_logged_out_root(self):
+    #     """"""
+    # def test_user_logged_in_root(self):
+    #     """"""
