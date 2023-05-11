@@ -21,7 +21,7 @@ db.drop_all()
 db.create_all()
 
 class GoalModelTestCase(TestCase):
-    """Test models for Workout."""
+    """Test models for Goal."""
 
     def setUp(self):
         """Create test client, add sample data."""

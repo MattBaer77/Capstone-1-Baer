@@ -21,8 +21,10 @@ from app import app
 db.drop_all()
 db.create_all()
 
-class PerformanceModelTestCase(TestCase):
-    """Test models for Workout."""
+app.config['WTF_CSRF_ENABLED'] = False
+
+class UserViewsTestCase(TestCase):
+    """Test models for User Views."""
 
     def setUp(self):
         """Create test client, add sample data."""
@@ -88,123 +90,6 @@ class PerformanceModelTestCase(TestCase):
 
         db.session.add_all([user1, user2, exercise_1, workout_1, workout_2, workout_2_1, workout_1_2])
         db.session.commit()
-
-        goal_1 = Goal(
-
-            workout_id = workout_1.id,
-            exercise_id = exercise_1.id,
-            goal_reps = 1,
-            goal_sets = 2,
-            goal_time_sec = 3,
-            goal_weight_lbs = 4,
-            goal_distance_miles = 5.1
-
-        )
-
-        goal_2 = Goal(
-
-            workout_id = workout_1.id,
-            exercise_id = exercise_1.id,
-            goal_reps = 1,
-            goal_sets = 2,
-            goal_time_sec = 3,
-            goal_weight_lbs = 4
-
-        )
-
-        goal_3 = Goal(
-
-            workout_id = workout_1.id,
-            exercise_id = exercise_1.id,
-            goal_reps = 1,
-            goal_sets = 2,
-            goal_time_sec = 3
-
-        )
-
-        goal_4 = Goal(
-
-            workout_id = workout_1.id,
-            exercise_id = exercise_1.id,
-            goal_reps = 1,
-            goal_sets = 2
-
-        )
-
-        goal_5 = Goal(
-
-            workout_id = workout_1.id,
-            exercise_id = exercise_1.id,
-            goal_reps = 1
-
-        )
-
-        goal_6 = Goal(
-
-            workout_id = workout_1.id,
-            exercise_id = exercise_1.id
-
-        )
-
-        db.session.add_all([goal_1, goal_2, goal_3, goal_4, goal_5, goal_6])
-        db.session.commit()
-
-        goals = Goal.query.order_by(Goal.id.asc()).all()
-
-        for goal in goals:
-
-            performance_1 = Performance(
-
-                goal_id = goal.id,
-                performance_reps = 1,
-                performance_sets = 2,
-                performance_weight_lbs = 3,
-                performance_time_sec = 4,
-                performance_distance_miles = 5.1
-            )
-
-            performance_2 = Performance(
-
-                goal_id = goal.id,
-                performance_reps = 1,
-                performance_sets = 2,
-                performance_weight_lbs = 3,
-                performance_time_sec = 4
-                
-            )
-
-            performance_3 = Performance(
-
-                goal_id = goal.id,
-                performance_reps = 1,
-                performance_sets = 2,
-                performance_weight_lbs = 3
-
-            )
-
-            performance_4 = Performance(
-
-                goal_id = goal.id,
-                performance_reps = 1,
-                performance_sets = 2
-
-            )
-
-            performance_5 = Performance(
-
-                goal_id = goal.id,
-                performance_reps = 1
-
-            )
-
-            performance_6 = Performance(
-
-                goal_id = goal.id
-
-            )
-
-            db.session.add_all([performance_1, performance_2, performance_3, performance_4, performance_5, performance_6])
-            db.session.commit()
 
         self.user1_testID = user1.id
         self.user1 = user1

@@ -20,8 +20,8 @@ from app import app
 db.drop_all()
 db.create_all()
 
-class GoalModelTestCase(TestCase):
-    """Test models for Workout."""
+class ExerciseModelTestCase(TestCase):
+    """Test models for Exercise."""
 
     def setUp(self):
         """Create test client, add sample data."""

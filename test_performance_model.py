@@ -22,7 +22,7 @@ db.drop_all()
 db.create_all()
 
 class PerformanceModelTestCase(TestCase):
-    """Test models for Workout."""
+    """Test models for Performance."""
 
     def setUp(self):
         """Create test client, add sample data."""
