@@ -255,8 +255,15 @@ class WorkoutViewsTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 302)
 
-    # def test_add_workout_goal_get_wrong_user(self):
-    #     """Test /workout/id/goal-add route - produces correct form if correct user not signed in"""
+    def test_add_workout_goal_get_wrong_user(self):
+        """Test /workout/id/goal-add route - produces correct form if correct user not signed in"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user2.id
+
+            resp = c.get("/workout/1/goal-add")
+
+            self.assertEqual(resp.status_code, 302)
     
     # def test_add_workout_goal_post(self):
     #     """Test /workout/id/goal-add route"""
@@ -269,10 +276,16 @@ class WorkoutViewsTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 302)
 
-    # def test_add_workout_goal_post_wrong_user(self):
-    #     """Test /workout/id/goal-add route - if correct user not signed in"""
+    def test_add_workout_goal_post_wrong_user(self):
+        """Test /workout/id/goal-add route - if correct user not signed in"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user2.id
 
-    
+            resp = c.post("/workout/1/goal-add", data={"workout_id" : "1", "exercise_id" : "1", "goal_reps" : "1", "goal_sets" : "2", "goal_time_sec" : "3", "goal_weight_lbs" : "4", "goal_distance_miles" : "5.1"})
+            
+            self.assertEqual(resp.status_code, 302)
+
     def test_edit_workout_get(self):
         """Test /workout/id/edit route - produces correct form"""
         with self.client as c:
@@ -295,8 +308,15 @@ class WorkoutViewsTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 302)
 
-    # def test_edit_workout_get_wrong_user(self):
-    #     """Test /workout/id/edit route - produces correct form if correct user not logged in"""
+    def test_edit_workout_get_wrong_user(self):
+        """Test /workout/id/edit route - produces correct form if correct user not logged in"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user2.id
+
+            resp = c.get("/workout/1/edit")
+            
+            self.assertEqual(resp.status_code, 302)
     
     # def test_edit_workout_post(self):
     #     """Test /workout/id/edit route"""
@@ -309,12 +329,25 @@ class WorkoutViewsTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 302)
 
-    # def test_edit_workout_post_wrong_user(self):
-    #     """Test /workout/id/edit route - if correct user not logged in"""
+    def test_edit_workout_post_wrong_user(self):
+        """Test /workout/id/edit route - if correct user not logged in"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user2.id
 
-    
-    # def test_delete_workout_post(self):
-    #     """Test /workout/id/delete"""
+            resp = c.post("/workout/1/edit", data={"description" : "Workout Number 1"})
+            
+            self.assertEqual(resp.status_code, 302)
+
+    def test_delete_workout_post(self):
+        """Test /workout/id/delete"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user1.id
+
+            resp = c.post("/workout/1/delete")
+            
+            self.assertEqual(resp.status_code, 302)
 
     def test_delete_workout_post_no_user(self):
         """Test /workout/id/delete - if user not logged in"""
@@ -324,9 +357,15 @@ class WorkoutViewsTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 302)
 
-    # def test_delete_workout_post_wrong_user(self):
-    #     """Test /workout/id/delete - if correct user not logged in"""
+    def test_delete_workout_post_wrong_user(self):
+        """Test /workout/id/delete - if correct user not logged in"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user2.id
 
+            resp = c.post("/workout/1/delete")
+            
+            self.assertEqual(resp.status_code, 302)
 
     def test_start_workout_stepthrough(self):
         """Test /workout/id/step begins a step"""
@@ -432,7 +471,7 @@ class WorkoutViewsTestCase(TestCase):
 
     #     with self.client as c:
 
-    #         resp = c.post("/signup", data={"username" : "test2user", "email" : "test3@test.com", "password" : "testuser3"}, follow_redirects=True)
+            # resp = c.post("/signup", data={"username" : "test2user", "email" : "test3@test.com", "password" : "testuser3"}, follow_redirects=True)
 
     #         self.assertEqual(resp.status_code, 200)
     #         html = resp.get_data(as_text=True)
