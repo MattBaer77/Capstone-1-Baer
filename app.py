@@ -145,6 +145,16 @@ def increment_step(goal_id, next_step_goal_id, performance_record_id):
     session[GOAL_ID_CURRENT] = next_step_goal_id
     session[PERFORMANCE_RECORDS_CAPTURED_IDS].append(performance_record_id)
 
+def check_for_stepthrough_with_message(message, category):
+    """
+    Check for a started stepthrough.
+    If a stepthrough is started, return True
+    """
+
+    if GOAL_ID_CURRENT in session:
+        flash(message, category)
+        return True
+
 
 ##############################################################################
 
@@ -162,6 +172,9 @@ def signup():
 
     if check_for_user_with_message("You are already logged in!", "success"):
         return redirect('/')
+
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
 
     form = UserAddForm()
 
@@ -193,6 +206,9 @@ def login():
     if check_for_user_with_message("You are already logged in!", "success"):
         return redirect('/')
 
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
+
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -213,6 +229,9 @@ def login():
 def logout():
     """Handle logout of user."""
 
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
+
     do_logout()
     flash("Goodbye!", "info")
     return redirect('/')
@@ -224,6 +243,9 @@ def edit_user():
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
+
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
 
     form = UserEditForm(obj=g.user)
 
@@ -258,6 +280,9 @@ def delete_user():
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
+
     do_logout()
 
     workouts_authored = Workout.query.filter(Workout.author_user_id == g.user.id).all()
@@ -288,6 +313,9 @@ def view_workouts():
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
+
     search = request.args.get('q')
 
     if not search:
@@ -311,6 +339,9 @@ def add_workout():
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
+
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
 
     form = WorkoutAddForm()
 
@@ -344,6 +375,9 @@ def view_workout(workout_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
+
     workout = Workout.query.get_or_404(workout_id)
 
     form = WorkoutCopyForm(obj=workout)
@@ -362,6 +396,9 @@ def copy_workout(workout_id):
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
+
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
 
     workout = Workout.query.get_or_404(workout_id)
 
@@ -390,6 +427,9 @@ def add_workout_goal(workout_id):
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
+
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
 
     workout = Workout.query.get_or_404(workout_id)
 
@@ -436,6 +476,9 @@ def edit_workout(workout_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
+
     workout = Workout.query.get_or_404(workout_id)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
@@ -470,6 +513,9 @@ def edit_goal(goal_id):
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
+
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
 
     goal = Goal.query.get_or_404(goal_id)
 
@@ -516,6 +562,9 @@ def delete_goal(goal_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
+
     goal = Goal.query.get_or_404(goal_id)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
@@ -539,6 +588,9 @@ def delete_workout(workout_id):
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
+
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
 
     workout = Workout.query.get_or_404(workout_id)
 
@@ -565,6 +617,9 @@ def view_goal_performance(goal_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
+
     goal = Goal.query.get_or_404(goal_id)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
@@ -589,6 +644,9 @@ def edit_performance_record(performance_id):
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
+
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
 
     performance = Performance.query.get_or_404(performance_id)
 
@@ -633,6 +691,9 @@ def api_send_goal(goal_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
+
     goal = Goal.query.get_or_404(goal_id)
 
     if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
@@ -650,6 +711,9 @@ def api_send_goal_performance(goal_id):
 
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
+
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
 
     goal = Goal.query.get_or_404(goal_id)
 
@@ -963,6 +1027,8 @@ def home():
     Return home-anon.html with this information
     """
 
+    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        return redirect('/finish')
 
     if check_for_user():
 
