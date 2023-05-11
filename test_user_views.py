@@ -120,7 +120,6 @@ class UserViewsTestCase(TestCase):
             html = resp.get_data(as_text=True)
             self.assertIn('<button class="btn btn-primary my-4">Signup</button>', html)
 
-
     def test_user_signup_post_success(self):
         """Can a user sign up"""
 
@@ -190,32 +189,158 @@ class UserViewsTestCase(TestCase):
             html = resp.get_data(as_text=True)
             self.assertIn('<button class="btn btn-primary my-4">Login</button>', html)
     
-    # def test_user_already_logged_in_get(self):
-    #     """"""
+    def test_user_already_logged_in_get(self):
+        """User redirected away from login page if logged in"""
 
-    # def test_user_login_post_success(self):
-    #     """"""
-    # def test_user_login_post_success_redirect(self):
-    #     """"""
-    # def test_user_login_post_wrong_username(self):
-    #     """"""
-    # def test_user_login_post_wrong_password(self):
-    #     """"""
-    # def test_user_logout(self):
-    #     """"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user1.id
+            
+            resp = c.get("/login", follow_redirects=True)
 
-    # def test_user_edit_get_success(self):
-    #     """"""
-    # def test_user_edit_get_not_user(self):
-    #     """"""
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn('You are already logged in!', html)
 
-    # def test_user_edit_post(self):
-    #     """"""
+    def test_user_login_post_success(self):
+        """Can a user log in"""
 
-    # def test_user_delete_post(self):
-    #     """"""
+        with self.client as c:
 
-    # def test_user_logged_out_root(self):
-    #     """"""
-    # def test_user_logged_in_root(self):
-    #     """"""
+            resp = c.post("/login", data={"username" : "test1user", "password" : "HASHED_PASSWORD1"})
+
+            self.assertEqual(resp.status_code, 302)
+            html = resp.get_data(as_text=True)
+            self.assertIn('<a href="/">/</a>', html)
+
+    def test_user_login_post_success_redirect(self):
+        """Can a user log in"""
+
+        with self.client as c:
+
+            resp = c.post("/login", data={"username" : "test1user", "password" : "HASHED_PASSWORD1"}, follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Let's do this test1user!", html)
+
+    def test_user_login_post_wrong_username(self):
+        """Is a user redirected and informed if username is incorrect"""
+
+        with self.client as c:
+
+            resp = c.post("/login", data={"username" : "testuser", "password" : "HASHED_PASSWORD1"}, follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn('Invalid credentials.', html)
+
+
+    def test_user_login_post_wrong_password(self):
+        """Is a user redirected and informed if password is incorrect"""
+
+        with self.client as c:
+
+            resp = c.post("/login", data={"username" : "test1user", "password" : "HASHED_PASSWORD_WRONG"}, follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn('Invalid credentials.', html)
+
+    def test_user_logout(self):
+        """Can a user log out?"""
+
+        with self.client as c:
+
+            resp = c.post("/logout", follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn('Goodbye!', html)
+
+    def test_user_edit_get_success(self):
+        """Test GET for the user edit page"""
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user1.id
+
+            resp = c.get("/user/edit")
+
+            self.assertEqual(resp.status_code, 200)
+
+            html = resp.get_data(as_text=True)
+
+            self.assertIn('<h1 class="mb-4">Edit Your Details</h1>', html)
+
+    def test_user_edit_get_not_user(self):
+        """Test GET for the user edit page if user is not logged in"""
+
+        with self.client as c:
+            resp = c.get("/user/edit")
+
+            self.assertEqual(resp.status_code, 302)
+
+    def test_user_edit_get_not_user_redirect(self):
+        """Test GET for the user edit page if user is not logged in - FOLLOW REDIRECT"""
+
+        with self.client as c:
+            resp = c.get("/user/edit", follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+
+            html = resp.get_data(as_text=True)
+
+            self.assertIn('Access unauthorized', html)
+
+    def test_user_edit_post(self):
+        """Test POST for the user edit page"""
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user1.id
+
+            resp = c.post("/user/edit", data={"username" : "Edited_test1user", "password" : "HASHED_PASSWORD1"}, follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+
+            self.assertIn("Edited_test1user", html)
+
+    def test_user_delete_post(self):
+        """Test POST for the user delete route"""
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user1.id
+
+            resp = c.post("/user/delete", follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+
+            self.assertIn("Join Routine and Get In The Game!", html)
+
+    def test_user_logged_in_root(self):
+        """Test GET for the / route if logged in"""
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user1.id
+
+            resp = c.get("/")
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+
+            self.assertIn("Let's do this test1user!", html)
+
+    def test_user_logged_out_root(self):
+        """Test GET for the / route if logged out"""
+
+        with self.client as c:
+
+            resp = c.get("/")
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+
+            self.assertIn("Join Routine and Get In The Game!", html)
