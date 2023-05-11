@@ -60,7 +60,7 @@ class WorkoutViewsTestCase(TestCase):
 
         workout_1 = Workout(
 
-            description="Workout Number One",
+            description="Workout Number 1",
             owner_user_id=1,
             author_user_id=1
 
@@ -68,7 +68,7 @@ class WorkoutViewsTestCase(TestCase):
 
         workout_2 = Workout(
 
-            description="Workout Number Two",
+            description="Workout Number 2",
             owner_user_id=2,
             author_user_id=2
 
@@ -111,96 +111,192 @@ class WorkoutViewsTestCase(TestCase):
 
     def test_view_workouts(self):
         """Test /workouts route if user signed in"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user1.id
 
-    def test_view_workouts_search(self):
-        """Test /workouts route if user signed in + search params"""
+            resp = c.get("/workouts")
 
-    def test_view_workouts_no_user(self):
-        """Test /workouts route if user not signed in"""
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+
+            self.assertIn("Can't find what you are looking for test1user?", html)
+            self.assertIn("Workout Number 2", html)
+
+
+
+    # def test_view_workouts_search(self):
+    #     """Test /workouts route if user signed in + search params"""
+
+    # def test_view_workouts_no_user(self):
+    #     """Test /workouts route if user not signed in"""
 
     
     def test_add_workout_get(self):
-        """Test /workout/add route GET produces correct form""""
+        """Test /workout/add route GET produces correct form"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user1.id
 
-    def test_add_workout_get_no_user(self):
-        """Test /workout/add route GET if user not signed in""""
+            resp = c.get("/workout/add")
 
-    def test_add_workout_post(self):
-        """Test /workout/add route POST""""
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+
+            self.assertIn("Create A New Workout" ,html)
+            self.assertIn("Let's give your workout a Name or Description:" ,html)
+
+    # def test_add_workout_get_no_user(self):
+    #     """Test /workout/add route GET if user not signed in""""
+
+    # def test_add_workout_post(self):
+    #     """Test /workout/add route POST""""
 
 
     def test_view_workout_get(self):
         """Test /workout/id route"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user1.id
 
-    def test_view_workout_get_no_user(self):
-        """Test /workout/id route if no user logged in"""
+            resp = c.get("/workout/1")
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+
+            self.assertIn("Workout Number 1", html)
+            self.assertIn("by test1user", html)
+
+    # def test_view_workout_get_no_user(self):
+    #     """Test /workout/id route if no user logged in"""
 
 
-    def test_copy_workout_post(self):
-        """Test /workout/id/copy route"""
+    # def test_copy_workout_post(self):
+    #     """Test /workout/id/copy route"""
 
-    def test_copy_workout_post_no_user(self):
-        """Test /workout/id/copy route if no user logged in"""
+    # def test_copy_workout_post_no_user(self):
+    #     """Test /workout/id/copy route if no user logged in"""
 
     
     def test_add_workout_goal_get(self):
         """Test /workout/id/goal-add route - produces correct form"""
-    
-    def test_add_workout_goal_get_no_user(self):
-        """Test /workout/id/goal-add route - produces correct form if user not signed in"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user1.id
 
-    def test_add_workout_goal_get_wrong_user(self):
-        """Test /workout/id/goal-add route - produces correct form if correct user not signed in"""
-    
-    def test_add_workout_goal_post(self):
-        """Test /workout/id/goal-add route"""
-    
-    def test_add_workout_goal_post_no_user(self):
-        """Test /workout/id/goal-add route - if user not signed in"""
+            resp = c.get("/workout/1/goal-add")
 
-    def test_add_workout_goal_post_wrong_user(self):
-        """Test /workout/id/goal-add route - if correct user not signed in"""
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+
+            self.assertIn("Add an Exercise Goal To Your Workout!", html)
+            self.assertIn('<button class="btn btn-primary my-4">Add</button>', html)
+    
+    # def test_add_workout_goal_get_no_user(self):
+    #     """Test /workout/id/goal-add route - produces correct form if user not signed in"""
+
+    # def test_add_workout_goal_get_wrong_user(self):
+    #     """Test /workout/id/goal-add route - produces correct form if correct user not signed in"""
+    
+    # def test_add_workout_goal_post(self):
+    #     """Test /workout/id/goal-add route"""
+    
+    # def test_add_workout_goal_post_no_user(self):
+    #     """Test /workout/id/goal-add route - if user not signed in"""
+
+    # def test_add_workout_goal_post_wrong_user(self):
+    #     """Test /workout/id/goal-add route - if correct user not signed in"""
 
     
     def test_edit_workout_get(self):
         """Test /workout/id/edit route - produces correct form"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user1.id
 
-    def test_edit_workout_get_no_user(self):
-        """Test /workout/id/edit route - produces correct form if user not logged in"""
+            resp = c.get("/workout/1/edit")
 
-    def test_edit_workout_get_wrong_user(self):
-        """Test /workout/id/edit route - produces correct form if correct user not logged in"""
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+
+            self.assertIn("Edit Your Workout", html)
+            self.assertIn('<button class="btn btn-primary my-4">Update</button>', html)
+
+    # def test_edit_workout_get_no_user(self):
+    #     """Test /workout/id/edit route - produces correct form if user not logged in"""
+
+    # def test_edit_workout_get_wrong_user(self):
+    #     """Test /workout/id/edit route - produces correct form if correct user not logged in"""
     
-    def test_edit_workout_post(self):
-        """Test /workout/id/edit route"""
+    # def test_edit_workout_post(self):
+    #     """Test /workout/id/edit route"""
 
-    def test_edit_workout_post_no_user(self):
-        """Test /workout/id/edit route - if user not logged in"""
+    # def test_edit_workout_post_no_user(self):
+    #     """Test /workout/id/edit route - if user not logged in"""
 
-    def test_edit_workout_post_wrong_user(self):
-        """Test /workout/id/edit route - if correct user not logged in"""
-
-    
-    def test_delete_workout_post(self):
-        """Test /workout/id/delete"""
-
-    def test_delete_workout_post_no_user(self):
-        """Test /workout/id/delete - if user not logged in"""
-
-    def test_delete_workout_post_wrong_user(self):
-        """Test /workout/id/delete - if correct user not logged in"""
-
-
-    def test_start_workout_stepthrough(self):
-        """Test /workout/id/step begins a step"""
-
-    def test_start_workout_stepthrough_no_user(self):
-        """Test /workout/id/step redirects if no user"""
-
-    def test_start_workout_stepthrough_wrong_user(self):
-        """Test /workout/id/step redirects if wrong user"""
+    # def test_edit_workout_post_wrong_user(self):
+    #     """Test /workout/id/edit route - if correct user not logged in"""
 
     
+    # def test_delete_workout_post(self):
+    #     """Test /workout/id/delete"""
+
+    # def test_delete_workout_post_no_user(self):
+    #     """Test /workout/id/delete - if user not logged in"""
+
+    # def test_delete_workout_post_wrong_user(self):
+    #     """Test /workout/id/delete - if correct user not logged in"""
+
+
+    # def test_start_workout_stepthrough(self):
+    #     """Test /workout/id/step begins a step"""
+    #     with self.client as c:
+    #         with c.session_transaction() as sess:
+    #             sess[CURR_USER_KEY] = self.user1.id
+
+    #         resp = c.get("/workout/1/step")
+
+    #         self.assertEqual(resp.status_code, 200)
+    #         html = resp.get_data(as_text=True)
+
+
+
+
+
+    # def test_start_workout_stepthrough_no_user(self):
+    #     """Test /workout/id/step redirects if no user"""
+
+    # def test_start_workout_stepthrough_wrong_user(self):
+    #     """Test /workout/id/step redirects if wrong user"""
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     # def test_user_signup_get(self):
     #     """Can a user view sign up page"""
 
