@@ -518,6 +518,9 @@ def delete_goal(goal_id):
 
     goal = Goal.query.get_or_404(goal_id)
 
+    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+        return redirect("/")
+
     workout = Workout.query.get_or_404(goal.workout_id)
 
     db.session.delete(goal)
@@ -538,6 +541,9 @@ def delete_workout(workout_id):
         return redirect('/')
 
     workout = Workout.query.get_or_404(workout_id)
+
+    if check_correct_user_with_message("Access unauthorized.", "danger", workout.owner.id):
+        return redirect("/")
 
     db.session.delete(workout)
     db.session.commit()

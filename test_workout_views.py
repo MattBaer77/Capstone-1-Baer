@@ -109,6 +109,98 @@ class WorkoutViewsTestCase(TestCase):
         db.drop_all()
         db.create_all()
 
+    def test_view_workouts(self):
+        """Test /workouts route if user signed in"""
+
+    def test_view_workouts_search(self):
+        """Test /workouts route if user signed in + search params"""
+
+    def test_view_workouts_no_user(self):
+        """Test /workouts route if user not signed in"""
+
+    
+    def test_add_workout_get(self):
+        """Test /workout/add route GET produces correct form""""
+
+    def test_add_workout_get_no_user(self):
+        """Test /workout/add route GET if user not signed in""""
+
+    def test_add_workout_post(self):
+        """Test /workout/add route POST""""
+
+
+    def test_view_workout_get(self):
+        """Test /workout/id route"""
+
+    def test_view_workout_get_no_user(self):
+        """Test /workout/id route if no user logged in"""
+
+
+    def test_copy_workout_post(self):
+        """Test /workout/id/copy route"""
+
+    def test_copy_workout_post_no_user(self):
+        """Test /workout/id/copy route if no user logged in"""
+
+    
+    def test_add_workout_goal_get(self):
+        """Test /workout/id/goal-add route - produces correct form"""
+    
+    def test_add_workout_goal_get_no_user(self):
+        """Test /workout/id/goal-add route - produces correct form if user not signed in"""
+
+    def test_add_workout_goal_get_wrong_user(self):
+        """Test /workout/id/goal-add route - produces correct form if correct user not signed in"""
+    
+    def test_add_workout_goal_post(self):
+        """Test /workout/id/goal-add route"""
+    
+    def test_add_workout_goal_post_no_user(self):
+        """Test /workout/id/goal-add route - if user not signed in"""
+
+    def test_add_workout_goal_post_wrong_user(self):
+        """Test /workout/id/goal-add route - if correct user not signed in"""
+
+    
+    def test_edit_workout_get(self):
+        """Test /workout/id/edit route - produces correct form"""
+
+    def test_edit_workout_get_no_user(self):
+        """Test /workout/id/edit route - produces correct form if user not logged in"""
+
+    def test_edit_workout_get_wrong_user(self):
+        """Test /workout/id/edit route - produces correct form if correct user not logged in"""
+    
+    def test_edit_workout_post(self):
+        """Test /workout/id/edit route"""
+
+    def test_edit_workout_post_no_user(self):
+        """Test /workout/id/edit route - if user not logged in"""
+
+    def test_edit_workout_post_wrong_user(self):
+        """Test /workout/id/edit route - if correct user not logged in"""
+
+    
+    def test_delete_workout_post(self):
+        """Test /workout/id/delete"""
+
+    def test_delete_workout_post_no_user(self):
+        """Test /workout/id/delete - if user not logged in"""
+
+    def test_delete_workout_post_wrong_user(self):
+        """Test /workout/id/delete - if correct user not logged in"""
+
+
+    def test_start_workout_stepthrough(self):
+        """Test /workout/id/step begins a step"""
+
+    def test_start_workout_stepthrough_no_user(self):
+        """Test /workout/id/step redirects if no user"""
+
+    def test_start_workout_stepthrough_wrong_user(self):
+        """Test /workout/id/step redirects if wrong user"""
+
+    
     # def test_user_signup_get(self):
     #     """Can a user view sign up page"""
 
