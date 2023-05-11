@@ -2,7 +2,7 @@
 User model tests.
 
 Run with:
-python -m unittest test_performance_model.py
+python -m unittest test_user_views.py
 """
 
 import os
@@ -33,7 +33,8 @@ class UserViewsTestCase(TestCase):
 
         self.client = app.test_client()
 
-        user1 = User(
+        # Signed up user
+        user1 = User.signup(
 
             email="test1@test.com",
             username="test1user",
@@ -41,6 +42,7 @@ class UserViewsTestCase(TestCase):
 
         )
 
+        # Declared user
         user2 = User(
 
             email="test2@test.com",
@@ -94,6 +96,11 @@ class UserViewsTestCase(TestCase):
         self.user1_testID = user1.id
         self.user1 = user1
         self.user2 = user2
+        self.exercise_1 = exercise_1
+        self.workout_1 = workout_1
+        self.workout_2 = workout_2
+        self.workout_2_1 = workout_2_1
+        self.workout_1_2 = workout_1_2
 
     def tearDown(self):
         """Clean up any fouled transaction. Remove data from database after test completed."""
@@ -101,3 +108,49 @@ class UserViewsTestCase(TestCase):
         db.session.rollback()
         db.drop_all()
         db.create_all()
+
+    def test_user_signup_get(self):
+        """"""
+    def test_user_signup_post_success(self):
+        """"""
+    def test_user_signup_post_success_redirect(self):
+        """"""
+    def test_user_signup_post_already_logged_in_redirect(self):
+        """"""
+    def test_user_signup_post_duplicate_username(self):
+        """"""
+    def test_user_signup_post_duplicate_email(self):
+        """"""
+
+
+    def test_user_login_get_success(self):
+        """"""
+    def test_user_already_logged_in_get(self):
+        """"""
+
+    def test_user_login_post_success(self):
+        """"""
+    def test_user_login_post_success_redirect(self):
+        """"""
+    def test_user_login_post_wrong_username(self):
+        """"""
+    def test_user_login_post_wrong_password(self):
+        """"""
+    def test_user_logout(self):
+        """"""
+
+    def test_user_edit_get_success(self):
+        """"""
+    def test_user_edit_get_not_user(self):
+        """"""
+
+    def test_user_edit_post(self):
+        """"""
+
+    def test_user_delete_post(self):
+        """"""
+
+    def test_user_logged_out_root(self):
+        """"""
+    def test_user_logged_in_root(self):
+        """"""
