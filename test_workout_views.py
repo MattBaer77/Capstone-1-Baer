@@ -168,9 +168,12 @@ class WorkoutViewsTestCase(TestCase):
         """Test /workouts route if user not signed in"""
         with self.client as c:
 
-            resp = c.get("/workouts")
+            resp = c.get("/workouts", follow_redirects=True)
 
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Join Routine and Get In The Game!", html)
+            self.assertIn("Access unauthorized.", html)
 
     def test_add_workout_get(self):
         """Test /workout/add route GET produces correct form"""
@@ -190,13 +193,15 @@ class WorkoutViewsTestCase(TestCase):
         """Test /workout/add route GET if user not signed in"""
         with self.client as c:
 
-            resp = c.get("/workout/add")
+            resp = c.get("/workout/add", follow_redirects=True)
 
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Join Routine and Get In The Game!", html)
+            self.assertIn("Access unauthorized.", html)
 
     # def test_add_workout_post(self):
     #     """Test /workout/add route POST""""
-
 
     def test_view_workout_get(self):
         """Test /workout/id route"""
@@ -216,10 +221,12 @@ class WorkoutViewsTestCase(TestCase):
         """Test /workout/id route if no user logged in"""
         with self.client as c:
 
-            resp = c.get("/workout/1")
+            resp = c.get("/workout/1", follow_redirects=True)
 
-            self.assertEqual(resp.status_code, 302)
-
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Join Routine and Get In The Game!", html)
+            self.assertIn("Access unauthorized.", html)
 
     # def test_copy_workout_post(self):
     #     """Test /workout/id/copy route"""
@@ -228,10 +235,12 @@ class WorkoutViewsTestCase(TestCase):
         """Test /workout/id/copy route if no user logged in"""
         with self.client as c:
 
-            resp = c.post("/workout/1/copy")
+            resp = c.post("/workout/1/copy", follow_redirects=True)
 
-            self.assertEqual(resp.status_code, 302)
-
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Join Routine and Get In The Game!", html)
+            self.assertIn("Access unauthorized.", html)
     
     def test_add_workout_goal_get(self):
         """Test /workout/id/goal-add route - produces correct form"""
@@ -251,9 +260,13 @@ class WorkoutViewsTestCase(TestCase):
         """Test /workout/id/goal-add route - produces correct form if user not signed in"""
         with self.client as c:
 
-            resp = c.get("/workout/1/goal-add")
+            resp = c.get("/workout/1/goal-add", follow_redirects=True)
 
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Join Routine and Get In The Game!", html)
+            self.assertIn("Access unauthorized.", html)
+
 
     def test_add_workout_goal_get_wrong_user(self):
         """Test /workout/id/goal-add route - produces correct form if correct user not signed in"""
@@ -261,9 +274,12 @@ class WorkoutViewsTestCase(TestCase):
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.user2.id
 
-            resp = c.get("/workout/1/goal-add")
+            resp = c.get("/workout/1/goal-add", follow_redirects=True)
 
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Let's do this test2user!", html)
+            self.assertIn("Access unauthorized.", html)
     
     # def test_add_workout_goal_post(self):
     #     """Test /workout/id/goal-add route"""
@@ -272,9 +288,12 @@ class WorkoutViewsTestCase(TestCase):
         """Test /workout/id/goal-add route - if user not signed in"""
         with self.client as c:
 
-            resp = c.post("/workout/1/goal-add")
+            resp = c.post("/workout/1/goal-add", follow_redirects=True)
 
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Join Routine and Get In The Game!", html)
+            self.assertIn("Access unauthorized.", html)
 
     def test_add_workout_goal_post_wrong_user(self):
         """Test /workout/id/goal-add route - if correct user not signed in"""
@@ -282,9 +301,12 @@ class WorkoutViewsTestCase(TestCase):
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.user2.id
 
-            resp = c.post("/workout/1/goal-add", data={"workout_id" : "1", "exercise_id" : "1", "goal_reps" : "1", "goal_sets" : "2", "goal_time_sec" : "3", "goal_weight_lbs" : "4", "goal_distance_miles" : "5.1"})
+            resp = c.post("/workout/1/goal-add", data={"workout_id" : "1", "exercise_id" : "1", "goal_reps" : "1", "goal_sets" : "2", "goal_time_sec" : "3", "goal_weight_lbs" : "4", "goal_distance_miles" : "5.1"}, follow_redirects=True)
             
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Let's do this test2user!", html)
+            self.assertIn("Access unauthorized.", html)
 
     def test_edit_workout_get(self):
         """Test /workout/id/edit route - produces correct form"""
@@ -304,9 +326,12 @@ class WorkoutViewsTestCase(TestCase):
         """Test /workout/id/edit route - produces correct form if user not logged in"""
         with self.client as c:
 
-            resp = c.get("/workout/1/edit")
+            resp = c.get("/workout/1/edit", follow_redirects=True)
 
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Join Routine and Get In The Game!", html)
+            self.assertIn("Access unauthorized.", html)
 
     def test_edit_workout_get_wrong_user(self):
         """Test /workout/id/edit route - produces correct form if correct user not logged in"""
@@ -314,10 +339,13 @@ class WorkoutViewsTestCase(TestCase):
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.user2.id
 
-            resp = c.get("/workout/1/edit")
+            resp = c.get("/workout/1/edit", follow_redirects=True)
             
-            self.assertEqual(resp.status_code, 302)
-    
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Let's do this test2user!", html)
+            self.assertIn("Access unauthorized.", html)   
+ 
     # def test_edit_workout_post(self):
     #     """Test /workout/id/edit route"""
 
@@ -325,9 +353,12 @@ class WorkoutViewsTestCase(TestCase):
         """Test /workout/id/edit route - if user not logged in"""
         with self.client as c:
 
-            resp = c.post("/workout/1/edit")
+            resp = c.post("/workout/1/edit", follow_redirects=True)
 
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Join Routine and Get In The Game!", html)
+            self.assertIn("Access unauthorized.", html)
 
     def test_edit_workout_post_wrong_user(self):
         """Test /workout/id/edit route - if correct user not logged in"""
@@ -335,9 +366,12 @@ class WorkoutViewsTestCase(TestCase):
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.user2.id
 
-            resp = c.post("/workout/1/edit", data={"description" : "Workout Number 1"})
+            resp = c.post("/workout/1/edit", data={"description" : "Workout Number 1"}, follow_redirects=True)
             
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Let's do this test2user!", html)
+            self.assertIn("Access unauthorized.", html)
 
     def test_delete_workout_post(self):
         """Test /workout/id/delete"""
@@ -345,17 +379,22 @@ class WorkoutViewsTestCase(TestCase):
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.user1.id
 
-            resp = c.post("/workout/1/delete")
+            resp = c.post("/workout/1/delete", follow_redirects=True)
             
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Let's do this test1user!", html)
 
     def test_delete_workout_post_no_user(self):
         """Test /workout/id/delete - if user not logged in"""
         with self.client as c:
 
-            resp = c.post("/workout/1/delete")
+            resp = c.post("/workout/1/delete", follow_redirects=True)
 
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Join Routine and Get In The Game!", html)
+            self.assertIn("Access unauthorized.", html)
 
     def test_delete_workout_post_wrong_user(self):
         """Test /workout/id/delete - if correct user not logged in"""
@@ -363,9 +402,12 @@ class WorkoutViewsTestCase(TestCase):
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.user2.id
 
-            resp = c.post("/workout/1/delete")
+            resp = c.post("/workout/1/delete", follow_redirects=True)
             
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Let's do this test2user!", html)
+            self.assertIn("Access unauthorized.", html)
 
     def test_start_workout_stepthrough(self):
         """Test /workout/id/step begins a step"""
@@ -384,12 +426,26 @@ class WorkoutViewsTestCase(TestCase):
         """Test /workout/id/step redirects if no user"""
         with self.client as c:
 
-            resp = c.get("/workout/1/step")
+            resp = c.get("/workout/1/step", follow_redirects=True)
 
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Join Routine and Get In The Game!", html)
+            self.assertIn("Access unauthorized.", html)
 
-    # def test_start_workout_stepthrough_wrong_user(self):
-    #     """Test /workout/id/step redirects if wrong user"""
+    def test_start_workout_stepthrough_wrong_user(self):
+        """Test /workout/id/step redirects if wrong user"""
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user2.id
+
+            resp = c.get("/workout/1/step", follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("Let's do this test2user!", html)
+            self.assertIn("Access unauthorized.", html)
 
     
 
