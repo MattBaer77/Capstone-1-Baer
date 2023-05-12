@@ -24,7 +24,7 @@ db.create_all()
 app.config['WTF_CSRF_ENABLED'] = False
 
 class GoalViewsTestCase(TestCase):
-    """Test models for User Views."""
+    """Test models for Goal Views."""
 
     def setUp(self):
         """Create test client, add sample data."""
