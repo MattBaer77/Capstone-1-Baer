@@ -68,7 +68,7 @@
 
             {{form.performance_distance_miles.label(class_="mt-4")}}
             {{form.performance_distance_miles(class_="form-control")}}
-            <label for="performance_distance_miles" class="text-secondary">Goal Weight: {{goal.goal_distance_miles}}</label>
+            <label for="performance_distance_miles" class="text-secondary">Goal Distance: {{goal.goal_distance_miles}}</label>
             {% for err in form.performance_distance_miles.errors %}
             <p class="text-danger mb-0">{{err}}</p>
             {% endfor %}
