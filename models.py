@@ -164,11 +164,6 @@ class Workout(db.Model):
 
     goals  = db.relationship('Goal', backref='workout', cascade='all, delete-orphan')
 
-    def get_author(self):
-        """Returns the author based on the author_user_id"""
-        author = User.query.get(self.author_user_id)
-        return author
-
     @classmethod
     def create(cls, description, owner_user_id):
         """

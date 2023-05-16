@@ -143,16 +143,6 @@ class WorkoutModelTestCase(TestCase):
         # Did workout index increment?
         self.assertEqual(workout_3.id, (workouts[3].id + 1))
 
-    def test_workout_get_author(self):
-
-        user1 = User.query.get(1)
-        user2 = User.query.get(2)
-        workout_1 = Workout.query.get(1)
-        workout_2_1 = Workout.query.get(3)
-
-        self.assertEqual(workout_1.get_author(), user1)
-        self.assertEqual(workout_2_1.get_author(), user1)
-
     def test_workout_create(self):
         """Create a fifth workout - Does basic model work? - Do all attributes and defaults work?"""
 
