@@ -66,6 +66,7 @@ class User(db.Model):
         db.Text,
         nullable=False,
         unique=True,
+        index=True
     )
 
     image_url = db.Column(
@@ -80,7 +81,7 @@ class User(db.Model):
 
     password = db.Column(
         db.Text,
-        nullable=False,
+        nullable=False
     )
 
     workouts = db.relationship('Workout', foreign_keys="[Workout.owner_user_id]", backref='owner', cascade='all, delete-orphan')
@@ -135,7 +136,8 @@ class Workout(db.Model):
 
     description = db.Column(
         db.Text,
-        default="No Description"
+        default="No Description",
+        index=True
     )
 
     owner_user_id = db.Column(
