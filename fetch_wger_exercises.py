@@ -35,7 +35,7 @@ def wger_parse_relevant(r):
         name = tag_scrub(each["name"])
         description = tag_scrub(each["description"])
 
-        parsed_data.append({"name":f"{name}", "description":f"{description}"})
+        parsed_data.append({"name":name, "description":description})
         english_only_data = scrub_abduktion_im_stand(parsed_data)
 
     return english_only_data
