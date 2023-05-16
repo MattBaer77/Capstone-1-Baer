@@ -4,6 +4,12 @@ import requests
 from write_to_local import write_to_local
 from models import Exercise
 
+def scrub_abduktion_im_stand(data):
+
+    scrubbed_data = [d for d in data if d["name"] != 'Abduktion im Stand']
+
+    return scrubbed_data
+
 def tag_scrub(old_string):
 
     scrubs = ["<p>", "</p>", "<b>", "</b>", "<li>", "</li>", "<ol>", "</ol>", "  ", "   ", "    "]
@@ -30,8 +36,9 @@ def wger_parse_relevant(r):
         description = tag_scrub(each["description"])
 
         parsed_data.append({"name":f"{name}", "description":f"{description}"})
+        english_only_data = scrub_abduktion_im_stand(parsed_data)
 
-    return parsed_data
+    return english_only_data
 
 def wger_fetch(filename, revision, limit):
     """

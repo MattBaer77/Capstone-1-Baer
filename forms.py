@@ -6,7 +6,7 @@ class UserAddForm(FlaskForm):
     """Form for adding users."""
 
     email = StringField('E-mail', validators=[DataRequired(), Email()])
-    username = StringField('Username', validators=[DataRequired(), Length(min=6)])
+    username = StringField('Username', validators=[DataRequired(), Length(min=3)])
     password = PasswordField('Password', validators=[Length(min=6)])
 
     form_name = "User Signup"
