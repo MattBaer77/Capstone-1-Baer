@@ -55,13 +55,19 @@
                 </ul>
             </div>
 
-            <form action="/goal/{{goal.id}}/edit" method="POST" style="display: inline;" class="mx-1">
+            <form action="/goal/{{goal.id}}/edit" method="GET" style="display: inline;" class="mx-1">
                 <button class="btn btn-secondary mt-2">Edit</button>
             </form>
 
-            <form action="/goal/{{goal.id}}/delete" method="POST" style="display: inline;" class="mx-1">
+            <!-- <form action="/goal/{{goal.id}}/delete" method="POST" style="display: inline;" class="mx-1">
                 <button class="btn btn-danger mt-2">Delete</button>
+            </form> -->
+            <form action="/goal/{{goal.id}}/delete" method="POST" style="display: inline;" class="mx-1">
+                {{ delete_form.hidden_tag() }}
+                <button class="btn btn-danger mt-2">{{delete_form.submit_text}}</button>
             </form>
+
+
 
         </div>
     </div>

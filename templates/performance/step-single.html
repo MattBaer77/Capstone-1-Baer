@@ -17,7 +17,10 @@
             {{form.performance_reps.label(class_="mt-4")}}
             {{form.performance_reps(class_="form-control")}}
             <label for="performance_reps" class="text-secondary">Goal Reps: {{goal.goal_reps}}</label>
-            
+            {% for err in form.performance_reps.errors %}
+            <p class="text-danger mb-0">{{err}}</p>
+            {% endfor %}
+
         </div>
         {% endif %}
 
@@ -27,6 +30,9 @@
             {{form.performance_sets.label(class_="mt-4")}}
             {{form.performance_sets(class_="form-control")}}
             <label for="performance_sets" class="text-secondary">Goal Sets: {{goal.goal_sets}}</label>
+            {% for err in form.performance_sets.errors %}
+            <p class="text-danger mb-0">{{err}}</p>
+            {% endfor %}
 
         </div>
         {% endif %}
@@ -37,6 +43,9 @@
             {{form.performance_time_sec.label(class_="mt-4")}}
             {{form.performance_time_sec(class_="form-control")}}
             <label for="performance_time_sec" class="text-secondary">Goal Time: {{goal.goal_time_sec}}</label>
+            {% for err in form.performance_time_sec.errors %}
+            <p class="text-danger mb-0">{{err}}</p>
+            {% endfor %}
             
         </div>
         {% endif %}
@@ -47,6 +56,9 @@
             {{form.performance_weight_lbs.label(class_="mt-4")}}
             {{form.performance_weight_lbs(class_="form-control")}}
             <label for="performance_weight_lbs" class="text-secondary">Goal Weight: {{goal.goal_weight_lbs}}</label>
+            {% for err in form.performance_weight_lbs.errors %}
+            <p class="text-danger mb-0">{{err}}</p>
+            {% endfor %}
             
         </div>
         {% endif %}
@@ -57,6 +69,9 @@
             {{form.performance_distance_miles.label(class_="mt-4")}}
             {{form.performance_distance_miles(class_="form-control")}}
             <label for="performance_distance_miles" class="text-secondary">Goal Weight: {{goal.goal_distance_miles}}</label>
+            {% for err in form.performance_distance_miles.errors %}
+            <p class="text-danger mb-0">{{err}}</p>
+            {% endfor %}
             
         </div>
         {% endif %}

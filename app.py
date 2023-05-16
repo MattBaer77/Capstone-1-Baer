@@ -437,6 +437,7 @@ def add_workout_goal(workout_id):
         return redirect("/")
 
     form = GoalAddForm()
+    delete_form = GoalDeleteForm()
 
     exercises = [(e.id, e.name) for e in Exercise.query.order_by(Exercise.id.asc()).all()]
 
@@ -462,7 +463,7 @@ def add_workout_goal(workout_id):
             flash("Unknown Integrity Error - /workout/<int:workout_id>/goal-add - POST", 'danger')
             return redirect('/workout/add')
 
-    return render_template('goals/add.html', workout=workout, form=form)
+    return render_template('goals/add.html', workout=workout, form=form, delete_form=delete_form)
 
 
 # EDIT WORKOUT
@@ -559,23 +560,30 @@ def delete_goal(goal_id):
     POST only to avoid issues with prefetching
     """
 
-    if check_for_not_user_with_message("Access unauthorized.", "danger"):
-        return redirect('/')
+    form = GoalDeleteForm()
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
-        return redirect('/finish')
+    if form.validate_on_submit():
 
-    goal = Goal.query.get_or_404(goal_id)
+        if check_for_not_user_with_message("Access unauthorized.", "danger"):
+            return redirect('/')
 
-    if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
-        return redirect("/")
+        if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+            return redirect('/finish')
 
-    workout = Workout.query.get_or_404(goal.workout_id)
+        goal = Goal.query.get_or_404(goal_id)
 
-    db.session.delete(goal)
-    db.session.commit()
+        if check_correct_user_with_message("Access unauthorized.", "danger", goal.workout.owner.id):
+            return redirect("/")
 
-    return redirect(f'/workout/{workout.id}/goal-add')
+        workout = Workout.query.get_or_404(goal.workout_id)
+
+        db.session.delete(goal)
+        db.session.commit()
+
+        return redirect(f'/workout/{workout.id}/goal-add')
+
+    flash("Access unauthorized.", "danger")
+    return redirect('/')
 
 
 # DELETE WORKOUT

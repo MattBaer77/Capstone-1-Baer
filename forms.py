@@ -95,6 +95,10 @@ class GoalEditForm(FlaskForm):
     form_title = "Edit Your Exercise Goal"
     submit_text = "Save Changes"
 
+class GoalDeleteForm(FlaskForm):
+    """Form for deleting a goal."""
+    submit_text = "Delete"
+
 class PerformanceAddForm(FlaskForm):
     """Form for adding a performacne record."""
 
