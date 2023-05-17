@@ -6,7 +6,9 @@
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: rgb(0,173,238);
+  color: hsl(0, 0%, 80%);
+  font-family: 'Saira', sans-serif;
+  font-weight: 400;
 }
 
 h1 {
@@ -16,26 +18,26 @@ h1 {
 }
 
 body {
-  background-color: hsl(0, 0%, 7%);
-}
-
-.card {
-  box-shadow: 10px 10px 10px hsl(0, 0%, 4%); border-radius: 20px;
-  background-image: linear-gradient(hsl(0, 0%, 11%), hsl(0, 0%, 9%));
-  border-width: 0px;
-  transition: all .2s ease-in-out;
+  background-color: hsl(0, 0%, 14%);
 }
 
 .card-main {
   box-shadow: 10px 10px 10px hsl(0, 0%, 4%); border-radius: 20px;
-  background-image: linear-gradient(hsl(0, 0%, 11%), hsl(0, 0%, 9%));
+  background-image: linear-gradient(hsl(0, 0%, 12%), hsl(0, 0%, 8%));
   border-width: 0px;
   padding: 20px;
 }
 
+.card {
+  box-shadow: 10px 10px 10px hsl(0, 0%, 4%); border-radius: 20px;
+  background-image: linear-gradient(hsl(0, 0%, 16%), hsl(0, 0%, 12%));
+  border-width: 0px;
+  transition: all .2s ease-in-out;
+}
+
 .card:hover {
   box-shadow: 10px 10px 10px hsl(0, 0%, 4%); border-radius: 20px;
-  background-image: linear-gradient(hsl(0, 0%, 15%), hsl(0, 0%, 9%));
+  background-image: linear-gradient(hsl(0, 0%, 18%), hsl(0, 0%, 14%));
   /* transform: scale(1.01); */
 }
 
@@ -48,8 +50,14 @@ body {
   text-decoration: none;
 }
 
+.logo-lg {
+  font-size: 80px;
+}
+
 .btn {
   border-radius: 10px;
+  font-family: 'Saira', sans-serif;
+  font-weight: 100;
 }
 
 .btn-danger {
@@ -62,8 +70,38 @@ body {
   border: rgb(0,173,238);
 }
 
-label {
+.btn-danger:hover {
+  background-color: rgb(192, 68, 89);
+  border: rgb(192, 68, 89);
+}
+
+.btn-primary:hover {
+  background-color: rgb(0, 137, 187);
+  border: rgb(0, 137, 187);
+}
+
+p, label {
   color: hsl(0, 0%, 80%);
+  font-family: 'Saira', sans-serif;
+  font-weight: 100;
+}
+
+th {
+  color: hsl(0, 0%, 80%);
+  font-family: 'Saira', sans-serif;
+  font-weight: 400;
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid hsl(0,0%,50%);
+}
+
+tr {
+  color: hsl(0, 0%, 80%);
+  font-family: 'Saira', sans-serif;
+  font-weight: 100;
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid hsl(0,0%,50%);
 }
 
 .form-control {
@@ -86,4 +124,10 @@ hr {
 a {
   color: rgb(0,173,238);
   text-decoration: none;
+  font-family: 'Saira', sans-serif;
+  font-weight: 400;
+}
+
+a:hover {
+  color: rgb(0, 137, 187);
 }
