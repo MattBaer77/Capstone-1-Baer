@@ -307,8 +307,8 @@ class PerformanceModelTestCase(TestCase):
         self.assertEqual(performance_1.serialize(),
                 {
                     'id': performance_1.id,
-                    'date': performance_1.date,
-                    'last_edited_date': performance_1.last_edited_date,
+                    'date': performance_1.date.strftime('%Y - %m - %d'),
+                    'last_edited_date': performance_1.last_edited_date.strftime('%Y - %m - %d'),
                     'goal_id': performance_1.goal_id,
                     'performance_reps': performance_1.performance_reps,
                     'performance_sets': performance_1.performance_sets,
@@ -322,8 +322,8 @@ class PerformanceModelTestCase(TestCase):
         self.assertEqual(performance_6.serialize(),
                 {
                     'id': performance_6.id,
-                    'date': performance_6.date,
-                    'last_edited_date': performance_6.last_edited_date,
+                    'date': performance_6.date.strftime('%Y - %m - %d'),
+                    'last_edited_date': performance_6.last_edited_date.strftime('%Y - %m - %d'),
                     'goal_id': performance_6.goal_id,
                     'performance_reps': performance_6.performance_reps,
                     'performance_sets': performance_6.performance_sets,
@@ -337,8 +337,8 @@ class PerformanceModelTestCase(TestCase):
         self.assertEqual(performance_1.serialize(),
                 {
                     'id': 1,
-                    'date': performance_1.date,
-                    'last_edited_date': performance_1.last_edited_date,
+                    'date': performance_1.date.strftime('%Y - %m - %d'),
+                    'last_edited_date': performance_1.last_edited_date.strftime('%Y - %m - %d'),
                     'goal_id': 1,
                     'performance_reps': 1,
                     'performance_sets': 2,
@@ -352,8 +352,8 @@ class PerformanceModelTestCase(TestCase):
         self.assertEqual(performance_6.serialize(),
                 {
                     'id': 6,
-                    'date': performance_6.date,
-                    'last_edited_date': performance_6.last_edited_date,
+                    'date': performance_6.date.strftime('%Y - %m - %d'),
+                    'last_edited_date': performance_6.last_edited_date.strftime('%Y - %m - %d'),
                     'goal_id': 1,
                     'performance_reps': 0,
                     'performance_sets': 0,

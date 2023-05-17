@@ -89,7 +89,7 @@
     {% for record in performance %}
 
             <tr>
-                <td> <a href="/performance/{{ record.id }}/edit"> {{ record.date }} </a></td>
+                <td> <a href="/performance/{{ record.id }}/edit"> {{ record.date.strftime('%Y - %m - %d') }} </a></td>
                 <td>{{ record.performance_reps }}</td>
                 <td>{{ record.performance_sets }}</td>
                 <td>{{ record.performance_time_sec }}</td>

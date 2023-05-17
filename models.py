@@ -343,8 +343,8 @@ class Performance(db.Model):
         """Returns a dict representation of performance record."""
         return {
             'id': self.id,
-            'date': self.date,
-            'last_edited_date': self.last_edited_date,
+            'date': self.date.strftime('%Y - %m - %d'),
+            'last_edited_date': self.last_edited_date.strftime('%Y - %m - %d'),
             'goal_id': self.goal_id,
             'performance_reps': self.performance_reps,
             'performance_sets': self.performance_sets,
