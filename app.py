@@ -173,7 +173,7 @@ def signup():
     if check_for_user_with_message("You are already logged in!", "success"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     form = UserAddForm()
@@ -206,7 +206,7 @@ def login():
     if check_for_user_with_message("You are already logged in!", "success"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     form = LoginForm()
@@ -229,7 +229,7 @@ def login():
 def logout():
     """Handle logout of user."""
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     do_logout()
@@ -244,7 +244,7 @@ def edit_user():
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     form = UserEditForm(obj=g.user)
@@ -266,8 +266,8 @@ def edit_user():
             return redirect("/")
 
         else:
-            flash("Access something.", "danger")
-            return render_template('users/edit.html', form=form)
+            flash("Incorrect Password - Changes Not Saved", "danger")
+            return render_template('users/edit.html', form=form, user=g.user)
 
     return render_template('users/edit.html', form=form, user=g.user)
 
@@ -280,7 +280,7 @@ def delete_user():
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     do_logout()
@@ -313,7 +313,7 @@ def view_workouts():
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     search = request.args.get('q')
@@ -340,7 +340,7 @@ def add_workout():
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     form = WorkoutAddForm()
@@ -354,7 +354,7 @@ def add_workout():
             db.session.commit()
 
         except IntegrityError:
-            flash("Unknown Integrity Error", 'danger')
+            flash("Something went wrong. Please try another description.", 'danger')
             return redirect('/workout/add')
 
         return redirect(f'/workout/{workout.id}/goal-add')
@@ -375,7 +375,7 @@ def view_workout(workout_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     workout = Workout.query.get_or_404(workout_id)
@@ -397,7 +397,7 @@ def copy_workout(workout_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     workout = Workout.query.get_or_404(workout_id)
@@ -409,7 +409,7 @@ def copy_workout(workout_id):
             copied_workout = Workout.copy(workout, g.user.id)
 
         except IntegrityError:
-            flash("Unknown Integrity Error", 'danger')
+            flash("This workout cannot be copied.", 'danger')
             return redirect('/')
 
         return redirect(f'/workout/{copied_workout.id}/edit')
@@ -428,7 +428,7 @@ def add_workout_goal(workout_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     workout = Workout.query.get_or_404(workout_id)
@@ -460,7 +460,7 @@ def add_workout_goal(workout_id):
             db.session.commit()
 
         except IntegrityError:
-            flash("Unknown Integrity Error - /workout/<int:workout_id>/goal-add - POST", 'danger')
+            flash("Goal cannot be added.", 'danger')
             return redirect('/workout/add')
 
     return render_template('goals/add.html', workout=workout, form=form, delete_form=delete_form)
@@ -477,7 +477,7 @@ def edit_workout(workout_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     workout = Workout.query.get_or_404(workout_id)
@@ -496,7 +496,7 @@ def edit_workout(workout_id):
             db.session.commit()
 
         except IntegrityError:
-            flash("Unknown Integrity Error", 'danger')
+            flash("Workout cannot be edited in this way.", 'danger')
             return redirect('/workout/add')
 
         return redirect('/')
@@ -515,7 +515,7 @@ def edit_goal(goal_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     goal = Goal.query.get_or_404(goal_id)
@@ -544,7 +544,7 @@ def edit_goal(goal_id):
             db.session.commit()
 
         except IntegrityError:
-            flash("Unknown Integrity Error - /workout/<int:workout_id>/goal-add - POST", 'danger')
+            flash("Goal cannot be edited in this way.", 'danger')
             return redirect(f'/workout/{workout.id}/goal-add')
 
         return redirect(f'/workout/{workout.id}/goal-add')
@@ -567,7 +567,7 @@ def delete_goal(goal_id):
         if check_for_not_user_with_message("Access unauthorized.", "danger"):
             return redirect('/')
 
-        if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+        if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
             return redirect('/finish')
 
         goal = Goal.query.get_or_404(goal_id)
@@ -597,7 +597,7 @@ def delete_workout(workout_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     workout = Workout.query.get_or_404(workout_id)
@@ -625,7 +625,7 @@ def view_goal_performance(goal_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     goal = Goal.query.get_or_404(goal_id)
@@ -653,7 +653,7 @@ def edit_performance_record(performance_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     performance = Performance.query.get_or_404(performance_id)
@@ -678,7 +678,7 @@ def edit_performance_record(performance_id):
             db.session.commit()
 
         except IntegrityError:
-            flash("Unknown Integrity Error", 'danger')
+            flash("Performance record cannot be edited in this way.", 'danger')
             return redirect(f'/workout/{performance.goal.workout.id}/performance')
 
         return redirect(f'/goal/{performance.goal.id}/performance')
@@ -699,7 +699,7 @@ def api_send_goal(goal_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     goal = Goal.query.get_or_404(goal_id)
@@ -720,7 +720,7 @@ def api_send_goal_performance(goal_id):
     if check_for_not_user_with_message("Access unauthorized.", "danger"):
         return redirect('/')
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     goal = Goal.query.get_or_404(goal_id)
@@ -789,7 +789,7 @@ def finish_step():
 
     # CHECK IF WORKOUT NOT STARTED
     if GOAL_ID_CURRENT not in session:
-        flash("You have not started a workout", "danger")
+        flash("You have not started a workout.", "danger")
         return redirect("/")
 
     goal = Goal.query.get_or_404(session[GOAL_ID_CURRENT])
@@ -818,7 +818,7 @@ def previous_step():
 
     # IS A WORKOUT NOT STARTED?
     if GOAL_ID_CURRENT not in session:
-        flash("You have not started a workout", "danger")
+        flash("You have not started a workout.", "danger")
         return redirect("/")
 
     # CHECK IF WE ARE ON THE FIRST STEP
@@ -861,7 +861,7 @@ def step():
 
     # IS A WORKOUT NOT STARTED?
     if GOAL_ID_CURRENT not in session:
-        flash("You have not started a workout", "danger")
+        flash("You have not started a workout.", "danger")
         return redirect("/")
 
     # FIND THE GOAL THAT I AM ON
@@ -922,7 +922,7 @@ def step():
             db.session.commit()
 
         except IntegrityError:
-            flash("Unknown Integrity Error", 'danger')
+            flash("This performance record could not be recorded.", 'danger')
             return redirect(f'/workout/{performance.goal.workout.id}/performance')
 
         # IF THERE IS A NEXT STEP - INCREMENT APPROPRIATE VALUES UP - MOVE TO NEXT STEP
@@ -953,7 +953,7 @@ def step_edit():
 
     # IS A WORKOUT NOT STARTED?
     if GOAL_ID_CURRENT not in session:
-        flash("You have not started a workout", "danger")
+        flash("You have not started a workout.", "danger")
         return redirect("/")
 
     # FIND THE GOAL THAT I AM ON
@@ -1005,7 +1005,7 @@ def step_edit():
             db.session.commit()
 
         except IntegrityError:
-            flash("Unknown Integrity Error", 'danger')
+            flash("This performance record could not be recorded.", 'danger')
             return redirect(f'/workout/{performance.goal.workout.id}/performance')
 
         # IF THERE IS A NEXT STEP - INCREMENT APPROPRIATE VALUES UP - MOVE TO NEXT STEP
@@ -1039,7 +1039,7 @@ def home():
     Return home-anon.html with this information
     """
 
-    if check_for_stepthrough_with_message("You have quit your workout", "warning"):
+    if check_for_stepthrough_with_message("You have quit your workout.", "warning"):
         return redirect('/finish')
 
     if check_for_user():
