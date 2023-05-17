@@ -549,7 +549,7 @@ def edit_goal(goal_id):
 
         return redirect(f'/workout/{workout.id}/goal-add')
 
-    return render_template('base-form.html', workout=workout, form=form)
+    return render_template('/goals/edit.html', workout=workout, form=form)
 
 
 # DELETE GOAL

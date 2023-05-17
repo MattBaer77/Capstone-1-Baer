@@ -23,6 +23,10 @@
             {% endfor %}
             <button class="btn btn-primary my-4">{{ form.submit_text }}</button>
         </form>
+
+        <hr>
+
+        <form action="/workout/{{ workout.id }}/edit"><button class="btn btn-secondary mt-2">Edit "{{ workout.description }}"" </button></form>
     
     </div>
 
