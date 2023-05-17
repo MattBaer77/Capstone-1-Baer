@@ -1,5 +1,19 @@
 const BASE_URL = "http://127.0.0.1:5000/api";
 
+const defaultGridStyle = {
+
+  scales: {
+    y: {
+      beginAtZero: true,
+      grid: {color: "hsl(0, 0%, 50%)"}
+    },
+    x: {
+      grid: {color: "hsl(0, 0%, 25%)"}
+    }
+  }
+
+}
+
 // Parse Integer of Goal ID
 const goalId = parseInt(goal_id);
 
@@ -78,13 +92,7 @@ async function start() {
 
       ]
       },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
+      options: defaultGridStyle
     });
 
   }
@@ -111,13 +119,7 @@ async function start() {
 
       ]
       },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
+      options: defaultGridStyle
     });
 
   }
@@ -144,13 +146,7 @@ async function start() {
 
       ]
       },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
+      options: defaultGridStyle
     });
 
   }
@@ -177,13 +173,7 @@ async function start() {
 
       ]
       },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
+      options: defaultGridStyle
     });
 
   }
@@ -210,13 +200,7 @@ async function start() {
 
       ]
       },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
+      options: defaultGridStyle
     });
 
   }

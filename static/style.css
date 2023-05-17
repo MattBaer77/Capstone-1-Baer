@@ -1,79 +1,89 @@
-.user-card {
-    width: 100%;
-    padding-bottom: 100%;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    position: relative;
-    background: white;
-    margin-top: 20px;
-  }
-  
-  .user-card > div {
-    position: absolute;
-    background: white;
-  }
-  
-  .user-card form {
-    margin-top: 5px;
-    margin-right: 5px;
-  }
-  
-  .user-card form .btn {
-    min-width: 89px;
-    padding: 4px 12px;
-    font-size: 12px;
-  }
-  
-  .card-hero {
-    width: 100%;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-  
-  .card-image {
-    border: 3px solid #fff;
-    border-radius: 70px;
-    height: 70px;
-    width: 70px;
-    margin-top: -35px;
-    position: relative;
-    z-index: 1;
-  }
-  
-  .card-link {
-    display: inline-block;
-    margin-left: 10px;
-  }
-  
-  .card-link > p {
-    position: absolute;
-  }
-  
-  .user-cards {
-    margin-bottom: 20px;
-  }
-  
-  .card-inner {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-  
-  .image-wrapper {
-    width: 100%;
-    padding-bottom: 36%;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .card-contents {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  p.card-bio {
-    margin: 2em 10px 0;
-  }
+
+/* Styles on top of boostrap */
+
+.logo {
+  font-size: large;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: rgb(0,173,238);
+}
+
+h1 {
+  color: hsl(0, 0%, 80%);
+  font-family: 'Saira', sans-serif;
+  font-weight: 100;
+}
+
+body {
+  background-color: hsl(0, 0%, 7%);
+}
+
+.card {
+  box-shadow: 10px 10px 10px hsl(0, 0%, 4%); border-radius: 20px;
+  background-image: linear-gradient(hsl(0, 0%, 11%), hsl(0, 0%, 9%));
+  border-width: 0px;
+  transition: all .2s ease-in-out;
+}
+
+.card-main {
+  box-shadow: 10px 10px 10px hsl(0, 0%, 4%); border-radius: 20px;
+  background-image: linear-gradient(hsl(0, 0%, 11%), hsl(0, 0%, 9%));
+  border-width: 0px;
+  padding: 20px;
+}
+
+.card:hover {
+  box-shadow: 10px 10px 10px hsl(0, 0%, 4%); border-radius: 20px;
+  background-image: linear-gradient(hsl(0, 0%, 15%), hsl(0, 0%, 9%));
+  /* transform: scale(1.01); */
+}
+
+.logo {
+  color: rgb(0,173,238);
+  font-size: 40px;
+  font-family: 'Saira', sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.btn {
+  border-radius: 10px;
+}
+
+.btn-danger {
+  background-color: rgb(233,106,128);
+  border: rgb(233,106,128);
+}
+
+.btn-primary {
+  background-color: rgb(0,173,238);
+  border: rgb(0,173,238);
+}
+
+label {
+  color: hsl(0, 0%, 80%);
+}
+
+.form-control {
+  background-color: hsl(0, 0%, 20%);
+  border-color: hsl(0, 0%, 22%);
+  color: hsl(0, 0%, 80%);
+}
+.form-control:focus {
+  background-color: hsl(0, 0%, 22%);
+  border-color: hsl(0, 0%, 24%);
+  color: hsl(0, 0%, 80%);
+}
+
+hr {
+  height: 1px;
+  background-image: linear-gradient(90deg, hsl(0, 0%, 80%), hsl(0, 0%, 50%));
+  border: 0;
+}
+
+a {
+  color: rgb(0,173,238);
+  text-decoration: none;
+}

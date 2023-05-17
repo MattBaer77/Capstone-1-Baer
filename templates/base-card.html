@@ -5,10 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400&family=Orbitron:wght@400;500;700&family=Plaster&family=Righteous&family=Saira:ital,wght@0,100;1,900&display=swap');
+    </style>
     <link rel="stylesheet" href="/static/style.css">
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body class="m-5" style="background-color: rgba(245, 245, 250, 1);">
+<body class="m-5">
 
     {% with messages = get_flashed_messages(with_categories = true) %}
 
@@ -25,9 +28,11 @@
 
     {% endwith %}
 
-    <a href="/">Routine Home</a>
+    <div align="center">
+        <a href="/" class="logo"><h1 class="logo">Routine</h1></a>
+    </div>
 
-    <div align="center" class="m-5 card" style="box-shadow: 3px 3px 6px rgba(200, 200, 200, 1); border-radius: 20px;">
+    <div align="center" class="m-5 card-main">
     {% block content %} {% endblock %}
     </div>
 </body>
