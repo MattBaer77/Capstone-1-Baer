@@ -4,6 +4,7 @@
 from app import db
 from models import Exercise, User, Workout, Goal, Performance
 from fetch_wger_exercises import *
+from secrets import *
 
 
 db.drop_all()
@@ -19,11 +20,11 @@ for each in data:
 db.session.commit()
 
 # Add users
-routine_user_1 = User.signup(email='routine_user1@routinefauxemail.com', username='Routine User 1', password='notpassword1')
-routine_user_2 = User.signup(email='routine_user2@routinefauxemail.com', username='Routine User 2', password='notpassword2')
-routine_user_3 = User.signup(email='routine_user3@routinefauxemail.com', username='Routine User 3', password='notpassword3')
-routine_user_4 = User.signup(email='routine_user4@routinefauxemail.com', username='Routine User 4', password='notpassword4')
-routine_user_5 = User.signup(email='routine_user5@routinefauxemail.com', username='Routine User 5', password='notpassword5')
+routine_user_1 = User.signup(email='routine_user1@routinefauxemail.com', username='Routine User 1', password=faux_password_1)
+routine_user_2 = User.signup(email='routine_user2@routinefauxemail.com', username='Routine User 2', password=faux_password_2)
+routine_user_3 = User.signup(email='routine_user3@routinefauxemail.com', username='Routine User 3', password=faux_password_3)
+routine_user_4 = User.signup(email='routine_user4@routinefauxemail.com', username='Routine User 4', password=faux_password_4)
+routine_user_5 = User.signup(email='routine_user5@routinefauxemail.com', username='Routine User 5', password=faux_password_5)
 
 db.session.commit()
 
