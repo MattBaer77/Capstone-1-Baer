@@ -9,21 +9,6 @@ from fetch_wger_exercises import *
 db.drop_all()
 db.create_all()
 
-# Make api call to populate exercises
-
-# Manual entry of some data - no API Call
-
-# Add exercises
-# two_hand_kettle_swing = Exercise(name='Two handed kettlebell swing', description='Two Handed Russian Style Kettlebell swing')
-# four_count_burpee = Exercise(name='Four-count burpees', description='Starting position: Stand straight, feet hip-width apart. Steps: Sqat low and support yourself on the floor with your hands between the knees and in front of your feet, your back straight. Keeping your hands on the floor, jump your legs backward into high plank position. Jump your feet forward to return to the squat position. Repeat.')
-# abdominal_stabilization = Exercise(name='Abdominal Stabilization', description='Do something')
-# alternate_back_lunges = Exercise(name='Alternate back lunges', description='The posterior muscles of the buttocks, hamstrings, soleus and gastrocnemius are trained more')
-# alternating_bicep_curl = Exercise(name='Alternating bicep curls', description='Starting position: Start standing up with dumbbells in each hand, your back straight and feet hip-width apart. Your arms should be relaxed, pointing down. Your knees should be slightly bent, your abs contracted, and your shoulders down. Steps: Bend one arm at the elbow, bringing the dumbbell up to your shoulder. Your upper arm should remain motionless during this movement. Bring the dumbbell back down until your arm is in its original relaxed position. Repeat, switching arms.')
-
-# # Commit exercises
-# db.session.add_all([two_hand_kettle_swing, four_count_burpee, abdominal_stabilization, alternate_back_lunges, alternating_bicep_curl])
-# db.session.commit()
-
 # Add exercises - from API Call
 data = wger_fetch("wger_fetch_from_seed_file", "A", 10000)
 
@@ -34,66 +19,69 @@ for each in data:
 db.session.commit()
 
 # Add users
-bob_bobson = User.signup(email='bob@unoriginallastname.com', username='Bobbo', password='bobson')
-mike_mikeson = User.signup(email='mike@gmail.com', username='Mikey', password='mikeson')
-bob_alfredson = User.signup(email='bob@gmail.com', username='BobbyA', password='alfredson')
-jim_mikeson = User.signup(email='jim@gmail.com', username='JimmyMike', password='mikeson')
-bob_bo = User.signup(email='otherbob@otherbob.com', username='Bobbo2electricboo', password='bobson')
+routine_user_1 = User.signup(email='routine_user1@routinefauxemail.com', username='Routine User 1', password='notpassword1')
+routine_user_2 = User.signup(email='routine_user2@routinefauxemail.com', username='Routine User 2', password='notpassword2')
+routine_user_3 = User.signup(email='routine_user3@routinefauxemail.com', username='Routine User 3', password='notpassword3')
+routine_user_4 = User.signup(email='routine_user4@routinefauxemail.com', username='Routine User 4', password='notpassword4')
+routine_user_5 = User.signup(email='routine_user5@routinefauxemail.com', username='Routine User 5', password='notpassword5')
 
 db.session.commit()
 
 # Add workouts
-the_bobson_workout = Workout.create(description='Curls and Burpees Forever', owner_user_id='1')
-the_mikeson_workout = Workout.create(description='Kettles and Abs All Day', owner_user_id='2')
-the_bo_workout = Workout.create(description='I do very little', owner_user_id='5')
+user_1_workout = Workout.create(description='Sample Workout 1', owner_user_id='1')
+user_2_workout = Workout.create(description='Sample Workout 2', owner_user_id='2')
+user_3_workout = Workout.create(description='Sample Workout Empty', owner_user_id='5')
 
 db.session.commit()
 
 # Add goals
-add_to_bobson_workout_1 = Goal(workout_id=1, exercise_id=5, goal_reps=10, goal_sets=3, goal_weight_lbs=45)
-add_to_bobson_workout_2 = Goal(workout_id=1, exercise_id=2, goal_reps=50, goal_sets=1)
-add_to_bobson_workout_3 = Goal(workout_id=1, exercise_id=1, goal_reps=50, goal_sets=1)
-add_to_bobson_workout_4 = Goal(workout_id=1, exercise_id=7, goal_reps=50, goal_sets=1)
-add_to_bobson_workout_5 = Goal(workout_id=1, exercise_id=7, goal_reps=50, goal_sets=1, goal_distance_miles=1)
+user_1_workout_goal_1 = Goal(workout_id=1, exercise_id=1, goal_reps=10, goal_sets=2, goal_weight_lbs=30, goal_time_sec=45)
+user_1_workout_goal_2 = Goal(workout_id=1, exercise_id=2, goal_reps=20, goal_sets=2, goal_weight_lbs=20)
+user_1_workout_goal_3 = Goal(workout_id=1, exercise_id=3, goal_reps=30, goal_sets=3, goal_distance_miles=30)
+user_1_workout_goal_4 = Goal(workout_id=1, exercise_id=4, goal_reps=40, goal_sets=4)
+user_1_workout_goal_5 = Goal(workout_id=1, exercise_id=5, goal_reps=50, goal_sets=5)
 
-add_to_mikeson_workout_1 = Goal(workout_id=2, exercise_id=1, goal_reps=30, goal_weight_lbs=80)
-add_to_mikeson_workout_2 = Goal(workout_id=2, exercise_id=3, goal_sets=6, goal_time_sec=60)
+user_2_workout_goal_1 = Goal(workout_id=2, exercise_id=1, goal_reps=10, goal_sets=1, goal_time_sec=10)
+user_2_workout_goal_2 = Goal(workout_id=2, exercise_id=2, goal_reps=20, goal_sets=2, goal_weight_lbs=20)
 
 db.session.add_all([
-    add_to_bobson_workout_1,
-    add_to_bobson_workout_2,
-    add_to_bobson_workout_3,
-    add_to_bobson_workout_4,
-    add_to_bobson_workout_5,
-    add_to_mikeson_workout_1,
-    add_to_mikeson_workout_2,
-    ])
+
+    user_1_workout_goal_1,
+    user_1_workout_goal_2,
+    user_1_workout_goal_3,
+    user_1_workout_goal_4,
+    user_1_workout_goal_5,
+    user_2_workout_goal_1,
+    user_2_workout_goal_2
+
+])
 db.session.commit()
 
 # Add performance
-the_bobson_workout_1_performance_1 = Performance(goal_id =1, performance_reps=10, performance_sets=3, performance_weight_lbs=30)
-the_bobson_workout_1_performance_2 = Performance(goal_id =1, performance_reps=10, performance_sets=3, performance_weight_lbs=35)
-the_bobson_workout_1_performance_3 = Performance(goal_id =1, performance_reps=10, performance_sets=3, performance_weight_lbs=40)
-the_bobson_workout_1_performance_4 = Performance(goal_id =1, performance_reps=10, performance_sets=3, performance_weight_lbs=45)
+user_1_workout_goal_1_performance_1 = Performance(goal_id=1, performance_reps=10, performance_sets=1, performance_weight_lbs=20, performance_time_sec=80)
+user_1_workout_goal_1_performance_2 = Performance(goal_id=1, performance_reps=10, performance_sets=1, performance_weight_lbs=20, performance_time_sec=70)
+user_1_workout_goal_1_performance_3 = Performance(goal_id=1, performance_reps=10, performance_sets=1, performance_weight_lbs=20, performance_time_sec=60)
+user_1_workout_goal_1_performance_4 = Performance(goal_id=1, performance_reps=10, performance_sets=1, performance_weight_lbs=30, performance_time_sec=50)
 
-the_bobson_workout_2_performance_1 = Performance(goal_id =2, performance_reps=36)
-the_bobson_workout_2_performance_2 = Performance(goal_id =2, performance_reps=39)
-the_bobson_workout_2_performance_3 = Performance(goal_id =2, performance_reps=50)
+user_1_workout_goal_2_performance_1 = Performance(goal_id=2, performance_reps=10, performance_sets=1, performance_weight_lbs=10)
+user_1_workout_goal_2_performance_2 = Performance(goal_id=2, performance_reps=11, performance_sets=2, performance_weight_lbs=20)
+user_1_workout_goal_2_performance_3 = Performance(goal_id=2, performance_reps=12, performance_sets=3, performance_weight_lbs=30)
 
 db.session.add_all([
-    the_bobson_workout_1_performance_1,
-    the_bobson_workout_1_performance_2,
-    the_bobson_workout_1_performance_3,
-    the_bobson_workout_1_performance_4,
-    the_bobson_workout_2_performance_1,
-    the_bobson_workout_2_performance_2,
-    the_bobson_workout_2_performance_3
+
+    user_1_workout_goal_1_performance_1,
+    user_1_workout_goal_1_performance_2,
+    user_1_workout_goal_1_performance_3,
+    user_1_workout_goal_1_performance_4,
+    user_1_workout_goal_2_performance_1,
+    user_1_workout_goal_2_performance_2,
+    user_1_workout_goal_2_performance_3
+
 ])
 
 db.session.commit()
 
 # Copy a workout
-
 workout_to_copy=Workout.query.get(1)
 
 Workout.copy(workout_to_copy, 3)
