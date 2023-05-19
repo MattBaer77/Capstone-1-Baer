@@ -5,12 +5,6 @@ import pdb
 import copy
 from datetime import datetime
 
-# For local implementation and development
-try:
-    from secrets import sneakybeaky
-except:
-    pass
-
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
@@ -18,7 +12,6 @@ from sqlalchemy.exc import IntegrityError
 from forms import *
 from models import db, connect_db, Exercise, User, Workout, Goal, Performance
 from helpers import scrub_default_image_url, replace_default_image_url
-
 
 CURR_USER_KEY = "curr_user"
 GOAL_ID_PREVIOUS = "previous_step"
@@ -34,7 +27,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', sneakybeaky)
+
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+
+
+
+
+
 # toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
