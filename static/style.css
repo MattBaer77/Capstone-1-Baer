@@ -121,7 +121,7 @@ hr {
   border: 0;
 }
 
-a {
+a, li {
   color: rgb(0,173,238);
   text-decoration: none;
   font-family: 'Saira', sans-serif;
